@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "gollie-transfusion"
+version = "0.1.0"
+description = ""
+authors = ["isidoraq <isidora.tourni@sandboxquantum.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+peft = "^0.11.1"
+transformers = "^4.33.1"
+bitsandbytes = "^0.43.1"
+numpy = "^2.0.0"
+packaging = "^24.1"
+torchvision = "^0.18.1"
+black = "^24.4.2"
+jinja2 = "^3.1.4"
+tqdm = "^4.66.4"
+rich = "^13.7.1"
+psutil = "^6.0.0"
+datasets = "^2.20.0"
+ruff = "^0.5.0"
+wandb = "^0.17.3"
+fschat = "^0.2.36"
+torchaudio = "^2.3.1"
+torch = "^2.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
