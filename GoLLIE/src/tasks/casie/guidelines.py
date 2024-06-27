@@ -6,7 +6,9 @@ GUIDELINES = {
         ]
     },
     "databreach_attack_mention": {
-        "en": ["The text span that triggers the event, such as:\n   'attack', 'expose', 'publish', 'steal', ..."]
+        "en": [
+            "The text span that triggers the event, such as:\n   'attack', 'expose', 'publish', 'steal', ..."
+        ]
     },
     "phising_attack_main": {
         "en": [
@@ -29,7 +31,9 @@ GUIDELINES = {
         ]
     },
     "ransom_attack_mention": {
-        "en": ["The text span that triggers the event, such as:\n    'attack', ransomware', 'selling', 'ransom', ..."]
+        "en": [
+            "The text span that triggers the event, such as:\n    'attack', ransomware', 'selling', 'ransom', ..."
+        ]
     },
     "vulnerability_discover_main": {
         "en": [

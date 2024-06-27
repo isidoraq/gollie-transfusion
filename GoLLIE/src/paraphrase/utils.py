@@ -48,7 +48,9 @@ def clean_guidelines(guidelines: Dict[str, Dict[str, List[str]]]):
     return guidelines
 
 
-def update_guidelines(paraphrases: List[str], guidelines: Dict[str, Dict[str, List[str]]], language: str):
+def update_guidelines(
+    paraphrases: List[str], guidelines: Dict[str, Dict[str, List[str]]], language: str
+):
     """
     Update the guidelines for a given task.
 

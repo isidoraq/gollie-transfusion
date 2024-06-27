@@ -80,9 +80,15 @@ for name, path in PATHS.items():
         _zero_results, _zero_sota_results = [], []
         for dataset, task in ZERO_DATASETS:
             _zero_results.append(results[dataset][task]["f1-score"] * 100)
-            if dataset.startswith("crossner") or dataset.startswith("mit") or dataset.startswith("wikievents"):
+            if (
+                dataset.startswith("crossner")
+                or dataset.startswith("mit")
+                or dataset.startswith("wikievents")
+            ):
                 _zero_sota_results.append(results[dataset][task]["f1-score"] * 100)
-        zero_results.append(_zero_results + [np.mean(_zero_sota_results), np.mean(_zero_results)])
+        zero_results.append(
+            _zero_results + [np.mean(_zero_sota_results), np.mean(_zero_results)]
+        )
 
     sup_results.append(np.array(sup_results).mean(0))
     sup_results.append(np.array(sup_results).std(0))
@@ -92,12 +98,15 @@ for name, path in PATHS.items():
 
     columns = list(map(str, range(i))) + ["Average", "Std"]
 
-    sup_results = pd.DataFrame(sup_results, columns=[dataset[0] for dataset in SUP_DATASETS] + ["Average"]).T
+    sup_results = pd.DataFrame(
+        sup_results, columns=[dataset[0] for dataset in SUP_DATASETS] + ["Average"]
+    ).T
     sup_results.columns = columns
     print(tabulate(sup_results, headers=columns, floatfmt=".1f"))
 
     zero_results = pd.DataFrame(
-        zero_results, columns=[dataset[0] for dataset in ZERO_DATASETS] + ["Zero Average", "Average"]
+        zero_results,
+        columns=[dataset[0] for dataset in ZERO_DATASETS] + ["Zero Average", "Average"],
     ).T
     zero_results.columns = columns
     print(tabulate(zero_results, headers=columns, floatfmt=".1f"))

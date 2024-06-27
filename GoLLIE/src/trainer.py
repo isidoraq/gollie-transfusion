@@ -54,7 +54,9 @@ class RichProgressCallback(TrainerCallback):
             )
 
             self.training_bar.start()
-            self.training_task = self.training_bar.add_task("[cyan]Training: ", total=state.max_steps)
+            self.training_task = self.training_bar.add_task(
+                "[cyan]Training: ", total=state.max_steps
+            )
         self.current_step = 0
 
     def on_step_end(self, args, state, control, **kwargs):
@@ -76,7 +78,9 @@ class RichProgressCallback(TrainerCallback):
                     auto_refresh=False,
                 )
                 self.prediction_bar.start()
-                self.prediction_task = self.prediction_bar.add_task("[cyan]Predicting: ", total=len(eval_dataloader))
+                self.prediction_task = self.prediction_bar.add_task(
+                    "[cyan]Predicting: ", total=len(eval_dataloader)
+                )
             self.prediction_bar.update(self.prediction_task, advance=1, refresh=True)
 
     def on_evaluate(self, args, state, control, **kwargs):
@@ -190,7 +194,9 @@ class CollieTrainer(Seq2SeqTrainer):
             None,
             None,
         ),
-        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+        preprocess_logits_for_metrics: Optional[
+            Callable[[torch.Tensor, torch.Tensor], torch.Tensor]
+        ] = None,
     ):
         if callbacks is None:
             callbacks = [RotateDatasetCallback()]
@@ -243,7 +249,9 @@ class CollieTrainer(Seq2SeqTrainer):
                 leaf_module = model.model.layers[0].block_sparse_moe.__class__
             except AttributeError:
                 leaf_module = None
-                logging.warning("Deepspeed enabled. The current model is not a MoE model.")
+                logging.warning(
+                    "Deepspeed enabled. The current model is not a MoE model."
+                )
 
             if leaf_module is not None:
                 try:
@@ -290,7 +298,9 @@ class CollieTrainer(Seq2SeqTrainer):
         if "loss_weight_mask" in inputs:
             loss_weight_mask = inputs.pop("loss_weight_mask")
         else:
-            raise ValueError("You should supply a loss_weight_mask key to compute the loss")
+            raise ValueError(
+                "You should supply a loss_weight_mask key to compute the loss"
+            )
 
         # Print first batch of training data for debugging
         if self.first_train_batch:
@@ -324,7 +334,10 @@ class CollieTrainer(Seq2SeqTrainer):
         logits = outputs["logits"] if isinstance(outputs, dict) else outputs[0]
 
         model_name = unwrap_model(model)._get_name()
-        if model_name in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values() or model_name == "PeftModelForCausalLM":
+        if (
+            model_name in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values()
+            or model_name == "PeftModelForCausalLM"
+        ):
             logits = logits[..., :-1, :].contiguous()
             labels = labels[..., 1:].contiguous()
             loss_weight_mask = loss_weight_mask[..., 1:].contiguous()
@@ -368,7 +381,9 @@ class CollieTrainer(Seq2SeqTrainer):
         except ImportError:
             PeftModel = None
 
-        if not isinstance(self.model, PreTrainedModel) and not (PeftModel and isinstance(self.model, PeftModel)):
+        if not isinstance(self.model, PreTrainedModel) and not (
+            PeftModel and isinstance(self.model, PeftModel)
+        ):
             if state_dict is None:
                 state_dict = self.model.state_dict()
 
@@ -379,9 +394,13 @@ class CollieTrainer(Seq2SeqTrainer):
                     safe_serialization=self.args.save_safetensors,
                 )
             else:
-                logger.info("Trainer.model is not a `PreTrainedModel`, only saving its state dict.")
+                logger.info(
+                    "Trainer.model is not a `PreTrainedModel`, only saving its state dict."
+                )
                 if self.args.save_safetensors:
-                    safetensors.torch.save_file(state_dict, os.path.join(output_dir, SAFE_WEIGHTS_NAME))
+                    safetensors.torch.save_file(
+                        state_dict, os.path.join(output_dir, SAFE_WEIGHTS_NAME)
+                    )
                 else:
                     torch.save(state_dict, os.path.join(output_dir, WEIGHTS_NAME))
         else:
@@ -424,7 +443,9 @@ class ConcatDataset(Dataset[T_co]):
         self.datasets = list(datasets)
         assert len(self.datasets) > 0, "datasets should not be an empty iterable"  # type: ignore[arg-type]
         for d in self.datasets:
-            assert not isinstance(d, IterableDataset), "ConcatDataset does not support IterableDataset"
+            assert not isinstance(
+                d, IterableDataset
+            ), "ConcatDataset does not support IterableDataset"
         self.cumulative_sizes = self.cumsum(self.datasets)
 
     def __len__(self):
@@ -433,7 +454,9 @@ class ConcatDataset(Dataset[T_co]):
     def __getitem__(self, idx):
         if idx < 0:
             if -idx > len(self):
-                raise ValueError("absolute value of index should not exceed dataset length")
+                raise ValueError(
+                    "absolute value of index should not exceed dataset length"
+                )
             idx = len(self) + idx
         dataset_idx = bisect.bisect_right(self.cumulative_sizes, idx)
         if dataset_idx == 0:
@@ -444,7 +467,11 @@ class ConcatDataset(Dataset[T_co]):
 
     @property
     def cummulative_sizes(self):
-        logging.warning("cummulative_sizes attribute is renamed to cumulative_sizes", DeprecationWarning, stacklevel=2)
+        logging.warning(
+            "cummulative_sizes attribute is renamed to cumulative_sizes",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.cumulative_sizes
 
     def rotate_split(self):
@@ -454,7 +481,13 @@ class ConcatDataset(Dataset[T_co]):
 
 
 class RotateDatasetCallback(TrainerCallback):
-    def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+    def on_epoch_end(
+        self,
+        args: TrainingArguments,
+        state: TrainerState,
+        control: TrainerControl,
+        **kwargs,
+    ):
         if "train_dataloader" in kwargs:
             kwargs["train_dataloader"].dataset.rotate_split()
         else:

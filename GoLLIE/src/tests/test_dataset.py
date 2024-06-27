@@ -64,7 +64,9 @@ result ="""
 ]"""
     if num_epochs == -1:
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with open(os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8") as f:
+            with open(
+                os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8"
+            ) as f:
                 print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
             dataset = CollieDataset(
@@ -83,7 +85,11 @@ result ="""
         random_seeds = random.sample(range(0, 100000), num_epochs)
         with tempfile.TemporaryDirectory() as tmpdirname:
             for epoch in random_seeds:
-                with open(os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"), "w", encoding="utf8") as f:
+                with open(
+                    os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"),
+                    "w",
+                    encoding="utf8",
+                ) as f:
                     print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
             dataset = CollieDataset(
@@ -156,7 +162,9 @@ result ="""
 ]"""
     if num_epochs == -1:
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with open(os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8") as f:
+            with open(
+                os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8"
+            ) as f:
                 print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
             dataset = CollieDataset(
@@ -175,7 +183,11 @@ result ="""
         random_seeds = random.sample(range(0, 100000), num_epochs)
         with tempfile.TemporaryDirectory() as tmpdirname:
             for epoch in random_seeds:
-                with open(os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"), "w", encoding="utf8") as f:
+                with open(
+                    os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"),
+                    "w",
+                    encoding="utf8",
+                ) as f:
                     print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
             dataset = CollieDataset(
@@ -248,7 +260,9 @@ result = [
 ]"""
     if num_epochs == -1:
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with open(os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8") as f:
+            with open(
+                os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8"
+            ) as f:
                 print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
             dataset = CollieDataset(
@@ -267,7 +281,11 @@ result = [
         random_seeds = random.sample(range(0, 100000), num_epochs)
         with tempfile.TemporaryDirectory() as tmpdirname:
             for epoch in random_seeds:
-                with open(os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"), "w", encoding="utf8") as f:
+                with open(
+                    os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"),
+                    "w",
+                    encoding="utf8",
+                ) as f:
                     print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
             dataset = CollieDataset(
@@ -396,7 +414,9 @@ class TestCollieDataset(unittest.TestCase):
         result = []"""
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with open(os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8") as f:
+            with open(
+                os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8"
+            ) as f:
                 print(json.dumps({"text": text2}, ensure_ascii=False), file=f)
                 print(json.dumps({"text": text1}, ensure_ascii=False), file=f)
 
@@ -441,7 +461,11 @@ class TestCollieDataset(unittest.TestCase):
         labels = dataset[0]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt + " " + result,
         )
 
@@ -456,7 +480,11 @@ class TestCollieDataset(unittest.TestCase):
         model_input = dataset[0]["input_ids"]
         self.assertFalse("labels" in dataset[0])
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt,
         )
 
@@ -577,13 +605,19 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=-100,
         )
 
-        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        dataloder = DataLoader(
+            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+        )
         batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt + " " + result,
         )
         self.assertEqual(
@@ -605,14 +639,20 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=tokenizer.pad_token_id,
         )
 
-        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        dataloder = DataLoader(
+            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+        )
         batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt + " " + result,
         )
 
@@ -654,7 +694,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             model_input = batch["input_ids"][0].tolist()
@@ -662,7 +704,11 @@ class TestCollieDataset(unittest.TestCase):
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
             self.assertEqual(
-                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                tokenizer.decode(
+                    model_input,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
                 prompt + " " + result,
             )
             self.assertEqual(
@@ -719,8 +765,12 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * len(result_tokens),
             )
 
-            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
-            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            prompt_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)]
+            )
+            result_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :]
+            )
             total_loss = prompt_tokens_loss + result_tokens_loss
 
             # print(f"Prompt loss weight: {prompt_loss_weight}")
@@ -761,7 +811,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             model_input = batch["input_ids"][0].tolist()
@@ -769,7 +821,11 @@ class TestCollieDataset(unittest.TestCase):
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
             self.assertEqual(
-                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                tokenizer.decode(
+                    model_input,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
                 prompt + " " + result,
             )
             self.assertEqual(
@@ -823,8 +879,12 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * len(result_tokens),
             )
 
-            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
-            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            prompt_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)]
+            )
+            result_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :]
+            )
             total_loss = prompt_tokens_loss + result_tokens_loss
 
             # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
@@ -859,7 +919,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=tokenizer.pad_token_id,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             model_input = batch["input_ids"][0].tolist()
@@ -867,7 +929,11 @@ class TestCollieDataset(unittest.TestCase):
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
             self.assertEqual(
-                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                tokenizer.decode(
+                    model_input,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
                 prompt + " " + result,
             )
             self.assertEqual(
@@ -921,8 +987,12 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * len(result_tokens),
             )
 
-            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
-            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            prompt_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)]
+            )
+            result_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :]
+            )
             total_loss = prompt_tokens_loss + result_tokens_loss
 
             # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
@@ -974,7 +1044,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             model_input = batch["input_ids"][0].tolist()
@@ -982,7 +1054,11 @@ class TestCollieDataset(unittest.TestCase):
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
             self.assertEqual(
-                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                tokenizer.decode(
+                    model_input,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
                 prompt + " " + result,
             )
             self.assertEqual(
@@ -1036,8 +1112,12 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * len(result_tokens),
             )
 
-            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
-            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            prompt_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)]
+            )
+            result_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :]
+            )
             total_loss = prompt_tokens_loss + result_tokens_loss
 
             # print(f"Prompt loss weight: {prompt_loss_weight}")
@@ -1078,7 +1158,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             model_input = batch["input_ids"][0].tolist()
@@ -1086,7 +1168,11 @@ class TestCollieDataset(unittest.TestCase):
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
             self.assertEqual(
-                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                tokenizer.decode(
+                    model_input,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
                 prompt + " " + result,
             )
             self.assertEqual(
@@ -1140,8 +1226,12 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * len(result_tokens),
             )
 
-            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
-            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            prompt_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)]
+            )
+            result_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :]
+            )
             total_loss = prompt_tokens_loss + result_tokens_loss
 
             # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
@@ -1176,7 +1266,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=tokenizer.pad_token_id,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             model_input = batch["input_ids"][0].tolist()
@@ -1184,7 +1276,11 @@ class TestCollieDataset(unittest.TestCase):
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
             self.assertEqual(
-                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                tokenizer.decode(
+                    model_input,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
                 prompt + " " + result,
             )
             self.assertEqual(
@@ -1238,8 +1334,12 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * len(result_tokens),
             )
 
-            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
-            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            prompt_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)]
+            )
+            result_tokens_loss = sum(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :]
+            )
             total_loss = prompt_tokens_loss + result_tokens_loss
 
             # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
@@ -1291,7 +1391,9 @@ class TestCollieDataset(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloder = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             batch = list(dataloder)[0]
 
             # model_input = batch["input_ids"][0].tolist()
@@ -1449,9 +1551,13 @@ class TestCollieDataset(unittest.TestCase):
         ]"""
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with open(os.path.join(tmpdirname, "tmp.ee.train.8.jsonl"), "w", encoding="utf8") as f:
+            with open(
+                os.path.join(tmpdirname, "tmp.ee.train.8.jsonl"), "w", encoding="utf8"
+            ) as f:
                 print(json.dumps({"text": text1}, ensure_ascii=False), file=f)
-            with open(os.path.join(tmpdirname, "tmp.ee.train.42.jsonl"), "w", encoding="utf8") as f:
+            with open(
+                os.path.join(tmpdirname, "tmp.ee.train.42.jsonl"), "w", encoding="utf8"
+            ) as f:
                 print(json.dumps({"text": text2}, ensure_ascii=False), file=f)
                 print(json.dumps({"text": text1}, ensure_ascii=False), file=f)
 
@@ -1479,15 +1585,27 @@ class TestCollieDataset(unittest.TestCase):
         labels = train_dataset[0]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt1 + " " + result1,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt2 + " " + result2,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt3 + " " + result3,
         )
 
@@ -1495,15 +1613,27 @@ class TestCollieDataset(unittest.TestCase):
         labels = train_dataset[1]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt1 + " " + result1,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt2 + " " + result2,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt3 + " " + result3,
         )
 
@@ -1511,7 +1641,11 @@ class TestCollieDataset(unittest.TestCase):
         labels = train_dataset[2]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt3 + " " + result3,
         )
 
@@ -1526,16 +1660,28 @@ class TestCollieDataset(unittest.TestCase):
         labels = train_dataset[0]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt2 + " " + result2,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt1 + " " + result1,
         )
 
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt3 + " " + result3,
         )
 
@@ -1543,15 +1689,27 @@ class TestCollieDataset(unittest.TestCase):
         labels = train_dataset[1]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt1 + " " + result1,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt2 + " " + result2,
         )
         self.assertNotEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt3 + " " + result3,
         )
 
@@ -1559,6 +1717,10 @@ class TestCollieDataset(unittest.TestCase):
         labels = train_dataset[2]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            tokenizer.decode(
+                model_input,
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
             prompt3 + " " + result3,
         )

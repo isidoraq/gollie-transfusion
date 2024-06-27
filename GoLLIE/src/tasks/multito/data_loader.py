@@ -5,20 +5,20 @@ from src.tasks.multito.guidelines_gold import EXAMPLES
 from src.tasks.multito.prompts import (
     ENTITY_DEFINITIONS,
     WeatherNoun,
-    Location, 
-    Datetime, 
-    WeatherAttribute, 
+    Location,
+    Datetime,
+    WeatherAttribute,
     ReminderTodo,
-    AlarmModifier, 
+    AlarmModifier,
     ReminderNoun,
     RecurringPeriod,
     Reference,
-    ReminderModifier, 
+    ReminderModifier,
     TimerNoun,
     Negation,
     TimerAttributes,
     NewsType,
-    WeatherTemperatureUnit
+    WeatherTemperatureUnit,
 )
 from src.tasks.label_encoding import rewrite_labels
 
@@ -41,15 +41,16 @@ ENTITY_TO_CLASS_MAPPING = {
     "negation": Negation,
     "timer/attributes": TimerAttributes,
     "news/type": NewsType,
-    "weather/temperatureUnit": WeatherTemperatureUnit
+    "weather/temperatureUnit": WeatherTemperatureUnit,
 }
 
 
-label_set = set() 
+label_set = set()
 for i in list(ENTITY_TO_CLASS_MAPPING.keys()):
     label_set.add("B-{}".format(i))
     label_set.add("I-{}".format(i))
 label_set.add("O")
+
 
 def get_conll_hf(
     split: str,
@@ -75,7 +76,9 @@ def get_conll_hf(
         words = example["tokens"]
         # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
         # we convert them to IOB2, so we don't have to deal with this later.
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
 
         # Get labeled word spans
         spans = []
@@ -93,7 +96,9 @@ def get_conll_hf(
         entities = []
         for label, start, end in spans:
             if include_misc or label != "MISC":
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
@@ -125,7 +130,7 @@ def read_tsv(filepath):
             else:
                 try:
                     _, word, _, label = line.split()
-                    
+
                 except ValueError:
                     try:
                         word, label, _ = line.split()
@@ -164,7 +169,7 @@ def load_conll_tsv(
     for words, labels in zip(dataset_words, dataset_labels):
         # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
         # we convert them to IOB2, so we don't have to deal with this later.
-        
+
         labels = rewrite_labels(labels=labels, encoding="iob2")
         # Get labeled word spans
         spans = []
@@ -181,8 +186,10 @@ def load_conll_tsv(
         # Get entities
         entities = []
         for label, start, end in spans:
-            
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
@@ -206,15 +213,14 @@ class MultiTODatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-
     def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
 
         self.elements = {}
 
         dataset_words, dataset_entities = load_conll_tsv(
-                path=path_or_split,
-                ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
-            )
+            path=path_or_split,
+            ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
+        )
 
         for id, (words, entities) in enumerate(zip(dataset_words, dataset_entities)):
             self.elements[id] = {
@@ -224,6 +230,7 @@ class MultiTODatasetLoader(DatasetLoader):
                 "entities": entities,
                 "gold": entities,
             }
+
 
 def get_entities(labels, words, ENTITY_TO_CLASS_MAPPING, include_misc=False):
     labels = rewrite_labels(labels=labels, encoding="iob2")
@@ -243,8 +250,11 @@ def get_entities(labels, words, ENTITY_TO_CLASS_MAPPING, include_misc=False):
     entities = []
     for label, start, end in spans:
         if include_misc or label.lower() != "misc":
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
     return entities
+
 
 def load_jsonl(path):
     with open(path, "r", encoding="utf-8") as f:
@@ -273,14 +283,16 @@ class MultiTOTransFusionDatasetLoader(DatasetLoader):
         self.elements = {}
 
         dataset_words, dataset_entities = load_conll_tsv(
-                path=path_or_split,
-                ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
-            )
+            path=path_or_split,
+            ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
+        )
 
         lang = path_or_split.split("/")[-1].split(".")[0].split("-")[-1]
         translation = load_jsonl(f"data_translatetest/multito/{lang}.eng_Latn.jsonl")
-        for id, (words, entities, en_trans) in enumerate(zip(dataset_words, dataset_entities, translation)):
-            
+        for id, (words, entities, en_trans) in enumerate(
+            zip(dataset_words, dataset_entities, translation)
+        ):
+
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -291,6 +303,7 @@ class MultiTOTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": [],
             }
+
 
 class MultiTOSampler(Sampler):
     """

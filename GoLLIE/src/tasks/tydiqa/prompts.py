@@ -15,8 +15,7 @@ class ShortAnswer(Entity):
 
     span: str
 
-ANSWER_DEFINITIONS: List[Type] = [
-    ShortAnswer
-]
+
+ANSWER_DEFINITIONS: List[Type] = [ShortAnswer]
 
 # __all__ = list(map(str, [*ANSWER_DEFINITIONS]))

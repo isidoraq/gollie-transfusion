@@ -1,21 +1,23 @@
 import copy
 
-def decode_label_span(label):
-        label_tags = label
-        span_labels = []
-        last = 'O'
-        start = -1
-        for i, tag in enumerate(label_tags):
-            pos, _ = (None, 'O') if tag == 'O' else tag.split('-')
-            if (pos == 'B' or tag == 'O') and last != 'O':  # end of span
-                span_labels.append((start, i, last.split('-')[1]))
-            if pos == 'B' or last == 'O':  # start of span or move on
-                start = i
-            last = tag
-        if label_tags[-1] != 'O':
-            span_labels.append((start, len(label_tags), label_tags[-1].split('-')[1]))
 
-        return span_labels
+def decode_label_span(label):
+    label_tags = label
+    span_labels = []
+    last = "O"
+    start = -1
+    for i, tag in enumerate(label_tags):
+        pos, _ = (None, "O") if tag == "O" else tag.split("-")
+        if (pos == "B" or tag == "O") and last != "O":  # end of span
+            span_labels.append((start, i, last.split("-")[1]))
+        if pos == "B" or last == "O":  # start of span or move on
+            start = i
+        last = tag
+    if label_tags[-1] != "O":
+        span_labels.append((start, len(label_tags), label_tags[-1].split("-")[1]))
+
+    return span_labels
+
 
 def extract_entity(word, label):
 
@@ -24,67 +26,71 @@ def extract_entity(word, label):
     tag_list = []
     for span in span_labels:
         s, e, tag = span
-        entity = word[s: e]
+        entity = word[s:e]
         entity_list.append(entity)
         tag_list.append(tag)
 
     return entity_list, tag_list, span_labels
 
+
 def encode(tokens, label, tag2mark):
     copy_tokens = copy.deepcopy(tokens)
-    prev_start_lab = 'O'
+    prev_start_lab = "O"
     for idx, lab in enumerate(label):
-        if lab != 'O' and (prev_start_lab == 'I' or prev_start_lab == 'B'):
-            start_lab = lab.split('-')[0]
-            tag = lab.split('-')[1]
+        if lab != "O" and (prev_start_lab == "I" or prev_start_lab == "B"):
+            start_lab = lab.split("-")[0]
+            tag = lab.split("-")[1]
 
             # check if its the same label
-            if start_lab == 'B':
+            if start_lab == "B":
                 # new label span
                 token = copy_tokens[idx]
-                token_new = '{} {} {}'.format(tag2mark[prev_tag]['e'], tag2mark[tag]['s'], token)
+                token_new = "{} {} {}".format(
+                    tag2mark[prev_tag]["e"], tag2mark[tag]["s"], token
+                )
                 copy_tokens[idx] = token_new
                 prev_start_lab = start_lab
                 prev_tag = tag
             else:
                 prev_start_lab = start_lab
                 prev_tag = tag
-        elif lab != 'O':
-            start_lab = lab.split('-')[0]
-            tag = lab.split('-')[1]
+        elif lab != "O":
+            start_lab = lab.split("-")[0]
+            tag = lab.split("-")[1]
 
-            if start_lab == 'B':
+            if start_lab == "B":
                 token = copy_tokens[idx]
                 # modify token
-                token_new = '{} {}'.format(tag2mark[tag]['s'], token)
+                token_new = "{} {}".format(tag2mark[tag]["s"], token)
                 copy_tokens[idx] = token_new
 
             prev_start_lab = start_lab
             prev_tag = tag
 
-        elif lab == 'O' and (prev_start_lab == 'I' or prev_start_lab == 'B'):
+        elif lab == "O" and (prev_start_lab == "I" or prev_start_lab == "B"):
             token = copy_tokens[idx - 1]
             # modify token
-            token_new = '{} {}'.format(token, tag2mark[prev_tag]['e'])
+            token_new = "{} {}".format(token, tag2mark[prev_tag]["e"])
             copy_tokens[idx - 1] = token_new
 
-            prev_start_lab = 'O'
-            prev_tag = 'O'
+            prev_start_lab = "O"
+            prev_tag = "O"
         else:
-            prev_start_lab = 'O'
-            prev_tag = 'O'
+            prev_start_lab = "O"
+            prev_tag = "O"
 
     # last
-    if label[-1] != 'O':
-        start_lab = label[-1].split('-')[0]
-        tag = label[-1].split('-')[1]
+    if label[-1] != "O":
+        start_lab = label[-1].split("-")[0]
+        tag = label[-1].split("-")[1]
 
-        if start_lab == 'B' or start_lab == 'I':
-            new_token = copy_tokens[-1] + ' {}'.format(tag2mark[tag]['e'])
+        if start_lab == "B" or start_lab == "I":
+            new_token = copy_tokens[-1] + " {}".format(tag2mark[tag]["e"])
             copy_tokens[-1] = new_token
 
-    encoded_sentence = ' '.join(copy_tokens)
+    encoded_sentence = " ".join(copy_tokens)
     return encoded_sentence
+
 
 def easyproject_encoding_ner(words, labels):
     # encode labels into words

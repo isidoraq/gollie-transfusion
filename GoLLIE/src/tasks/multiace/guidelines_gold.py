@@ -19,7 +19,9 @@ GUIDELINES = {
         ]
     },
     "ace_appeal": {
-        "en": ["An Appeal Event occurs whenever the decision of a court is taken to a higher court for review."]
+        "en": [
+            "An Appeal Event occurs whenever the decision of a court is taken to a higher court for review."
+        ]
     },
     "ace_arrestjail": {
         "en": [
@@ -33,7 +35,9 @@ GUIDELINES = {
             "such Event not covered by the Injure or Die subtypes, including Events where there is no stated agent.\n"
         ]
     },
-    "ace_beborn": {"en": ["A BeBorn Event occurs whenever a Person Entity is given birth to."]},
+    "ace_beborn": {
+        "en": ["A BeBorn Event occurs whenever a Person Entity is given birth to."]
+    },
     "ace_business": {
         "en": [
             "The Business Relation captures the connection between two entities in any professional relationship.\n"
@@ -229,7 +233,9 @@ GUIDELINES = {
         ]
     },
     "ace_lifeevent": {
-        "en": ["A LifeEvent occurs whenever a Person Entity borns, dies, gets married, divorced or gets injured."]
+        "en": [
+            "A LifeEvent occurs whenever a Person Entity borns, dies, gets married, divorced or gets injured."
+        ]
     },
     "ace_located": {
         "en": [
@@ -246,7 +252,9 @@ GUIDELINES = {
         ]
     },
     "ace_marry": {
-        "en": ["Marry Events are official Events, where two people are married under the legal definition."]
+        "en": [
+            "Marry Events are official Events, where two people are married under the legal definition."
+        ]
     },
     "ace_meet": {
         "en": [
@@ -393,7 +401,9 @@ GUIDELINES = {
             "individual sports teams).\n"
         ]
     },
-    "ace_startorg": {"en": ["A StartOrg Event occurs whenever a new Organization is created."]},
+    "ace_startorg": {
+        "en": ["A StartOrg Event occurs whenever a new Organization is created."]
+    },
     "ace_startposition": {
         "en": [
             "A StartPosition Event occurs whenever a Person Entity begins working for (or changes offices within) an\n"
@@ -494,7 +504,18 @@ EXAMPLES = {
         ]
     },
     "ace_movementevent_examples": {
-        "en": ["travel", "arrived", "going", "moving", "take", "went", "get", "trip", "come", "go"]
+        "en": [
+            "travel",
+            "arrived",
+            "going",
+            "moving",
+            "take",
+            "went",
+            "get",
+            "trip",
+            "come",
+            "go",
+        ]
     },
     "ace_transactionevent_examples": {
         "en": [
@@ -525,10 +546,32 @@ EXAMPLES = {
         ]
     },
     "ace_conflictevent_examples": {
-        "en": ["terrorism", "combat", "hit", "fight", "bombing", "fire", "attacks", "fighting", "attack", "war"]
+        "en": [
+            "terrorism",
+            "combat",
+            "hit",
+            "fight",
+            "bombing",
+            "fire",
+            "attacks",
+            "fighting",
+            "attack",
+            "war",
+        ]
     },
     "ace_contactevent_examples": {
-        "en": ["meetings", "conference", "talked", "met", "letters", "summit", "call", "meet", "talks", "meeting"]
+        "en": [
+            "meetings",
+            "conference",
+            "talked",
+            "met",
+            "letters",
+            "summit",
+            "call",
+            "meet",
+            "talks",
+            "meeting",
+        ]
     },
     "ace_personnelevent_examples": {
         "en": [
@@ -559,7 +602,18 @@ EXAMPLES = {
         ]
     },
     "ace_person_examples": {
-        "en": ["I", "you", "they", "troops", "forces", "people", "who", "officials", "we", "them"]
+        "en": [
+            "I",
+            "you",
+            "they",
+            "troops",
+            "forces",
+            "people",
+            "who",
+            "officials",
+            "we",
+            "them",
+        ]
     },
     "ace_organization_examples": {
         "en": [
@@ -576,19 +630,74 @@ EXAMPLES = {
         ]
     },
     "ace_gpe_examples": {
-        "en": ["Iraq", "U.S.", "they", "country", "Baghdad", "city", "US", "coalition", "Israel", "British"]
+        "en": [
+            "Iraq",
+            "U.S.",
+            "they",
+            "country",
+            "Baghdad",
+            "city",
+            "US",
+            "coalition",
+            "Israel",
+            "British",
+        ]
     },
     "ace_location_examples": {
-        "en": ["world", "area", "there", "where", "here", "mars", "areas", "border", "planet", "region"]
+        "en": [
+            "world",
+            "area",
+            "there",
+            "where",
+            "here",
+            "mars",
+            "areas",
+            "border",
+            "planet",
+            "region",
+        ]
     },
     "ace_facility_examples": {
-        "en": ["home", "airport", "base", "there", "hospital", "house", "prison", "room", "bridge", "road"]
+        "en": [
+            "home",
+            "airport",
+            "base",
+            "there",
+            "hospital",
+            "house",
+            "prison",
+            "room",
+            "bridge",
+            "road",
+        ]
     },
     "ace_weapon_examples": {
-        "en": ["weapons", "gun", "missiles", "nuclear", "artillery", "bomb", "arms", "granades", "explosive", "knife"]
+        "en": [
+            "weapons",
+            "gun",
+            "missiles",
+            "nuclear",
+            "artillery",
+            "bomb",
+            "arms",
+            "granades",
+            "explosive",
+            "knife",
+        ]
     },
     "ace_vehicle_examples": {
-        "en": ["ship", "car", "aircraft", "tank", "plane", "bus", "vehicle", "boat", "helicopter", "truck"]
+        "en": [
+            "ship",
+            "car",
+            "aircraft",
+            "tank",
+            "plane",
+            "bus",
+            "vehicle",
+            "boat",
+            "helicopter",
+            "truck",
+        ]
     },
     "ace_time_examples": {
         "en": [

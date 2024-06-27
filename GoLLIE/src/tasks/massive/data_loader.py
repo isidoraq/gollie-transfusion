@@ -59,7 +59,7 @@ from src.tasks.massive.prompts import (
     DefinitionWord,
     EmailFolder,
     GameType,
-    EmailAddress
+    EmailAddress,
 )
 from src.tasks.label_encoding import rewrite_labels
 
@@ -122,30 +122,83 @@ ENTITY_TO_CLASS_MAPPING = ENTITY_CLASS_MAP = {
     "definition_word": DefinitionWord,
     "email_folder": EmailFolder,
     "game_type": GameType,
-    "email_address": EmailAddress
+    "email_address": EmailAddress,
 }
 
-label_list = ['date', 'place_name', 'event_name', 'person', 'time', 'media_type', 'business_name', 'weather_descriptor', 'food_type', 'transport_type', 'artist_name', 'timeofday', 'list_name', 'relation', 'house_place', 'device_type', 'definition_word', 'music_genre', 'currency_name', 'news_topic', 'player_setting', 'song_name', 'radio_name', 'business_type', 'color_type', 'game_name', 'podcast_descriptor', 'audiobook_name', 'general_frequency', 'order_type', 'meal_type', 'podcast_name', 'playlist_name', 'personal_info', 'time_zone', 'joke_type', 'transport_agency', 'email_address', 'change_amount', 'cooking_type', 'music_descriptor', 'ingredient', 'app_name', 'audiobook_author', 'email_folder', 'coffee_type', 'transport_name', 'alarm_type', 'movie_type', 'movie_name', 'transport_descriptor', 'drink_type', 'music_album']
+label_list = [
+    "date",
+    "place_name",
+    "event_name",
+    "person",
+    "time",
+    "media_type",
+    "business_name",
+    "weather_descriptor",
+    "food_type",
+    "transport_type",
+    "artist_name",
+    "timeofday",
+    "list_name",
+    "relation",
+    "house_place",
+    "device_type",
+    "definition_word",
+    "music_genre",
+    "currency_name",
+    "news_topic",
+    "player_setting",
+    "song_name",
+    "radio_name",
+    "business_type",
+    "color_type",
+    "game_name",
+    "podcast_descriptor",
+    "audiobook_name",
+    "general_frequency",
+    "order_type",
+    "meal_type",
+    "podcast_name",
+    "playlist_name",
+    "personal_info",
+    "time_zone",
+    "joke_type",
+    "transport_agency",
+    "email_address",
+    "change_amount",
+    "cooking_type",
+    "music_descriptor",
+    "ingredient",
+    "app_name",
+    "audiobook_author",
+    "email_folder",
+    "coffee_type",
+    "transport_name",
+    "alarm_type",
+    "movie_type",
+    "movie_name",
+    "transport_descriptor",
+    "drink_type",
+    "music_album",
+]
 FILTER_LABEL_LIST = set(label_list[:])
+
 
 def extract_span_and_label(sentence):
     # Regular expression pattern to match the label and content
-    pattern = r'\[(.*?)\s*:\s*(.*?)\]'
-    
+    pattern = r"\[(.*?)\s*:\s*(.*?)\]"
+
     # Find all matches in the sentence
     matches = re.findall(pattern, sentence)
-    
+
     # Create a list of dictionaries to store label and content pairs
     extracted_info = []
-    
+
     for match in matches:
         label, content = match
-        extracted_info.append({
-            'label': label.strip(),
-            'content': content.strip()
-        })
-    
+        extracted_info.append({"label": label.strip(), "content": content.strip()})
+
     return extracted_info
+
 
 def load_massive_hf(
     language: str,
@@ -203,17 +256,16 @@ class MassiveDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-
     def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
 
         self.elements = {}
 
         dataset_words, dataset_entities = load_massive_hf(
-                language=kwargs["language"],
-                split="test",
-                max_sentence=500,
-                ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
-            )
+            language=kwargs["language"],
+            split="test",
+            max_sentence=500,
+            ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
+        )
 
         for id, (words, entities) in enumerate(zip(dataset_words, dataset_entities)):
             self.elements[id] = {
@@ -223,6 +275,7 @@ class MassiveDatasetLoader(DatasetLoader):
                 "entities": entities,
                 "gold": entities,
             }
+
 
 def load_jsonl(path):
     with open(path, "r", encoding="utf-8") as f:
@@ -251,16 +304,18 @@ class MassiveTransFusionDatasetLoader(DatasetLoader):
         self.elements = {}
 
         dataset_words, dataset_entities = load_massive_hf(
-                language=kwargs["language"],
-                split="test",
-                max_sentence=500,
-                ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
-            )
+            language=kwargs["language"],
+            split="test",
+            max_sentence=500,
+            ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
+        )
 
         lang = kwargs["language"]
         translation = load_jsonl(f"data_translatetest/massive/{lang}.eng_Latn.jsonl")
-        for id, (words, entities, en_trans) in enumerate(zip(dataset_words, dataset_entities, translation)):
-            
+        for id, (words, entities, en_trans) in enumerate(
+            zip(dataset_words, dataset_entities, translation)
+        ):
+
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -271,6 +326,7 @@ class MassiveTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": [],
             }
+
 
 class MassiveSampler(Sampler):
     """

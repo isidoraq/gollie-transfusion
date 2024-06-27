@@ -1,4 +1,5 @@
 import json
+
 for lang in ["es", "nl", "de", "ru", "it", "fr", "pl", "pt", "zh"]:
     print(lang)
     tmp_config = {
@@ -20,9 +21,9 @@ for lang in ["es", "nl", "de", "ru", "it", "fr", "pl", "pt", "zh"]:
                 "guideline_dropout": 0.15,
                 "scorer": "src.tasks.multinerd.scorer.MultinerdEntityScorer",
                 "paraphrase_train": True,
-                "label_noise": 0.5
+                "label_noise": 0.5,
             }
-        }
+        },
     }
 
     with open("multinerd_{}_config.json".format(lang), "w") as f:

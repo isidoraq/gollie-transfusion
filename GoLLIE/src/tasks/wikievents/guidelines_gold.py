@@ -6,7 +6,9 @@ GUIDELINES = {
         ]
     },
     "wikievents_ner_bodypart": {
-        "en": ["An identifiable, living part of a human's or animal's body, such as a eye, ear, neck, leg, etc."]
+        "en": [
+            "An identifiable, living part of a human's or animal's body, such as a eye, ear, neck, leg, etc."
+        ]
     },
     "wikievents_ner_commercialproduct": {
         "en": [
@@ -36,7 +38,9 @@ GUIDELINES = {
         ]
     },
     "wikievents_ner_location": {
-        "en": ["Geographical entities such as geographical areas and landmasses, bodies of water."]
+        "en": [
+            "Geographical entities such as geographical areas and landmasses, bodies of water."
+        ]
     },
     "wikievents_ner_medicalhealthissue": {
         "en": [
@@ -58,7 +62,9 @@ GUIDELINES = {
         ]
     },
     "wikievents_ner_person": {
-        "en": ["Person entities are limited to humans. A Person entity may be a single person or a group."]
+        "en": [
+            "Person entities are limited to humans. A Person entity may be a single person or a group."
+        ]
     },
     "wikievents_ner_side_of_conflict": {
         "en": [
@@ -175,16 +181,22 @@ GUIDELINES = {
         ]
     },
     "wikievents_ee_transaction": {
-        "en": ["A transaction involving the transfer of money, goods, or services between two or more parties."]
+        "en": [
+            "A transaction involving the transfer of money, goods, or services between two or more parties."
+        ]
     },
-    "wikievents_eae_damage_destroy": {"en": ["The damaging or destruction of a thing."]},
+    "wikievents_eae_damage_destroy": {
+        "en": ["The damaging or destruction of a thing."]
+    },
     "wikievents_eae_disable_defuse": {
         "en": [
             "Disabling the expected functioning of a mechanical device, or software, for example defusing or"
             " removing\n a fuse from an explosive.\n"
         ]
     },
-    "wikievents_eae_dismantle": {"en": ["Disassembling an artifact in such a way that it could be reassembled."]},
+    "wikievents_eae_dismantle": {
+        "en": ["Disassembling an artifact in such a way that it could be reassembled."]
+    },
     "wikievents_eae_manufacture_assemble": {
         "en": [
             "Physical action of building, assembling, manufacturing, putting things together, mixing, etc. (does not\n"
@@ -197,7 +209,9 @@ GUIDELINES = {
             " an\n entity or event belongs to, such as being a suspect or a target or an attack.\n"
         ]
     },
-    "wikievents_eae_inspection": {"en": ["An observation or inspection event, with any target of inspection."]},
+    "wikievents_eae_inspection": {
+        "en": ["An observation or inspection event, with any target of inspection."]
+    },
     "wikievents_eae_research": {
         "en": [
             "Explicit mention of researching the answer to a question by analyzing literature or testing hypotheses\n"
@@ -210,9 +224,15 @@ GUIDELINES = {
             " does\n not have complete mastery of the skill until the end\n"
         ]
     },
-    "wikievents_eae_attack": {"en": ["An attack event, a violent physical act causing harm or damage."]},
-    "wikievents_eae_defeat": {"en": ["Defeat in a conflict or an election, but not a game-style competition"]},
-    "wikievents_eae_demonstrate": {"en": ["A demonstration, march, protest, or political gathering."]},
+    "wikievents_eae_attack": {
+        "en": ["An attack event, a violent physical act causing harm or damage."]
+    },
+    "wikievents_eae_defeat": {
+        "en": ["Defeat in a conflict or an election, but not a game-style competition"]
+    },
+    "wikievents_eae_demonstrate": {
+        "en": ["A demonstration, march, protest, or political gathering."]
+    },
     "wikievents_eae_contact": {
         "en": [
             "An event where two or more participants communicate over any medium, where the context does not\n"
@@ -244,12 +264,18 @@ GUIDELINES = {
             " difficulties with respect to the occurrence of a taggable, non-Movement event or process.\n"
         ]
     },
-    "wikievents_eae_crash": {"en": ["Vehicular collision or the crashing of any type of vehicle."]},
+    "wikievents_eae_crash": {
+        "en": ["Vehicular collision or the crashing of any type of vehicle."]
+    },
     "wikievents_eae_disease_outbreak": {
-        "en": ["Explicit mentions of an outbreak of a disease in an area, region, or country."]
+        "en": [
+            "Explicit mentions of an outbreak of a disease in an area, region, or country."
+        ]
     },
     "wikievents_eae_fire_explosion": {
-        "en": ["A damaging fire or explosion, either natural or caused but without the intent of attacking."]
+        "en": [
+            "A damaging fire or explosion, either natural or caused but without the intent of attacking."
+        ]
     },
     "wikievents_eae_generic_crime": {
         "en": [
@@ -270,7 +296,9 @@ GUIDELINES = {
         ]
     },
     "wikievents_eae_charge_indict": {
-        "en": ["A government actor charging, accusing, or indicting a person, organization, or GPE of a crime."]
+        "en": [
+            "A government actor charging, accusing, or indicting a person, organization, or GPE of a crime."
+        ]
     },
     "wikievents_eae_convict": {
         "en": [
@@ -278,7 +306,9 @@ GUIDELINES = {
             " crime.\n"
         ]
     },
-    "wikievents_eae_investigate_crime": {"en": ["Legal, journalistic, and other investigations of crimes."]},
+    "wikievents_eae_investigate_crime": {
+        "en": ["Legal, journalistic, and other investigations of crimes."]
+    },
     "wikievents_eae_release_parole": {
         "en": [
             "A release-parole event occurs whenever a state actor (GPE, organization subpart, or person\n"
@@ -300,10 +330,18 @@ GUIDELINES = {
             " to discuss some criminal legal matter.\n"
         ]
     },
-    "wikievents_eae_consume": {"en": ["An person or animal takes a substance into their body."]},
+    "wikievents_eae_consume": {
+        "en": ["An person or animal takes a substance into their body."]
+    },
     "wikievents_eae_die": {"en": ["The death of a person or animal."]},
-    "wikievents_eae_illness": {"en": ["A person or animal experiencing physical harm due to sickness or illness."]},
-    "wikievents_eae_infect": {"en": ["A person or animal is infected with a pathogen."]},
+    "wikievents_eae_illness": {
+        "en": [
+            "A person or animal experiencing physical harm due to sickness or illness."
+        ]
+    },
+    "wikievents_eae_infect": {
+        "en": ["A person or animal is infected with a pathogen."]
+    },
     "wikievents_eae_injure": {"en": ["The physical injuring of a person or animal."]},
     "wikievents_eae_diagnosis": {
         "en": [
@@ -317,7 +355,9 @@ GUIDELINES = {
             " a\n medical condition.\n"
         ]
     },
-    "wikievents_eae_vaccinate": {"en": ["A person or an animal is inoculated against a disease."]},
+    "wikievents_eae_vaccinate": {
+        "en": ["A person or an animal is inoculated against a disease."]
+    },
     "wikievents_eae_evacuation": {
         "en": [
             "The movement of a person or animal (by an agent or via their own effort) from one place to another for\n"
@@ -325,7 +365,9 @@ GUIDELINES = {
         ]
     },
     "wikievents_eae_grant_allow_passage": {
-        "en": ["Explicit mention of granting or allowing entry or exit from a location."]
+        "en": [
+            "Explicit mention of granting or allowing entry or exit from a location."
+        ]
     },
     "wikievents_eae_illegal_transportation": {
         "en": [
@@ -333,7 +375,9 @@ GUIDELINES = {
             " smuggling,\n trafficking, illegal border crossings.\n"
         ]
     },
-    "wikievents_eae_prevent_passage": {"en": ["Explicit mention of preventing entry or exit from a location."]},
+    "wikievents_eae_prevent_passage": {
+        "en": ["Explicit mention of preventing entry or exit from a location."]
+    },
     "wikievents_eae_transportation": {
         "en": [
             "Physical movement or transportation of a person or artifact between places, includes putting and"
@@ -341,7 +385,9 @@ GUIDELINES = {
         ]
     },
     "wikievents_eae_change_job_location": {
-        "en": ["A person continuing in the same role in a different location in the same organization."]
+        "en": [
+            "A person continuing in the same role in a different location in the same organization."
+        ]
     },
     "wikievents_eae_change_job_title": {
         "en": [
@@ -536,7 +582,9 @@ EXAMPLES = {
             "him",
         ]
     },
-    "wikievents_ner_side_of_conflict_examples": {"en": ["church", "officers", "supporters", "radical Islam"]},
+    "wikievents_ner_side_of_conflict_examples": {
+        "en": ["church", "officers", "supporters", "radical Islam"]
+    },
     "wikievents_ner_job_title_examples": {
         "en": [
             "President",

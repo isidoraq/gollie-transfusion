@@ -1,5 +1,9 @@
 GUIDELINES = {
-    "ner_person": {"en": ["first, middle and last names of people, animals and fictional characters aliases."]},
+    "ner_person": {
+        "en": [
+            "first, middle and last names of people, animals and fictional characters aliases."
+        ]
+    },
     "ner_organization": {
         "en": [
             "Companies (press agencies, studios, banks, stock\n"

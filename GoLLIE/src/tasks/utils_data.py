@@ -12,6 +12,7 @@ from jinja2 import Template
 
 from src.tasks.utils_typing import cast_to, IgnoreAction, SkipAction
 
+
 class DatasetLoader:
     """An abstract class for dataset loaders."""
 
@@ -142,7 +143,7 @@ class Sampler:
     ) -> None:
         self.do_not_shuffle = do_not_shuffle
         if split != "train":
-            self.do_not_shuffle = True # no shuffle for test set
+            self.do_not_shuffle = True  # no shuffle for test set
 
         self.disable_paraphrases = disable_paraphrases
         self.loader = dataset_loader
@@ -168,7 +169,9 @@ class Sampler:
             self.max_guidelines = len(self.task_definitions)
         else:
             self.max_guidelines = max_guidelines
-        if sample_total_guidelines < 0 or sample_total_guidelines > len(self.task_definitions):
+        if sample_total_guidelines < 0 or sample_total_guidelines > len(
+            self.task_definitions
+        ):
             self.sample_total_guidelines = len(self.task_definitions)
         else:
             self.sample_total_guidelines = sample_total_guidelines
@@ -190,13 +193,17 @@ class Sampler:
         self.remove_guidelines = remove_guidelines
         # self._remove_guidelines_re = re.compile(r'"""(.+\n?)*"""')
         self._remove_guidelines_re = re.compile(r'"""[^"]+"""')
-        self._remove_guidelines_fn = lambda x: self._remove_guidelines_re.sub("", x).replace("\n    \n", "\n")
+        self._remove_guidelines_fn = lambda x: self._remove_guidelines_re.sub(
+            "", x
+        ).replace("\n    \n", "\n")
 
         self._remove_comments_re = re.compile(r"#.+?\n")
         self._remove_comments_fn = lambda x: self._remove_comments_re.sub("\n", x)
 
         self._remove_empty_comments_re = re.compile(r"#()*\n")
-        self._remove_empty_comments_fn = lambda x: self._remove_empty_comments_re.sub("\n", x)
+        self._remove_empty_comments_fn = lambda x: self._remove_empty_comments_re.sub(
+            "\n", x
+        )
         self._formatter = Formatter()
 
         self.lang = lang
@@ -223,14 +230,20 @@ class Sampler:
         # _gold refers to specifc gold information that is used in the template (depends on the task)
         _gold: List[Any] = [gold for inst in instances for gold in inst["gold"]]
         # positive_guidelines referst just to the guidelines definitions of the labels in the example
-        positive_guidelines: Set[Type] = {type(ann) for inst in instances for ann in inst[self.task_target]}
+        positive_guidelines: Set[Type] = {
+            type(ann) for inst in instances for ann in inst[self.task_target]
+        }
         if self.is_coarse_to_fine:
-            coarse_guidelines: Set[Type] = {self._fine_to_coarse[_def] for _def in positive_guidelines}
+            coarse_guidelines: Set[Type] = {
+                self._fine_to_coarse[_def] for _def in positive_guidelines
+            }
 
         guidelines: List[Type] = [*self.task_definitions]
 
         # The variable all_guidelines makes compatible the coarse-to-fine with normal tasks
-        all_guidelines = [guidelines] if not self.is_coarse_to_fine else coarse_guidelines
+        all_guidelines = (
+            [guidelines] if not self.is_coarse_to_fine else coarse_guidelines
+        )
         for guidelines in all_guidelines:
             if self.is_coarse_to_fine:
                 if self.coarse_dropout and random.random() < self.coarse_dropout:
@@ -244,15 +257,29 @@ class Sampler:
                 guidelines = [
                     definition
                     for definition in guidelines
-                    if any(isinstance(ann, definition) for inst in instances for ann in inst[self.task_target])
+                    if any(
+                        isinstance(ann, definition)
+                        for inst in instances
+                        for ann in inst[self.task_target]
+                    )
                 ]
 
             # Reduce the ammount of labels by sampling. We can make sure positive guidelines are sampled using `ensure_positives_on_train`
-            if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
-                p = np.asarray([
-                    (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
-                    for _def in guidelines
-                ])
+            if (
+                self.sample_total_guidelines < len(guidelines)
+                and not self.sample_only_gold_guidelines
+            ):
+                p = np.asarray(
+                    [
+                        (
+                            100.0
+                            if _def in positive_guidelines
+                            and self.ensure_positives_on_train
+                            else 0.0
+                        )
+                        for _def in guidelines
+                    ]
+                )
                 p += 1.0 / p.shape[0]
                 p /= p.sum()
                 guidelines_ids = np.random.choice(
@@ -273,14 +300,19 @@ class Sampler:
 
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
-                _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
+                _guidelines = guidelines[
+                    i * self.max_guidelines : (i + 1) * self.max_guidelines
+                ]
                 # Apply guideline dropout
                 if self.split == "train":
                     _guidelines_dropout = [
                         _def
                         for _def in _guidelines
                         if random.random() > self.guideline_dropout
-                        or (_def in positive_guidelines and self.ensure_positives_on_train)
+                        or (
+                            _def in positive_guidelines
+                            and self.ensure_positives_on_train
+                        )
                     ]
 
                     if len(_guidelines_dropout) == 0 and len(_guidelines) > 0:
@@ -288,12 +320,25 @@ class Sampler:
                         _guidelines_dropout.append(random.choice(_guidelines))
                     _guidelines = _guidelines_dropout
 
-                _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
+                _ann = [
+                    ann
+                    for inst in instances
+                    for ann in inst[self.task_target]
+                    if type(ann) in _guidelines
+                ]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
                 if self.use_transfusion:
                     # apply en translation and en annotation during training
-                    _en_ann = [ann for inst in instances for ann in inst["en_" + self.task_target] if (type(ann) in _guidelines or type(ann) in [IgnoreAction, SkipAction])]
+                    _en_ann = [
+                        ann
+                        for inst in instances
+                        for ann in inst["en_" + self.task_target]
+                        if (
+                            type(ann) in _guidelines
+                            or type(ann) in [IgnoreAction, SkipAction]
+                        )
+                    ]
                     _en_text = " ".join([inst["en_text"] for inst in instances]).strip()
                     _en_gold = [gold for inst in instances for gold in inst["en_gold"]]
                 # This makes the gold information useful for coarse to fine tasks
@@ -304,7 +349,9 @@ class Sampler:
                 if self.is_coarse_to_fine and not len(_ann):
                     continue
 
-                _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                _guidelines = [
+                    inspect.getsource(definition) for definition in _guidelines
+                ]
 
                 # Apply definition paraphrases if train
                 _definitions = {
@@ -338,21 +385,43 @@ class Sampler:
                 _repl = {**_examples, **_definitions}
                 _guidelines = [definition.format(**_repl) for definition in _guidelines]
                 # If no examples are provide, empty comments are created, the following line removes them
-                _guidelines = [self._remove_empty_comments_fn(definition) for definition in _guidelines]
+                _guidelines = [
+                    self._remove_empty_comments_fn(definition)
+                    for definition in _guidelines
+                ]
 
                 # Remove definitions for baseline
                 if self.remove_guidelines:
-                    _guidelines = [self._remove_guidelines_fn(definition) for definition in _guidelines]
-                    _guidelines = [self._remove_comments_fn(definition) for definition in _guidelines]
+                    _guidelines = [
+                        self._remove_guidelines_fn(definition)
+                        for definition in _guidelines
+                    ]
+                    _guidelines = [
+                        self._remove_comments_fn(definition)
+                        for definition in _guidelines
+                    ]
 
                 if not self.use_transfusion:
-                    text = self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold)
+                    text = self.template.render(
+                        guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold
+                    )
                 else:
-                    text = self.template.render(guidelines=_guidelines, text=_text, en_text=_en_text, 
-                        annotations=_ann, en_annotations=_en_ann, gold=_gold, en_gold=_en_gold)
-                
+                    text = self.template.render(
+                        guidelines=_guidelines,
+                        text=_text,
+                        en_text=_en_text,
+                        annotations=_ann,
+                        en_annotations=_en_ann,
+                        gold=_gold,
+                        en_gold=_en_gold,
+                    )
+
                 # Apply label noise (but keem them if we are removing the guidelines)
-                if self.split == "train" and self.label_noise_prob > 0.0 and not self.remove_guidelines:
+                if (
+                    self.split == "train"
+                    and self.label_noise_prob > 0.0
+                    and not self.remove_guidelines
+                ):
                     pretext_idx = text.index("\ntext =")
                     results_idx = text.index("\nresult =")
                     _pretext = text[:pretext_idx]
@@ -385,7 +454,9 @@ class Sampler:
         prev_id = None
         for elem in self.loader:
             # Prevent mixing sentences from different documents. TODO: generalize
-            if (len(instances) == total_inst) or (prev_id is not None and elem["doc_id"] != prev_id):
+            if (len(instances) == total_inst) or (
+                prev_id is not None and elem["doc_id"] != prev_id
+            ):
                 for samp in self._sample(instances):
                     yield samp
                 instances = []

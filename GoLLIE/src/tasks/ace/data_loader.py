@@ -98,293 +98,298 @@ from ..utils_data import DatasetLoader, Sampler
 from src.tasks.ace.easyproject_data import decode_data
 
 ENTITY_TO_CLASS_MAPPING = {
-        "FAC": Facility,
-        "GPE": GPE,
-        "LOC": Location,
-        "ORG": Organization,
-        "PER": Person,
-        "VEH": Vehicle,
-        "WEA": Weapon,
-    }
+    "FAC": Facility,
+    "GPE": GPE,
+    "LOC": Location,
+    "ORG": Organization,
+    "PER": Person,
+    "VEH": Vehicle,
+    "WEA": Weapon,
+}
 VALUE_TO_CLASS_MAPPING = {
-        "Contact-Info": ContactInfo,
-        "Crime": Crime,
-        "Job-Title": JobTitle,
-        "Numeric": Numeric,
-        "Sentence": Sentence,
-        "TIME": Time,
-    }
-    # RELATION_TO_CLASS_MAPPING = {
-    #     "ART:User-Owner-Inventor-Manufacturer": (AgentArtifactRelationRelation, UserOwnerInventorManufacturer),
-    #     "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (GenAffiliationRelation, CitizenResidentReligionEthnicity),
-    #     "GEN-AFF:Org-Location": (GenAffiliationRelation, OrgLocationOrigin),
-    #     "ORG-AFF:Employment": (OrganizationAffiliationRelation, Employment),
-    #     "ORG-AFF:Founder": (OrganizationAffiliationRelation, Founder),
-    #     "ORG-AFF:Investor-Shareholder": (OrganizationAffiliationRelation, InvestorShareholder),
-    #     "ORG-AFF:Membership": (OrganizationAffiliationRelation, Membership),
-    #     "ORG-AFF:Ownership": (OrganizationAffiliationRelation, Ownership),
-    #     "ORG-AFF:Sports-Affiliation": (OrganizationAffiliationRelation, SportsAffiliation),
-    #     "ORG-AFF:Student-Alum": (OrganizationAffiliationRelation, StudentAlum),
-    #     "PART-WHOLE:Artifact": (
-    #         PartWholeRelation,
-    #         Geographical,
-    #     ),  # There is no definition for Artifact relation on the guidelines
-    #     "PART-WHOLE:Geographical": (PartWholeRelation, Geographical),
-    #     "PART-WHOLE:Subsidiary": (PartWholeRelation, Subsidiary),
-    #     "PER-SOC:Business": (PersonalSocialRelation, Business),
-    #     "PER-SOC:Family": (PersonalSocialRelation, Family),
-    #     "PER-SOC:Lasting-Personal": (PersonalSocialRelation, LastingPersonal),
-    #     "PHYS:Located": (PhysicalRelation, Located),
-    #     "PHYS:Near": (PhysicalRelation, Near),
-    # }
+    "Contact-Info": ContactInfo,
+    "Crime": Crime,
+    "Job-Title": JobTitle,
+    "Numeric": Numeric,
+    "Sentence": Sentence,
+    "TIME": Time,
+}
+# RELATION_TO_CLASS_MAPPING = {
+#     "ART:User-Owner-Inventor-Manufacturer": (AgentArtifactRelationRelation, UserOwnerInventorManufacturer),
+#     "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (GenAffiliationRelation, CitizenResidentReligionEthnicity),
+#     "GEN-AFF:Org-Location": (GenAffiliationRelation, OrgLocationOrigin),
+#     "ORG-AFF:Employment": (OrganizationAffiliationRelation, Employment),
+#     "ORG-AFF:Founder": (OrganizationAffiliationRelation, Founder),
+#     "ORG-AFF:Investor-Shareholder": (OrganizationAffiliationRelation, InvestorShareholder),
+#     "ORG-AFF:Membership": (OrganizationAffiliationRelation, Membership),
+#     "ORG-AFF:Ownership": (OrganizationAffiliationRelation, Ownership),
+#     "ORG-AFF:Sports-Affiliation": (OrganizationAffiliationRelation, SportsAffiliation),
+#     "ORG-AFF:Student-Alum": (OrganizationAffiliationRelation, StudentAlum),
+#     "PART-WHOLE:Artifact": (
+#         PartWholeRelation,
+#         Geographical,
+#     ),  # There is no definition for Artifact relation on the guidelines
+#     "PART-WHOLE:Geographical": (PartWholeRelation, Geographical),
+#     "PART-WHOLE:Subsidiary": (PartWholeRelation, Subsidiary),
+#     "PER-SOC:Business": (PersonalSocialRelation, Business),
+#     "PER-SOC:Family": (PersonalSocialRelation, Family),
+#     "PER-SOC:Lasting-Personal": (PersonalSocialRelation, LastingPersonal),
+#     "PHYS:Located": (PhysicalRelation, Located),
+#     "PHYS:Near": (PhysicalRelation, Near),
+# }
 RELATION_TO_CLASS_MAPPING = {
-        "ART": AgentArtifactRelationRelation,
-        "GEN-AFF": GenAffiliationRelation,
-        "ORG-AFF": OrganizationAffiliationRelation,
-        "PART-WHOLE": PartWholeRelation, # There is no definition for Artifact relation on the guidelines
-        "PER-SOC": PersonalSocialRelation,
-        "PHYS": PhysicalRelation,
-        
-    }
+    "ART": AgentArtifactRelationRelation,
+    "GEN-AFF": GenAffiliationRelation,
+    "ORG-AFF": OrganizationAffiliationRelation,
+    "PART-WHOLE": PartWholeRelation,  # There is no definition for Artifact relation on the guidelines
+    "PER-SOC": PersonalSocialRelation,
+    "PHYS": PhysicalRelation,
+}
 _EVENT_CONSTANTS_MAPPING = {
-        "trigger": "mention",
-        "Place": "place",
-        "Time-After": "time",
-        "Time-At-Begginning": "time",
-        "Time-At-Beginning": "time",  # A bug on the data
-        "Time-At-End": "time",
-        "Time-Before": "time",
-        "Time-Ending": "time",
-        "Time-Holds": "time",
-        "Time-Starting": "time",
-        "Time-Within": "time",
-    }
+    "trigger": "mention",
+    "Place": "place",
+    "Time-After": "time",
+    "Time-At-Begginning": "time",
+    "Time-At-Beginning": "time",  # A bug on the data
+    "Time-At-End": "time",
+    "Time-Before": "time",
+    "Time-Ending": "time",
+    "Time-Holds": "time",
+    "Time-Starting": "time",
+    "Time-Within": "time",
+}
 EVENT_TO_CLASS_MAPPING = {
-        "Business:Declare-Bankruptcy": {
-            "coarse": BusinessEvent,
-            "class": DeclareBankruptcy,
-            "Org": "org",
-        },
-        "Business:End-Org": {
-            "coarse": BusinessEvent,
-            "class": EndOrg,
-            "Org": "org",
-        },
-        "Business:Merge-Org": {
-            "coarse": BusinessEvent,
-            "class": MergeOrg,
-            "Org": "org",
-        },
-        "Business:Start-Org": {"coarse": BusinessEvent, "class": StartOrg, "Agent": "agent", "Org": "org"},
-        "Conflict:Attack": {
-            "coarse": ConflictEvent,
-            "class": Attack,
-            "Agent": "attacker",
-            "Attacker": "attacker",
-            "Instrument": "instrument",
-            "Target": "target",
-            "Victim": "target",
-        },
-        "Conflict:Demonstrate": {
-            "coarse": ConflictEvent,
-            "class": Demonstrate,
-            "Entity": "entity",
-        },
-        "Contact:Meet": {
-            "coarse": ContactEvent,
-            "class": Meet,
-            "Entity": "entity",
-        },
-        "Contact:Phone-Write": {
-            "coarse": ContactEvent,
-            "class": PhoneWrite,
-            "Entity": "entity",
-        },
-        "Justice:Acquit": {
-            "coarse": JusticeEvent,
-            "class": Acquit,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Defendant": "defendant",
-        },
-        "Justice:Appeal": {
-            "coarse": JusticeEvent,
-            "class": Appeal,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Plaintiff": "prosecutor",
-        },
-        "Justice:Arrest-Jail": {
-            "coarse": JusticeEvent,
-            "class": ArrestJail,
-            "Agent": "agent",
-            "Crime": "crime",
-            "Person": "person",
-        },
-        "Justice:Charge-Indict": {
-            "coarse": JusticeEvent,
-            "class": ChargeIndict,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Defendant": "defendant",
-            "Prosecutor": "prosecutor",
-        },
-        "Justice:Convict": {
-            "coarse": JusticeEvent,
-            "class": Convict,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Defendant": "defendant",
-        },
-        "Justice:Execute": {
-            "coarse": JusticeEvent,
-            "class": Execute,
-            "Agent": "agent",
-            "Crime": "crime",
-            "Person": "person",
-        },
-        "Justice:Extradite": {
-            "coarse": JusticeEvent,
-            "class": Extradite,
-            "Agent": "agent",
-            "Destination": "destination",
-            "Origin": "origin",
-            "Person": "person",
-        },
-        "Justice:Fine": {
-            "coarse": JusticeEvent,
-            "class": Fine,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Entity": "entity",
-            "Money": "money",
-        },
-        "Justice:Pardon": {
-            "coarse": JusticeEvent,
-            "class": Pardon,
-            "Adjudicator": "adjudicator",
-            "Defendant": "defendant",
-            "Crime": "crime",
-        },
-        "Justice:Release-Parole": {
-            "coarse": JusticeEvent,
-            "class": ReleaseParole,
-            "Crime": "crime",
-            "Entity": "entity",
-            "Person": "person",
-        },
-        "Justice:Sentence": {
-            "coarse": JusticeEvent,
-            "class": SentenceAct,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Defendant": "defendant",
-            "Sentence": "sentence",
-        },
-        "Justice:Sue": {
-            "coarse": JusticeEvent,
-            "class": Sue,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Defendant": "defendant",
-            "Plaintiff": "plaintiff",
-        },
-        "Justice:Trial-Hearing": {
-            "coarse": JusticeEvent,
-            "class": TrialHearing,
-            "Adjudicator": "adjudicator",
-            "Crime": "crime",
-            "Defendant": "defendant",
-            "Prosecutor": "prosecutor",
-        },
-        "Life:Be-Born": {
-            "coarse": LifeEvent,
-            "class": BeBorn,
-            "Person": "person",
-        },
-        "Life:Die": {
-            "coarse": LifeEvent,
-            "class": Die,
-            "Agent": "agent",
-            "Instrument": "instrument",
-            "Person": "victim",
-            "Victim": "victim",
-        },
-        "Life:Divorce": {
-            "coarse": LifeEvent,
-            "class": Divorce,
-            "Person": "person",
-        },
-        "Life:Injure": {
-            "coarse": LifeEvent,
-            "class": Injure,
-            "Agent": "agent",
-            "Instrument": "instrument",
-            "Victim": "victim",
-        },
-        "Life:Marry": {
-            "coarse": LifeEvent,
-            "class": Marry,
-            "Person": "person",
-        },
-        "Movement:Transport": {
-            "coarse": MovementEvent,
-            "class": Transport,
-            "Agent": "agent",
-            "Artifact": "artifact",
-            "Destination": "destination",
-            "Origin": "origin",
-            "Place": "destination",
-            "Vehicle": "vehicle",
-            "Victim": "artifact",  # MMMmmm WTF
-            "Price": "price",
-        },
-        "Personnel:Elect": {
-            "coarse": PersonnelEvent,
-            "class": Elect,
-            "Entity": "entity",
-            "Person": "person",
-            "Position": "position",
-        },
-        "Personnel:End-Position": {
-            "coarse": PersonnelEvent,
-            "class": EndPosition,
-            "Entity": "entity",
-            "Person": "person",
-            "Position": "position",
-        },
-        "Personnel:Nominate": {
-            "coarse": PersonnelEvent,
-            "class": Nominate,
-            "Agent": "agent",
-            "Person": "person",
-            "Position": "position",
-        },
-        "Personnel:Start-Position": {
-            "coarse": PersonnelEvent,
-            "class": StartPosition,
-            "Entity": "entity",
-            "Person": "person",
-            "Position": "position",
-        },
-        "Transaction:Transfer-Money": {
-            "coarse": TransactionEvent,
-            "class": TransferMoney,
-            "Beneficiary": "beneficiary",
-            "Giver": "giver",
-            "Money": "money",
-            "Recipient": "recipient",
-        },
-        "Transaction:Transfer-Ownership": {
-            "coarse": TransactionEvent,
-            "class": TransferOwnership,
-            "Artifact": "artifact",
-            "Beneficiary": "beneficiary",
-            "Buyer": "buyer",
-            "Price": "price",
-            "Seller": "seller",
-        },
-    }
+    "Business:Declare-Bankruptcy": {
+        "coarse": BusinessEvent,
+        "class": DeclareBankruptcy,
+        "Org": "org",
+    },
+    "Business:End-Org": {
+        "coarse": BusinessEvent,
+        "class": EndOrg,
+        "Org": "org",
+    },
+    "Business:Merge-Org": {
+        "coarse": BusinessEvent,
+        "class": MergeOrg,
+        "Org": "org",
+    },
+    "Business:Start-Org": {
+        "coarse": BusinessEvent,
+        "class": StartOrg,
+        "Agent": "agent",
+        "Org": "org",
+    },
+    "Conflict:Attack": {
+        "coarse": ConflictEvent,
+        "class": Attack,
+        "Agent": "attacker",
+        "Attacker": "attacker",
+        "Instrument": "instrument",
+        "Target": "target",
+        "Victim": "target",
+    },
+    "Conflict:Demonstrate": {
+        "coarse": ConflictEvent,
+        "class": Demonstrate,
+        "Entity": "entity",
+    },
+    "Contact:Meet": {
+        "coarse": ContactEvent,
+        "class": Meet,
+        "Entity": "entity",
+    },
+    "Contact:Phone-Write": {
+        "coarse": ContactEvent,
+        "class": PhoneWrite,
+        "Entity": "entity",
+    },
+    "Justice:Acquit": {
+        "coarse": JusticeEvent,
+        "class": Acquit,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Defendant": "defendant",
+    },
+    "Justice:Appeal": {
+        "coarse": JusticeEvent,
+        "class": Appeal,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Plaintiff": "prosecutor",
+    },
+    "Justice:Arrest-Jail": {
+        "coarse": JusticeEvent,
+        "class": ArrestJail,
+        "Agent": "agent",
+        "Crime": "crime",
+        "Person": "person",
+    },
+    "Justice:Charge-Indict": {
+        "coarse": JusticeEvent,
+        "class": ChargeIndict,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Defendant": "defendant",
+        "Prosecutor": "prosecutor",
+    },
+    "Justice:Convict": {
+        "coarse": JusticeEvent,
+        "class": Convict,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Defendant": "defendant",
+    },
+    "Justice:Execute": {
+        "coarse": JusticeEvent,
+        "class": Execute,
+        "Agent": "agent",
+        "Crime": "crime",
+        "Person": "person",
+    },
+    "Justice:Extradite": {
+        "coarse": JusticeEvent,
+        "class": Extradite,
+        "Agent": "agent",
+        "Destination": "destination",
+        "Origin": "origin",
+        "Person": "person",
+    },
+    "Justice:Fine": {
+        "coarse": JusticeEvent,
+        "class": Fine,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Entity": "entity",
+        "Money": "money",
+    },
+    "Justice:Pardon": {
+        "coarse": JusticeEvent,
+        "class": Pardon,
+        "Adjudicator": "adjudicator",
+        "Defendant": "defendant",
+        "Crime": "crime",
+    },
+    "Justice:Release-Parole": {
+        "coarse": JusticeEvent,
+        "class": ReleaseParole,
+        "Crime": "crime",
+        "Entity": "entity",
+        "Person": "person",
+    },
+    "Justice:Sentence": {
+        "coarse": JusticeEvent,
+        "class": SentenceAct,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Defendant": "defendant",
+        "Sentence": "sentence",
+    },
+    "Justice:Sue": {
+        "coarse": JusticeEvent,
+        "class": Sue,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Defendant": "defendant",
+        "Plaintiff": "plaintiff",
+    },
+    "Justice:Trial-Hearing": {
+        "coarse": JusticeEvent,
+        "class": TrialHearing,
+        "Adjudicator": "adjudicator",
+        "Crime": "crime",
+        "Defendant": "defendant",
+        "Prosecutor": "prosecutor",
+    },
+    "Life:Be-Born": {
+        "coarse": LifeEvent,
+        "class": BeBorn,
+        "Person": "person",
+    },
+    "Life:Die": {
+        "coarse": LifeEvent,
+        "class": Die,
+        "Agent": "agent",
+        "Instrument": "instrument",
+        "Person": "victim",
+        "Victim": "victim",
+    },
+    "Life:Divorce": {
+        "coarse": LifeEvent,
+        "class": Divorce,
+        "Person": "person",
+    },
+    "Life:Injure": {
+        "coarse": LifeEvent,
+        "class": Injure,
+        "Agent": "agent",
+        "Instrument": "instrument",
+        "Victim": "victim",
+    },
+    "Life:Marry": {
+        "coarse": LifeEvent,
+        "class": Marry,
+        "Person": "person",
+    },
+    "Movement:Transport": {
+        "coarse": MovementEvent,
+        "class": Transport,
+        "Agent": "agent",
+        "Artifact": "artifact",
+        "Destination": "destination",
+        "Origin": "origin",
+        "Place": "destination",
+        "Vehicle": "vehicle",
+        "Victim": "artifact",  # MMMmmm WTF
+        "Price": "price",
+    },
+    "Personnel:Elect": {
+        "coarse": PersonnelEvent,
+        "class": Elect,
+        "Entity": "entity",
+        "Person": "person",
+        "Position": "position",
+    },
+    "Personnel:End-Position": {
+        "coarse": PersonnelEvent,
+        "class": EndPosition,
+        "Entity": "entity",
+        "Person": "person",
+        "Position": "position",
+    },
+    "Personnel:Nominate": {
+        "coarse": PersonnelEvent,
+        "class": Nominate,
+        "Agent": "agent",
+        "Person": "person",
+        "Position": "position",
+    },
+    "Personnel:Start-Position": {
+        "coarse": PersonnelEvent,
+        "class": StartPosition,
+        "Entity": "entity",
+        "Person": "person",
+        "Position": "position",
+    },
+    "Transaction:Transfer-Money": {
+        "coarse": TransactionEvent,
+        "class": TransferMoney,
+        "Beneficiary": "beneficiary",
+        "Giver": "giver",
+        "Money": "money",
+        "Recipient": "recipient",
+    },
+    "Transaction:Transfer-Ownership": {
+        "coarse": TransactionEvent,
+        "class": TransferOwnership,
+        "Artifact": "artifact",
+        "Beneficiary": "beneficiary",
+        "Buyer": "buyer",
+        "Price": "price",
+        "Seller": "seller",
+    },
+}
+
 
 class ACEDatasetLoader(DatasetLoader):
     """
@@ -459,7 +464,10 @@ class ACEDatasetLoader(DatasetLoader):
                     if event["event_type"] not in EVENT_TO_CLASS_MAPPING:
                         continue
                     info = EVENT_TO_CLASS_MAPPING[event["event_type"]]
-                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+                    _inst = {
+                        param: []
+                        for param in inspect.signature(info["class"]).parameters.keys()
+                    }
                     _inst["mention"] = event["trigger"]["text"]
                     for argument in event["arguments"]:
                         if argument["role"] in info:
@@ -471,12 +479,13 @@ class ACEDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
+                            raise ValueError(
+                                f"Argument {event['event_type']}:{argument['role']} not found!"
+                            )
 
                     events.append(info["coarse"](mention=_inst["mention"]))
                     arguments.append(info["class"](**_inst))
 
-                
                 self.elements[key]["text"] += " " + line["sentence"].strip()
                 self.elements[key]["entities"] += entities
                 self.elements[key]["values"] += values
@@ -484,7 +493,8 @@ class ACEDatasetLoader(DatasetLoader):
                 self.elements[key]["relations"] += relations
                 self.elements[key]["events"] += events
                 self.elements[key]["arguments"] += arguments
-                self.elements[key]["gold"] += entities  
+                self.elements[key]["gold"] += entities
+
 
 def make_events(spans, marker2label, annotation, entity_info, trigger_info):
     entities = []
@@ -500,17 +510,15 @@ def make_events(spans, marker2label, annotation, entity_info, trigger_info):
 
         if label_id in trigger_info:
             trigger_info[label_id]["span"] = span
-        
-    
-    entities = [
-            ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["span"])
-            for _id, entity in entity_info.items()
-            if entity["entity_type"] in ENTITY_TO_CLASS_MAPPING
-            ]
 
-    values = [
+    entities = [
+        ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["span"])
+        for _id, entity in entity_info.items()
+        if entity["entity_type"] in ENTITY_TO_CLASS_MAPPING
     ]
-    
+
+    values = []
+
     coarse_relations, relations = [], []
     for rel in annotation["relation_mentions"]:
         # if rel["relation_subtype"] not in self.RELATION_TO_CLASS_MAPPING:
@@ -524,13 +532,15 @@ def make_events(spans, marker2label, annotation, entity_info, trigger_info):
                 arg2=entity_info[arg2_id]["span"],
             )
         )
-        
+
     events, arguments = [], []
     for event in annotation["event_mentions"]:
         if event["event_type"] not in EVENT_TO_CLASS_MAPPING:
             continue
         info = EVENT_TO_CLASS_MAPPING[event["event_type"]]
-        _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+        _inst = {
+            param: [] for param in inspect.signature(info["class"]).parameters.keys()
+        }
         event_id = event["id"]
         _inst["mention"] = trigger_info[event_id]["span"]
         for argument in event["arguments"]:
@@ -545,11 +555,14 @@ def make_events(spans, marker2label, annotation, entity_info, trigger_info):
                 arg_id = argument["entity_id"]
                 _inst[name].append(entity_info[arg_id]["span"])
             else:
-                raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
+                raise ValueError(
+                    f"Argument {event['event_type']}:{argument['role']} not found!"
+                )
 
         events.append(info["coarse"](mention=_inst["mention"]))
         arguments.append(info["class"](**_inst))
     return entities, coarse_relations, values, events, arguments
+
 
 class ACETranslationDatasetLoader(DatasetLoader):
     """
@@ -577,7 +590,7 @@ class ACETranslationDatasetLoader(DatasetLoader):
         with open(path, "rt", encoding="utf-8") as in_f:
             for line in in_f:
                 line = json.loads(line.strip())
-                
+
                 input_sentence = line["input_sentence"]
                 output_sentence = line["output_sentence"]
                 marker2label = line["marker2label"]
@@ -588,11 +601,14 @@ class ACETranslationDatasetLoader(DatasetLoader):
                     entity_info[entity["id"]] = entity
                 for event in annotation["event_mentions"]:
                     trigger_info[event["id"]] = event
-                clean_sentence, spans = decode_data(input_sentence, output_sentence, marker2label)
+                clean_sentence, spans = decode_data(
+                    input_sentence, output_sentence, marker2label
+                )
                 if (clean_sentence and spans) or (clean_sentence and spans == []):
                     # decode label
-                    entities, coarse_relations, values, events, arguments = make_events(spans, marker2label, annotation, 
-                                                                                        entity_info, trigger_info)
+                    entities, coarse_relations, values, events, arguments = make_events(
+                        spans, marker2label, annotation, entity_info, trigger_info
+                    )
 
                     self.elements[key] = {}
                     self.elements[key]["id"] = key
@@ -604,8 +620,9 @@ class ACETranslationDatasetLoader(DatasetLoader):
                     self.elements[key]["relations"] = []
                     self.elements[key]["events"] = events
                     self.elements[key]["arguments"] = arguments
-                    self.elements[key]["gold"] = entities  
+                    self.elements[key]["gold"] = entities
                     key += 1
+
 
 class ACETransFusionDatasetLoader(DatasetLoader):
     """
@@ -633,7 +650,7 @@ class ACETransFusionDatasetLoader(DatasetLoader):
         with open(path, "rt", encoding="utf-8") as in_f:
             for line in in_f:
                 line = json.loads(line.strip())
-                
+
                 input_sentence = line["input_sentence"]
                 output_sentence = line["output_sentence"]
                 marker2label = line["marker2label"]
@@ -644,14 +661,31 @@ class ACETransFusionDatasetLoader(DatasetLoader):
                     entity_info[entity["id"]] = entity
                 for event in annotation["event_mentions"]:
                     trigger_info[event["id"]] = event
-                clean_sentence, spans = decode_data(input_sentence, output_sentence, marker2label)
-                clean_en_sentence, en_spans = decode_data(input_sentence, input_sentence, marker2label)
-                if (clean_sentence and spans and clean_en_sentence and en_spans) or (clean_sentence and spans == [] and clean_en_sentence and en_spans == []):
+                clean_sentence, spans = decode_data(
+                    input_sentence, output_sentence, marker2label
+                )
+                clean_en_sentence, en_spans = decode_data(
+                    input_sentence, input_sentence, marker2label
+                )
+                if (clean_sentence and spans and clean_en_sentence and en_spans) or (
+                    clean_sentence
+                    and spans == []
+                    and clean_en_sentence
+                    and en_spans == []
+                ):
                     # decode label
-                    entities, coarse_relations, values, events, arguments = make_events(spans, marker2label, annotation,
-                                                                                            entity_info, trigger_info)
-                    en_entities, en_coarse_relations, en_values, en_events, en_arguments = make_events(en_spans, marker2label, annotation,
-                                                                                            entity_info, trigger_info)
+                    entities, coarse_relations, values, events, arguments = make_events(
+                        spans, marker2label, annotation, entity_info, trigger_info
+                    )
+                    (
+                        en_entities,
+                        en_coarse_relations,
+                        en_values,
+                        en_events,
+                        en_arguments,
+                    ) = make_events(
+                        en_spans, marker2label, annotation, entity_info, trigger_info
+                    )
 
                     self.elements[key] = {}
                     self.elements[key]["id"] = key
@@ -664,15 +698,16 @@ class ACETransFusionDatasetLoader(DatasetLoader):
                     self.elements[key]["relations"] = []
                     self.elements[key]["events"] = events
                     self.elements[key]["arguments"] = arguments
-                    self.elements[key]["gold"] = entities  
+                    self.elements[key]["gold"] = entities
                     self.elements[key]["en_entities"] = en_entities
                     self.elements[key]["en_values"] = values
                     self.elements[key]["en_coarse_relations"] = en_coarse_relations
                     self.elements[key]["en_relations"] = []
                     self.elements[key]["en_events"] = en_events
                     self.elements[key]["en_arguments"] = en_arguments
-                    self.elements[key]["en_gold"] = en_entities  
+                    self.elements[key]["en_gold"] = en_entities
                     key += 1
+
 
 class ACESampler(Sampler):
     """
@@ -745,36 +780,84 @@ class ACESampler(Sampler):
         if use_transfusion:
             if use_transfusionv2:
                 task_definitions, task_target, task_template = {
-                    "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt_tfv2.txt"),
+                    "NER": (
+                        ENTITY_DEFINITIONS,
+                        "entities",
+                        "templates/prompt_tfv2.txt",
+                    ),
                     "VER": (VALUE_DEFINITIONS, "values", "templates/prompt_tfv2.txt"),
-                    "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re_tfv2.txt"),
-                    "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc_tfv2.txt"),
-                    "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt_tfv2.txt"),
-                    "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae_tfv2.txt"),
+                    "RE": (
+                        COARSE_RELATION_DEFINITIONS,
+                        "coarse_relations",
+                        "templates/prompt_ace_re_tfv2.txt",
+                    ),
+                    "RC": (
+                        RELATION_DEFINITIONS,
+                        "relations",
+                        "templates/prompt_ace_rc_tfv2.txt",
+                    ),
+                    "EE": (
+                        COARSE_EVENT_DEFINITIONS,
+                        "events",
+                        "templates/prompt_tfv2.txt",
+                    ),
+                    "EAE": (
+                        EVENT_DEFINITIONS,
+                        "arguments",
+                        "templates/prompt_ace_eae_tfv2.txt",
+                    ),
                 }[task]
             else:
                 task_definitions, task_target, task_template = {
                     "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt_tf.txt"),
                     "VER": (VALUE_DEFINITIONS, "values", "templates/prompt_tf.txt"),
-                    "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re_tfv2.txt"),
-                    "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc_tfv2.txt"),
-                    "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt_tf.txt"),
-                    "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae_tfv2.txt"),
+                    "RE": (
+                        COARSE_RELATION_DEFINITIONS,
+                        "coarse_relations",
+                        "templates/prompt_ace_re_tfv2.txt",
+                    ),
+                    "RC": (
+                        RELATION_DEFINITIONS,
+                        "relations",
+                        "templates/prompt_ace_rc_tfv2.txt",
+                    ),
+                    "EE": (
+                        COARSE_EVENT_DEFINITIONS,
+                        "events",
+                        "templates/prompt_tf.txt",
+                    ),
+                    "EAE": (
+                        EVENT_DEFINITIONS,
+                        "arguments",
+                        "templates/prompt_ace_eae_tfv2.txt",
+                    ),
                 }[task]
         else:
             task_definitions, task_target, task_template = {
                 "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt.txt"),
                 "VER": (VALUE_DEFINITIONS, "values", "templates/prompt.txt"),
-                "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re.txt"),
-                "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc.txt"),
+                "RE": (
+                    COARSE_RELATION_DEFINITIONS,
+                    "coarse_relations",
+                    "templates/prompt_ace_re.txt",
+                ),
+                "RC": (
+                    RELATION_DEFINITIONS,
+                    "relations",
+                    "templates/prompt_ace_rc.txt",
+                ),
                 "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
                 "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
             }[task]
 
         if task in ["RC", "EAE"]:
             is_coarse_to_fine: bool = True
-            COARSE_TO_FINE = COARSE_TO_FINE_EVENTS if task == "EAE" else COARSE_TO_FINE_RELATIONS
-            FINE_TO_COARSE = FINE_TO_COARSE_EVENTS if task == "EAE" else FINE_TO_COARSE_RELATIONS
+            COARSE_TO_FINE = (
+                COARSE_TO_FINE_EVENTS if task == "EAE" else COARSE_TO_FINE_RELATIONS
+            )
+            FINE_TO_COARSE = (
+                FINE_TO_COARSE_EVENTS if task == "EAE" else FINE_TO_COARSE_RELATIONS
+            )
         else:
             is_coarse_to_fine = False
             COARSE_TO_FINE = None

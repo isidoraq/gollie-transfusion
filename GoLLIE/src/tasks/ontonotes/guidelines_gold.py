@@ -4,7 +4,9 @@ GUIDELINES = {
     "ontonotes_facility": {"en": ["Buildings, airports, highways, bridges, etc."]},
     "ontonotes_organization": {"en": ["Companies, agencies, institutions, etc."]},
     "ontonotes_gpe": {"en": ["Countries, cities, states."]},
-    "ontonotes_location": {"en": ["Non-GPE locations, mountain ranges, bodies of water."]},
+    "ontonotes_location": {
+        "en": ["Non-GPE locations, mountain ranges, bodies of water."]
+    },
     "ontonotes_product": {"en": ["Objects, vehicles, foods, etc. (Not services)."]},
     "ontonotes_event": {"en": ["Named hurricanes, battles, wars, sports events, etc."]},
     "ontonotes_work_of_art": {"en": ["Titles of books, songs, etc."]},
@@ -15,13 +17,30 @@ GUIDELINES = {
     "ontonotes_percent": {"en": ["Percentage, including ”%“."]},
     "ontonotes_money": {"en": ["Monetary values, including unit."]},
     "ontonotes_quantity": {"en": ["Measurements, as of weight or distance."]},
-    "ontonotes_ordinal": {"en": ["first, second, third, First, fourth, fifth, Second, seventh, eighth, sixth."]},
-    "ontonotes_cardinal": {"en": ["two, one, three, One, four, five, six, seven, Two, half."]},
+    "ontonotes_ordinal": {
+        "en": [
+            "first, second, third, First, fourth, fifth, Second, seventh, eighth, sixth."
+        ]
+    },
+    "ontonotes_cardinal": {
+        "en": ["two, one, three, One, four, five, six, seven, Two, half."]
+    },
 }
 
 EXAMPLES = {
     "ontonotes_person_examples": {
-        "en": ["Bush", "Clinton", "Barak", "Noriega", "Putin", "Milosevic", "Ehud Barak", "Chen", "Reagan", "Gore"]
+        "en": [
+            "Bush",
+            "Clinton",
+            "Barak",
+            "Noriega",
+            "Putin",
+            "Milosevic",
+            "Ehud Barak",
+            "Chen",
+            "Reagan",
+            "Gore",
+        ]
     },
     "ontonotes_norp_examples": {
         "en": [
@@ -52,10 +71,32 @@ EXAMPLES = {
         ]
     },
     "ontonotes_organization_examples": {
-        "en": ["Congress", "Senate", "Treasury", "Xinhua News Agency", "House", "Fed", "UN", "Pentagon", "CNN", "IBM"]
+        "en": [
+            "Congress",
+            "Senate",
+            "Treasury",
+            "Xinhua News Agency",
+            "House",
+            "Fed",
+            "UN",
+            "Pentagon",
+            "CNN",
+            "IBM",
+        ]
     },
     "ontonotes_gpe_examples": {
-        "en": ["U.S.", "China", "Taiwan", "Japan", "US", "New York", "Iraq", "Washington", "Israel", "Hong Kong"]
+        "en": [
+            "U.S.",
+            "China",
+            "Taiwan",
+            "Japan",
+            "US",
+            "New York",
+            "Iraq",
+            "Washington",
+            "Israel",
+            "Hong Kong",
+        ]
     },
     "ontonotes_location_examples": {
         "en": [
@@ -114,7 +155,18 @@ EXAMPLES = {
         ]
     },
     "ontonotes_percent_examples": {
-        "en": ["10 %", "8 %", "50 %", "15 %", "9 %", "5 %", "20 %", "40 %", "60 %", "25 %"]
+        "en": [
+            "10 %",
+            "8 %",
+            "50 %",
+            "15 %",
+            "9 %",
+            "5 %",
+            "20 %",
+            "40 %",
+            "60 %",
+            "25 %",
+        ]
     },
     "ontonotes_money_examples": {
         "en": [
@@ -131,13 +183,46 @@ EXAMPLES = {
         ]
     },
     "ontonotes_quantity_examples": {
-        "en": ["two", "three", "four", "ten", "one", "six", "gallon", "1 degree below zero", "two miles", "five"]
+        "en": [
+            "two",
+            "three",
+            "four",
+            "ten",
+            "one",
+            "six",
+            "gallon",
+            "1 degree below zero",
+            "two miles",
+            "five",
+        ]
     },
     "ontonotes_ordinal_examples": {
-        "en": ["first", "second", "third", "First", "fourth", "fifth", "Second", "seventh", "eighth", "sixth"]
+        "en": [
+            "first",
+            "second",
+            "third",
+            "First",
+            "fourth",
+            "fifth",
+            "Second",
+            "seventh",
+            "eighth",
+            "sixth",
+        ]
     },
     "ontonotes_cardinal_examples": {
-        "en": ["two", "one", "three", "One", "four", "five", "six", "seven", "Two", "half"]
+        "en": [
+            "two",
+            "one",
+            "three",
+            "One",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "Two",
+            "half",
+        ]
     },
     "ontonotes_event_examples": {
         "en": [

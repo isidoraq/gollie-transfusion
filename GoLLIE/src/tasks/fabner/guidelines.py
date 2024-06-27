@@ -7,7 +7,9 @@ GUIDELINES = {
         ]
     },
     "fabner_manufacturingprocess": {
-        "en": ["Refers to a specific technique, method, or procedure used in the production of goods."]
+        "en": [
+            "Refers to a specific technique, method, or procedure used in the production of goods."
+        ]
     },
     "fabner_machineequipment": {
         "en": [
@@ -54,7 +56,9 @@ GUIDELINES = {
         ]
     },
     "fabner_conceptprinciples": {
-        "en": ["Refers to key concepts, principles, and elements related to manufacturing processes."]
+        "en": [
+            "Refers to key concepts, principles, and elements related to manufacturing processes."
+        ]
     },
     "fabner_manufacturingstandards": {
         "en": [
@@ -62,5 +66,7 @@ GUIDELINES = {
             " industry to ensure uniformity, quality, and compatibility of products, processes, and systems."
         ]
     },
-    "fabner_biomedical": {"en": ["Refers to any biomedical entity involved in the manufacturing process."]},
+    "fabner_biomedical": {
+        "en": ["Refers to any biomedical entity involved in the manufacturing process."]
+    },
 }

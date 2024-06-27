@@ -307,7 +307,11 @@ class WikiEventsDatasetLoader(DatasetLoader):
             "Perpetrator": "perpetrator",
             "Victim": "victim",
         },
-        "Justice.Acquit.Unspecified": {"coarse": JusticeEvent, "class": Acquit, "Defendant": "defendant"},
+        "Justice.Acquit.Unspecified": {
+            "coarse": JusticeEvent,
+            "class": Acquit,
+            "Defendant": "defendant",
+        },
         "Justice.ArrestJailDetain.Unspecified": {
             "coarse": JusticeEvent,
             "class": ArrestJailDetain,
@@ -360,7 +364,11 @@ class WikiEventsDatasetLoader(DatasetLoader):
             "Killer": "killer",
             "Victim": "victim",
         },
-        "Life.Infect.Unspecified": {"coarse": LifeEvent, "class": Infect, "Victim": "victim"},
+        "Life.Infect.Unspecified": {
+            "coarse": LifeEvent,
+            "class": Infect,
+            "Victim": "victim",
+        },
         "Life.Injure.Unspecified": {
             "coarse": LifeEvent,
             "class": Injure,
@@ -467,7 +475,9 @@ class WikiEventsDatasetLoader(DatasetLoader):
                     }
 
                 entities = [
-                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
+                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](
+                        span=entity["text"]
+                    )
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.ENTITY_TO_CLASS_MAPPING
                 ]
@@ -477,7 +487,10 @@ class WikiEventsDatasetLoader(DatasetLoader):
                     if event["event_type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
                     info = self.EVENT_TO_CLASS_MAPPING[event["event_type"]]
-                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+                    _inst = {
+                        param: []
+                        for param in inspect.signature(info["class"]).parameters.keys()
+                    }
                     _inst["mention"] = event["trigger"]["text"]
                     for argument in event["arguments"]:
                         if "OOR" in argument["role"]:
@@ -491,7 +504,9 @@ class WikiEventsDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
+                            raise ValueError(
+                                f"Argument {event['event_type']}:{argument['role']} not found!"
+                            )
 
                     events.append(info["coarse"](mention=_inst["mention"]))
                     arguments.append(info["class"](**_inst))

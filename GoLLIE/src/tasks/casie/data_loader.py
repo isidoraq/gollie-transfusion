@@ -106,11 +106,18 @@ class CASIEDatasetLoader(DatasetLoader):
                     }
 
                 events, arguments = [], []
-                for event in sorted(line["events"], key=lambda x: x["trigger"]["start"]):
+                for event in sorted(
+                    line["events"], key=lambda x: x["trigger"]["start"]
+                ):
                     if event["type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
                     info = self.EVENT_TO_CLASS_MAPPING[event["type"]]
-                    _inst = {param: [] for param in inspect.signature(info["eae_class"]).parameters.keys()}
+                    _inst = {
+                        param: []
+                        for param in inspect.signature(
+                            info["eae_class"]
+                        ).parameters.keys()
+                    }
                     _inst["mention"] = event["trigger"]["text"]
                     for argument in event["arguments"]:
                         if argument["role"] in info:
@@ -122,7 +129,9 @@ class CASIEDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            raise ValueError(f"Argument {event['type']}:{argument['role']} not found!")
+                            raise ValueError(
+                                f"Argument {event['type']}:{argument['role']} not found!"
+                            )
 
                     events.append(info["ed_class"](mention=_inst["mention"]))
                     arguments.append(info["eae_class"](**_inst))

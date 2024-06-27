@@ -67,62 +67,90 @@ class REDFMDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-    relation_list = ['country', 'place of birth', 'spouse', 'country of citizenship', 'instance of', 
-                    'capital', 'child', 'shares border with', 'author', 'director', 'occupation', 
-                    'founded by', 'league', 'owned by', 'genre', 'named after', 'follows', 'headquarters location',
-                    'cast member', 'manufacturer', 'located in or next to body of water', 'location', 'part of', 
-                    'mouth of the watercourse', 'member of', 'sport', 'characters', 'participant', 'notable work', 
-                    'replaces', 'sibling', 'inception']
-    
+    relation_list = [
+        "country",
+        "place of birth",
+        "spouse",
+        "country of citizenship",
+        "instance of",
+        "capital",
+        "child",
+        "shares border with",
+        "author",
+        "director",
+        "occupation",
+        "founded by",
+        "league",
+        "owned by",
+        "genre",
+        "named after",
+        "follows",
+        "headquarters location",
+        "cast member",
+        "manufacturer",
+        "located in or next to body of water",
+        "location",
+        "part of",
+        "mouth of the watercourse",
+        "member of",
+        "sport",
+        "characters",
+        "participant",
+        "notable work",
+        "replaces",
+        "sibling",
+        "inception",
+    ]
+
     relid2relation = {idx: rel for idx, rel in enumerate(relation_list)}
 
     RELATION_TO_CLASS_MAPPING = {
-            "country": CountryRelation,
-            "place of birth": PlaceOfBirthRelation,
-            "spouse": SpouseRelation,
-            "country of citizenship": CountryOfCitizenshipRelation,
-            "capital": CapitalRelation,
-            "instance of": InstanceOfRelation,
-            "child": ChildRelation,
-            "shares border with": ShareBorderWithRelation,
-            "author": AuthorRelation,
-            "director": DirectorRelation,
-            "occupation": OccupationRelation,
-            "founded by": FoundedByRelation,
-            "league": LeagueRelation,
-            "owned by": OwnedByelation,
-            "genre": GenreRelation,
-            "named after": NamedAfterRelation,
-            "follows": FollowsRelation,
-            "headquarters location": HeadquartersLocationRelation,
-            "cast member": CastMemberRelation,
-            "manufacturer": ManufacturerRelation,
-            "located in or next to body of water": LocatedInOrNextToBodyOfWaterRelation,
-            "location": LocationRelation,
-            "part of": PartOfRelation,
-            "mouth of the watercourse": MouthOfTheWatercourseRelation,
-            "member of": MemberOfRelation,
-            "sport": SportRelation,
-            "characters": CharactersRelation,
-            "participant": ParticipantRelation,
-            "notable work": NotableWorkRelation,
-            "replaces": ReplacesRelation,
-            "sibling": SiblingRelation,
-            "inception": InceptionRelation
+        "country": CountryRelation,
+        "place of birth": PlaceOfBirthRelation,
+        "spouse": SpouseRelation,
+        "country of citizenship": CountryOfCitizenshipRelation,
+        "capital": CapitalRelation,
+        "instance of": InstanceOfRelation,
+        "child": ChildRelation,
+        "shares border with": ShareBorderWithRelation,
+        "author": AuthorRelation,
+        "director": DirectorRelation,
+        "occupation": OccupationRelation,
+        "founded by": FoundedByRelation,
+        "league": LeagueRelation,
+        "owned by": OwnedByelation,
+        "genre": GenreRelation,
+        "named after": NamedAfterRelation,
+        "follows": FollowsRelation,
+        "headquarters location": HeadquartersLocationRelation,
+        "cast member": CastMemberRelation,
+        "manufacturer": ManufacturerRelation,
+        "located in or next to body of water": LocatedInOrNextToBodyOfWaterRelation,
+        "location": LocationRelation,
+        "part of": PartOfRelation,
+        "mouth of the watercourse": MouthOfTheWatercourseRelation,
+        "member of": MemberOfRelation,
+        "sport": SportRelation,
+        "characters": CharactersRelation,
+        "participant": ParticipantRelation,
+        "notable work": NotableWorkRelation,
+        "replaces": ReplacesRelation,
+        "sibling": SiblingRelation,
+        "inception": InceptionRelation,
     }
-    
+
     ENTITY_TO_CLASS_MAPPING = {
-            "CEL": Celestial,
-            "Concept": Concept,
-            "DATE": Date,
-            "DIS": Distinct,
-            "EVE": Event,
-            "LOC": Location,
-            "MEDIA": Media,
-            "MISC": MISC,
-            "ORG": Organization,
-            "PER": Person,
-            "TIME": Time,
+        "CEL": Celestial,
+        "Concept": Concept,
+        "DATE": Date,
+        "DIS": Distinct,
+        "EVE": Event,
+        "LOC": Location,
+        "MEDIA": Media,
+        "MISC": MISC,
+        "ORG": Organization,
+        "PER": Person,
+        "TIME": Time,
     }
 
     ENT_LIST = set(ENTITY_TO_CLASS_MAPPING.keys())
@@ -132,9 +160,8 @@ class REDFMDatasetLoader(DatasetLoader):
 
         from datasets import load_dataset
 
-        dataset = load_dataset("Babelscape/REDFM", 
-                kwargs["language"])
-        
+        dataset = load_dataset("Babelscape/REDFM", kwargs["language"])
+
         for key, instance in enumerate(dataset[split]):
             self.elements[key] = {}
             text = instance["text"]
@@ -167,11 +194,13 @@ class REDFMDatasetLoader(DatasetLoader):
             self.elements[key]["relations"] = relations
             self.elements[key]["gold"] = entities
 
+
 def load_translation(language):
     path = f"data_translatetest/redfm/redfm_{language}_eng_Latn.jsonl"
     with open(path.format(language), "r", encoding="utf-8") as f:
         data = [json.loads(l)["output_sentence"] for l in f]
     return data
+
 
 class REDFMTransFusionDatasetLoader(DatasetLoader):
     """
@@ -186,62 +215,90 @@ class REDFMTransFusionDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-    relation_list = ['country', 'place of birth', 'spouse', 'country of citizenship', 'instance of', 
-                    'capital', 'child', 'shares border with', 'author', 'director', 'occupation', 
-                    'founded by', 'league', 'owned by', 'genre', 'named after', 'follows', 'headquarters location',
-                    'cast member', 'manufacturer', 'located in or next to body of water', 'location', 'part of', 
-                    'mouth of the watercourse', 'member of', 'sport', 'characters', 'participant', 'notable work', 
-                    'replaces', 'sibling', 'inception']
-    
+    relation_list = [
+        "country",
+        "place of birth",
+        "spouse",
+        "country of citizenship",
+        "instance of",
+        "capital",
+        "child",
+        "shares border with",
+        "author",
+        "director",
+        "occupation",
+        "founded by",
+        "league",
+        "owned by",
+        "genre",
+        "named after",
+        "follows",
+        "headquarters location",
+        "cast member",
+        "manufacturer",
+        "located in or next to body of water",
+        "location",
+        "part of",
+        "mouth of the watercourse",
+        "member of",
+        "sport",
+        "characters",
+        "participant",
+        "notable work",
+        "replaces",
+        "sibling",
+        "inception",
+    ]
+
     relid2relation = {idx: rel for idx, rel in enumerate(relation_list)}
 
     RELATION_TO_CLASS_MAPPING = {
-            "country": CountryRelation,
-            "place of birth": PlaceOfBirthRelation,
-            "spouse": SpouseRelation,
-            "country of citizenship": CountryOfCitizenshipRelation,
-            "capital": CapitalRelation,
-            "instance of": InstanceOfRelation,
-            "child": ChildRelation,
-            "shares border with": ShareBorderWithRelation,
-            "author": AuthorRelation,
-            "director": DirectorRelation,
-            "occupation": OccupationRelation,
-            "founded by": FoundedByRelation,
-            "league": LeagueRelation,
-            "owned by": OwnedByelation,
-            "genre": GenreRelation,
-            "named after": NamedAfterRelation,
-            "follows": FollowsRelation,
-            "headquarters location": HeadquartersLocationRelation,
-            "cast member": CastMemberRelation,
-            "manufacturer": ManufacturerRelation,
-            "located in or next to body of water": LocatedInOrNextToBodyOfWaterRelation,
-            "location": LocationRelation,
-            "part of": PartOfRelation,
-            "mouth of the watercourse": MouthOfTheWatercourseRelation,
-            "member of": MemberOfRelation,
-            "sport": SportRelation,
-            "characters": CharactersRelation,
-            "participant": ParticipantRelation,
-            "notable work": NotableWorkRelation,
-            "replaces": ReplacesRelation,
-            "sibling": SiblingRelation,
-            "inception": InceptionRelation
+        "country": CountryRelation,
+        "place of birth": PlaceOfBirthRelation,
+        "spouse": SpouseRelation,
+        "country of citizenship": CountryOfCitizenshipRelation,
+        "capital": CapitalRelation,
+        "instance of": InstanceOfRelation,
+        "child": ChildRelation,
+        "shares border with": ShareBorderWithRelation,
+        "author": AuthorRelation,
+        "director": DirectorRelation,
+        "occupation": OccupationRelation,
+        "founded by": FoundedByRelation,
+        "league": LeagueRelation,
+        "owned by": OwnedByelation,
+        "genre": GenreRelation,
+        "named after": NamedAfterRelation,
+        "follows": FollowsRelation,
+        "headquarters location": HeadquartersLocationRelation,
+        "cast member": CastMemberRelation,
+        "manufacturer": ManufacturerRelation,
+        "located in or next to body of water": LocatedInOrNextToBodyOfWaterRelation,
+        "location": LocationRelation,
+        "part of": PartOfRelation,
+        "mouth of the watercourse": MouthOfTheWatercourseRelation,
+        "member of": MemberOfRelation,
+        "sport": SportRelation,
+        "characters": CharactersRelation,
+        "participant": ParticipantRelation,
+        "notable work": NotableWorkRelation,
+        "replaces": ReplacesRelation,
+        "sibling": SiblingRelation,
+        "inception": InceptionRelation,
     }
-    
+
     ENTITY_TO_CLASS_MAPPING = {
-            "CEL": Celestial,
-            "Concept": Concept,
-            "DATE": Date,
-            "DIS": Distinct,
-            "EVE": Event,
-            "LOC": Location,
-            "MEDIA": Media,
-            "MISC": MISC,
-            "ORG": Organization,
-            "PER": Person,
-            "TIME": Time,
+        "CEL": Celestial,
+        "Concept": Concept,
+        "DATE": Date,
+        "DIS": Distinct,
+        "EVE": Event,
+        "LOC": Location,
+        "MEDIA": Media,
+        "MISC": MISC,
+        "ORG": Organization,
+        "PER": Person,
+        "TIME": Time,
     }
 
     ENT_LIST = set(ENTITY_TO_CLASS_MAPPING.keys())
@@ -251,9 +308,8 @@ class REDFMTransFusionDatasetLoader(DatasetLoader):
 
         from datasets import load_dataset
 
-        dataset = load_dataset("Babelscape/REDFM", 
-                kwargs["language"])
-        
+        dataset = load_dataset("Babelscape/REDFM", kwargs["language"])
+
         # load translation
         translation = load_translation(language=kwargs["language"])
 
@@ -291,6 +347,7 @@ class REDFMTransFusionDatasetLoader(DatasetLoader):
             self.elements[key]["en_relations"] = []
             self.elements[key]["gold"] = entities
             self.elements[key]["en_gold"] = []
+
 
 class REDFMSampler(Sampler):
     """
@@ -356,7 +413,11 @@ class REDFMSampler(Sampler):
 
         if use_transfusion:
             task_definitions, task_target, task_template = {
-                "RE": (RELATION_DEFINITIONS, "relations", "templates/prompt_re_tfv2.txt"),
+                "RE": (
+                    RELATION_DEFINITIONS,
+                    "relations",
+                    "templates/prompt_re_tfv2.txt",
+                ),
             }[task]
         else:
             task_definitions, task_target, task_template = {

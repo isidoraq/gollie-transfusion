@@ -1,5 +1,6 @@
 import json
 
+
 def get_multinerd_hf(
     split: str,
     language: str,
@@ -73,8 +74,7 @@ for lang in ["de", "es", "fr", "it", "nl", "pl", "pt", "ru", "zh"]:
     output = []
     for d in data[0]:
         output.append({"sentence": " ".join(d), "marker2label": ""})
-    
+
     with open(f"data_translatetest/multinerd/{lang}.jsonl", "w", encoding="utf-8") as f:
         for out in output:
             f.write(json.dumps(out, ensure_ascii=False) + "\n")
-     

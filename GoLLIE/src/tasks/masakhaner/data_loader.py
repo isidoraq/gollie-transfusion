@@ -54,7 +54,9 @@ def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
 
     print(f"Read {len(dataset_words)} sentences from {filepath}")
 
-    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
+    dataset_labels = [
+        rewrite_labels(labels, encoding="iob2") for labels in dataset_labels
+    ]
 
     return dataset_words, dataset_labels
 
@@ -97,12 +99,15 @@ def load_masakhaner_tsv(
         entities = []
         for label, start, end in spans:
             if include_date or label.lower() != "date":
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
 
     return dataset_sentences, dataset_entities
+
 
 def load_masakhaner_translation(path):
     output = []
@@ -110,6 +115,7 @@ def load_masakhaner_translation(path):
         for line in f:
             output.append(line.strip())
     return output
+
 
 class MasakhaNERDatasetLoader(DatasetLoader):
     """
@@ -147,7 +153,6 @@ class MasakhaNERDatasetLoader(DatasetLoader):
 
         self.elements = {}
 
-
         dataset_words, dataset_entities = load_masakhaner_tsv(
             path=path_or_split,
             include_date=include_date,
@@ -162,6 +167,7 @@ class MasakhaNERDatasetLoader(DatasetLoader):
                 "entities": entities,
                 "gold": entities,
             }
+
 
 class MasakhaNERTransFusionDatasetLoader(DatasetLoader):
     """
@@ -199,7 +205,6 @@ class MasakhaNERTransFusionDatasetLoader(DatasetLoader):
 
         self.elements = {}
 
-
         dataset_words, dataset_entities = load_masakhaner_tsv(
             path=path_or_split,
             include_date=include_date,
@@ -208,9 +213,12 @@ class MasakhaNERTransFusionDatasetLoader(DatasetLoader):
 
         # load translation
         translation_sentence = load_masakhaner_translation(
-                                path=kwargs["translation_file"])
+            path=kwargs["translation_file"]
+        )
 
-        for id, (words, entities, trans_sent) in enumerate(zip(dataset_words, dataset_entities, translation_sentence)):
+        for id, (words, entities, trans_sent) in enumerate(
+            zip(dataset_words, dataset_entities, translation_sentence)
+        ):
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -221,6 +229,7 @@ class MasakhaNERTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": [],
             }
+
 
 class MasakhaNERSampler(Sampler):
     """
@@ -286,7 +295,14 @@ class MasakhaNERSampler(Sampler):
         ], f"MasakhaNER only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
-            "NER": (ENTITY_DEFINITIONS if kwargs["include_date"] else ENTITY_DEFINITIONS_woDATE, "entities"),
+            "NER": (
+                (
+                    ENTITY_DEFINITIONS
+                    if kwargs["include_date"]
+                    else ENTITY_DEFINITIONS_woDATE
+                ),
+                "entities",
+            ),
         }[task]
 
         super().__init__(

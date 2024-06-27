@@ -21,6 +21,7 @@ from src.tasks.conll04.prompts import (
 from ..utils_data import DatasetLoader, Sampler
 from src.tasks.conll04.easyproject_data import decode_data
 
+
 class CoNLL04DatasetLoader(DatasetLoader):
     """
     A `DatasetLoader` for the CoNLL04 dataset.
@@ -46,20 +47,22 @@ class CoNLL04DatasetLoader(DatasetLoader):
         "Located_In": LocatedInRelation,
         "Kill": KillRelation,
         "Live_In": LiveInRelation,
-        "Work_For": WorkForRelation
+        "Work_For": WorkForRelation,
     }
-    
+
     def __init__(self, path: str, **kwargs) -> None:
         self.elements = {}
 
         with open(path, "rt") as in_f:
             data = json.load(in_f)
-        
+
         for line in data:
             key = line["orig_id"]
             tokens = line["tokens"]
             entities = [
-                self.ENTITY_TO_CLASS_MAPPING[entity["type"]](span=" ".join(tokens[entity["start"]:entity["end"]]))
+                self.ENTITY_TO_CLASS_MAPPING[entity["type"]](
+                    span=" ".join(tokens[entity["start"] : entity["end"]])
+                )
                 for entity in line["entities"]
                 if entity["type"] in self.ENTITY_TO_CLASS_MAPPING
             ]
@@ -82,6 +85,7 @@ class CoNLL04DatasetLoader(DatasetLoader):
             self.elements[key]["entities"] = entities
             self.elements[key]["relations"] = relations
             self.elements[key]["gold"] = entities  # Is not used anyway
+
 
 class CoNLL04TranslationDatasetLoader(DatasetLoader):
     """
@@ -108,21 +112,23 @@ class CoNLL04TranslationDatasetLoader(DatasetLoader):
         "Located_In": LocatedInRelation,
         "Kill": KillRelation,
         "Live_In": LiveInRelation,
-        "Work_For": WorkForRelation
+        "Work_For": WorkForRelation,
     }
-    
+
     def __init__(self, path: str, **kwargs) -> None:
         self.elements = {}
 
         with open(path, "r", encoding="utf-8") as in_f:
             data = [json.loads(line) for line in in_f]
-        
+
         for d_idx, line in enumerate(data):
             output_sentence = line["output_sentence"]
             input_sentence = line["input_sentence"]
             marker2label = line["marker2label"]
 
-            clean_sentence, entities = decode_data(input_sentence, output_sentence, marker2label)
+            clean_sentence, entities = decode_data(
+                input_sentence, output_sentence, marker2label
+            )
             if (clean_sentence and entities) or (clean_sentence and entities == []):
                 key2entities = {}
 
@@ -131,24 +137,26 @@ class CoNLL04TranslationDatasetLoader(DatasetLoader):
                     key, span = ent
                     key2entities[key] = span.strip()
                     labeled_entities.append(
-                        self.ENTITY_TO_CLASS_MAPPING[marker2label[key]](span=span.strip())
+                        self.ENTITY_TO_CLASS_MAPPING[marker2label[key]](
+                            span=span.strip()
+                        )
                     )
 
                 relations = []
                 for rel in marker2label["relations"]:
-                    
-                    #{"type": "Work_For", "head": 0, "tail": 1}
+
+                    # {"type": "Work_For", "head": 0, "tail": 1}
                     rel_type = rel["type"]
                     head = rel["head"]
                     tail = rel["tail"]
-                    
+
                     relations.append(
                         self.RELATION_TO_CLASS_MAPPING[rel_type](
                             arg1=key2entities[str(head)],
                             arg2=key2entities[str(tail)],
                         )
                     )
-            
+
                 self.elements[d_idx] = {}
                 self.elements[d_idx]["text"] = clean_sentence
                 self.elements[d_idx]["doc_id"] = d_idx
@@ -156,6 +164,7 @@ class CoNLL04TranslationDatasetLoader(DatasetLoader):
                 self.elements[d_idx]["entities"] = labeled_entities
                 self.elements[d_idx]["relations"] = relations
                 self.elements[d_idx]["gold"] = labeled_entities  # Is not used anyway
+
 
 class CoNLL04TransFusionDatasetLoader(DatasetLoader):
     """
@@ -182,23 +191,32 @@ class CoNLL04TransFusionDatasetLoader(DatasetLoader):
         "Located_In": LocatedInRelation,
         "Kill": KillRelation,
         "Live_In": LiveInRelation,
-        "Work_For": WorkForRelation
+        "Work_For": WorkForRelation,
     }
-    
+
     def __init__(self, path: str, **kwargs) -> None:
         self.elements = {}
 
         with open(path, "r", encoding="utf-8") as in_f:
             data = [json.loads(line) for line in in_f]
-        
+
         for d_idx, line in enumerate(data):
             output_sentence = line["output_sentence"]
             input_sentence = line["input_sentence"]
             marker2label = line["marker2label"]
 
-            clean_sentence, entities = decode_data(input_sentence, output_sentence, marker2label)
-            clean_en_sentence, en_entities = decode_data(input_sentence, input_sentence, marker2label)
-            if (clean_sentence and entities and clean_en_sentence and en_entities) or (clean_sentence and entities == [] and clean_en_sentence and en_entities == []):
+            clean_sentence, entities = decode_data(
+                input_sentence, output_sentence, marker2label
+            )
+            clean_en_sentence, en_entities = decode_data(
+                input_sentence, input_sentence, marker2label
+            )
+            if (clean_sentence and entities and clean_en_sentence and en_entities) or (
+                clean_sentence
+                and entities == []
+                and clean_en_sentence
+                and en_entities == []
+            ):
                 key2entities = {}
                 en_key2entities = {}
 
@@ -207,7 +225,9 @@ class CoNLL04TransFusionDatasetLoader(DatasetLoader):
                     key, span = ent
                     key2entities[key] = span.strip()
                     labeled_entities.append(
-                        self.ENTITY_TO_CLASS_MAPPING[marker2label[key]](span=span.strip())
+                        self.ENTITY_TO_CLASS_MAPPING[marker2label[key]](
+                            span=span.strip()
+                        )
                     )
 
                 labeled_en_entities = []
@@ -215,18 +235,20 @@ class CoNLL04TransFusionDatasetLoader(DatasetLoader):
                     key, span = ent
                     en_key2entities[key] = span.strip()
                     labeled_en_entities.append(
-                        self.ENTITY_TO_CLASS_MAPPING[marker2label[key]](span=span.strip())
+                        self.ENTITY_TO_CLASS_MAPPING[marker2label[key]](
+                            span=span.strip()
+                        )
                     )
 
                 relations = []
                 en_relations = []
                 for rel in marker2label["relations"]:
-                    
-                    #{"type": "Work_For", "head": 0, "tail": 1}
+
+                    # {"type": "Work_For", "head": 0, "tail": 1}
                     rel_type = rel["type"]
                     head = rel["head"]
                     tail = rel["tail"]
-                    
+
                     relations.append(
                         self.RELATION_TO_CLASS_MAPPING[rel_type](
                             arg1=key2entities[str(head)],
@@ -240,7 +262,7 @@ class CoNLL04TransFusionDatasetLoader(DatasetLoader):
                             arg2=en_key2entities[str(tail)],
                         )
                     )
-            
+
                 self.elements[d_idx] = {}
                 self.elements[d_idx]["text"] = clean_sentence
                 self.elements[d_idx]["en_text"] = clean_en_sentence
@@ -250,8 +272,8 @@ class CoNLL04TransFusionDatasetLoader(DatasetLoader):
                 self.elements[d_idx]["en_entities"] = labeled_en_entities
                 self.elements[d_idx]["relations"] = relations
                 self.elements[d_idx]["en_relations"] = en_relations
-                self.elements[d_idx]["gold"] = labeled_entities  
-                self.elements[d_idx]["en_gold"] = labeled_en_entities 
+                self.elements[d_idx]["gold"] = labeled_entities
+                self.elements[d_idx]["en_gold"] = labeled_en_entities
 
 
 class CoNLL04Sampler(Sampler):
@@ -320,7 +342,11 @@ class CoNLL04Sampler(Sampler):
         if use_transfusion:
             task_definitions, task_target, task_template = {
                 "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt_ner_tf.txt"),
-                "RE": (RELATION_DEFINITIONS, "relations", "templates/prompt_re_tfv2.txt"),
+                "RE": (
+                    RELATION_DEFINITIONS,
+                    "relations",
+                    "templates/prompt_re_tfv2.txt",
+                ),
             }[task]
         else:
             task_definitions, task_target, task_template = {

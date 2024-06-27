@@ -79,8 +79,12 @@ def prepare_data(
                 "Prompt until 'all' is not supported for encoder-decoder models. "
                 "Please use 'result' or 'text' instead."
             )
-        prompt, result = example.split("result =" if prompt_until == "result" else "text =", maxsplit=1)
-        prompt = prompt + ("result =" if prompt_until == "result" else prompt + "text =")
+        prompt, result = example.split(
+            "result =" if prompt_until == "result" else "text =", maxsplit=1
+        )
+        prompt = prompt + (
+            "result =" if prompt_until == "result" else prompt + "text ="
+        )
         prompt = prompt.strip()
         result = result.strip()
 
@@ -102,7 +106,9 @@ def prepare_data(
                 add_special_tokens=True,
             )["input_ids"]
 
-            model_inputs["loss_weight_mask"] = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+            model_inputs["loss_weight_mask"] = np.ones(
+                len(model_inputs["labels"]), dtype=np.float32
+            )
 
     else:
         if inference:
@@ -151,7 +157,9 @@ def prepare_data(
             # Find the prompt length
 
             if prompt_until == "all":
-                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+                loss_weight_mask = np.ones(
+                    len(model_inputs["labels"]), dtype=np.float32
+                )
             else:
                 if prompt_until == "result":
                     prompt = example.split("result =", maxsplit=1)[0] + "result ="
@@ -182,18 +190,24 @@ def prepare_data(
                     )
 
                 # Create the weight mask
-                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+                loss_weight_mask = np.ones(
+                    len(model_inputs["labels"]), dtype=np.float32
+                )
 
                 # The sum of the loss of the prompt tokens should be equal
                 # to 'prompt_loss_weight' percent of the total loss
                 len_prompt = len(prompt)
                 len_result = len(model_inputs["labels"]) - len_prompt
-                prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
+                prompt_token_weight = (
+                    len_result * prompt_loss_weight
+                )  # 'prompt_loss_weight' percent of the total loss
                 try:
                     prompt_token_weight = prompt_token_weight * (
                         len_result / (len_result * (1 - prompt_loss_weight))
                     )  # Scale so result tokens can have 1.0 weight
-                    prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
+                    prompt_token_weight = (
+                        prompt_token_weight / len_prompt
+                    )  # Divide by the number of prompt tokens
                 except ZeroDivisionError:
                     logging.warning(
                         "Found division by zero in prompt token weight calculation. You might have an empty prompt,"
@@ -347,12 +361,16 @@ class CollieDataset(Dataset):
         self.max_examples = max_examples
 
         if not (0.0 <= prompt_loss_weight < 1.0):
-            raise ValueError(f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}.")
+            raise ValueError(
+                f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}."
+            )
 
         self.prompt_loss_weight = prompt_loss_weight
 
         if prompt_until not in ["result", "text", "all"]:
-            raise ValueError(f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'")
+            raise ValueError(
+                f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'"
+            )
         self.prompt_until = prompt_until
 
         try:
@@ -361,13 +379,15 @@ class CollieDataset(Dataset):
                 self.dataset_name, self.task_name, self.split, extension = name_list
                 self.lang_specific_data = False
             elif len(name_list) == 5:
-                self.dataset_name, self.lang, self.task_name, self.split, extension = name_list
+                self.dataset_name, self.lang, self.task_name, self.split, extension = (
+                    name_list
+                )
                 self.lang_specific_data = True
             else:
                 raise ValueError(
-                f"Something is wrong with the dataset path {dataset_path}. Please check it and ensure "
-                "it follows the format `dataset_name.task_name.split.jsonl`"
-            )
+                    f"Something is wrong with the dataset path {dataset_path}. Please check it and ensure "
+                    "it follows the format `dataset_name.task_name.split.jsonl`"
+                )
         except ValueError:
             raise ValueError(
                 f"Something is wrong with the dataset path {dataset_path}. Please check it and ensure "
@@ -382,17 +402,22 @@ class CollieDataset(Dataset):
         if self.split == "train":
             epoch_datasets = glob.glob(
                 os.path.join(
-                    os.path.dirname(dataset_path), f"{self.dataset_name}.{self.task_name}.{self.split}.*.jsonl"
+                    os.path.dirname(dataset_path),
+                    f"{self.dataset_name}.{self.task_name}.{self.split}.*.jsonl",
                 )
             )
             if epoch_datasets:
                 epoch_datasets.sort(key=lambda x: int(x.split(".")[-2]))
-                logging.info(f"Found {len(epoch_datasets)} pre-computed epoch datasets.")
+                logging.info(
+                    f"Found {len(epoch_datasets)} pre-computed epoch datasets."
+                )
                 for dataset in epoch_datasets:
                     try:
                         _, _, _, epoch, _ = os.path.basename(dataset).split(".")
                     except ValueError:
-                        logging.warning(f"Error loading pre-computed epoch {dataset} . Skipping...")
+                        logging.warning(
+                            f"Error loading pre-computed epoch {dataset} . Skipping..."
+                        )
                         continue
 
                     self.dataset_dict[int(epoch)] = self.compute_tokenized_examples(
@@ -418,7 +443,9 @@ class CollieDataset(Dataset):
                             f"Oversampling dataset {key} from {len(self.dataset_dict[key])} to {max_length}"
                         )
                         num_samples = max_length - len(self.dataset_dict[key])
-                        random_samples = random.choices(self.dataset_dict[key], k=num_samples)
+                        random_samples = random.choices(
+                            self.dataset_dict[key], k=num_samples
+                        )
                         self.dataset_dict[key].extend(random_samples)
 
                 self.current_dataset_key = self.dataset_keys[0]
@@ -432,7 +459,9 @@ class CollieDataset(Dataset):
             self.dataset_keys.append(0)
             self.current_dataset_key = self.dataset_keys[0]
 
-        logging.info(f"Loaded {[len(x) for x in self.dataset_dict.values()]} examples from {dataset_path}")
+        logging.info(
+            f"Loaded {[len(x) for x in self.dataset_dict.values()]} examples from {dataset_path}"
+        )
 
     def compute_tokenized_examples(
         self,
@@ -461,15 +490,19 @@ class CollieDataset(Dataset):
             examples = f.readlines()
 
         examples = [json.loads(example.strip())["text"] for example in examples]
-        
+
         if self.max_examples is not None and self.max_examples < len(examples):
-            #examples = random.sample(examples, self.max_examples) Change to top K
-            examples = examples[:self.max_examples]
-        
+            # examples = random.sample(examples, self.max_examples) Change to top K
+            examples = examples[: self.max_examples]
+
         if num_workers <= 1:
             return batch_tokenization(
                 tokenizer=tokenizer,
-                dataset_name=".".join([self.dataset_name, self.lang, self.task_name, self.split]) if self.lang_specific_data else ".".join([self.dataset_name, self.task_name, self.split]),
+                dataset_name=(
+                    ".".join([self.dataset_name, self.lang, self.task_name, self.split])
+                    if self.lang_specific_data
+                    else ".".join([self.dataset_name, self.task_name, self.split])
+                ),
                 is_encoder_decoder=self.is_encoder_decoder,
                 max_length=self.max_length,
                 inference=self.inference,
@@ -482,7 +515,11 @@ class CollieDataset(Dataset):
             tokenizer_fn = partial(
                 batch_tokenization,
                 tokenizer,
-                ".".join([self.dataset_name, self.lang, self.task_name, self.split]) if self.lang_specific_data else ".".join([self.dataset_name, self.task_name, self.split]),
+                (
+                    ".".join([self.dataset_name, self.lang, self.task_name, self.split])
+                    if self.lang_specific_data
+                    else ".".join([self.dataset_name, self.task_name, self.split])
+                ),
                 self.is_encoder_decoder,
                 self.max_length,
                 self.inference,
@@ -508,7 +545,8 @@ class CollieDataset(Dataset):
         Rotate the current dataset to the next one.
         """
         self.current_dataset_key = self.dataset_keys[
-            (self.dataset_keys.index(self.current_dataset_key) + 1) % len(self.dataset_keys)
+            (self.dataset_keys.index(self.current_dataset_key) + 1)
+            % len(self.dataset_keys)
         ]
 
         if len(self.dataset_dict) > 1:
@@ -566,9 +604,15 @@ class DataCollatorForCoLLIE:
     def __call__(self, features, return_tensors=None):
         if return_tensors is None:
             return_tensors = self.return_tensors
-        labels = [feature["labels"] for feature in features] if "labels" in features[0].keys() else None
+        labels = (
+            [feature["labels"] for feature in features]
+            if "labels" in features[0].keys()
+            else None
+        )
         loss_weight_mask = (
-            [feature["loss_weight_mask"] for feature in features] if "loss_weight_mask" in features[0].keys() else None
+            [feature["loss_weight_mask"] for feature in features]
+            if "loss_weight_mask" in features[0].keys()
+            else None
         )
         # We have to pad the labels before calling `tokenizer.pad` as this method won't pad them and needs them of the
         # same length to return tensors.
@@ -583,15 +627,23 @@ class DataCollatorForCoLLIE:
 
             padding_side = self.tokenizer.padding_side
             for feature in features:
-                remainder = [self.label_pad_token_id] * (max_label_length - len(feature["labels"]))
+                remainder = [self.label_pad_token_id] * (
+                    max_label_length - len(feature["labels"])
+                )
                 if isinstance(feature["labels"], list):
                     feature["labels"] = (
-                        feature["labels"] + remainder if padding_side == "right" else remainder + feature["labels"]
+                        feature["labels"] + remainder
+                        if padding_side == "right"
+                        else remainder + feature["labels"]
                     )
                 elif padding_side == "right":
-                    feature["labels"] = np.concatenate([feature["labels"], remainder]).astype(np.int64)
+                    feature["labels"] = np.concatenate(
+                        [feature["labels"], remainder]
+                    ).astype(np.int64)
                 else:
-                    feature["labels"] = np.concatenate([remainder, feature["labels"]]).astype(np.int64)
+                    feature["labels"] = np.concatenate(
+                        [remainder, feature["labels"]]
+                    ).astype(np.int64)
 
         if loss_weight_mask is not None:
             max_loss_weight_mask_length = max(len(l) for l in loss_weight_mask)
@@ -614,13 +666,13 @@ class DataCollatorForCoLLIE:
                         else remainder + feature["loss_weight_mask"]
                     )
                 elif padding_side == "right":
-                    feature["loss_weight_mask"] = np.concatenate([feature["loss_weight_mask"], remainder]).astype(
-                        np.float32
-                    )
+                    feature["loss_weight_mask"] = np.concatenate(
+                        [feature["loss_weight_mask"], remainder]
+                    ).astype(np.float32)
                 else:
-                    feature["loss_weight_mask"] = np.concatenate([remainder, feature["loss_weight_mask"]]).astype(
-                        np.float32
-                    )
+                    feature["loss_weight_mask"] = np.concatenate(
+                        [remainder, feature["loss_weight_mask"]]
+                    ).astype(np.float32)
 
         features = self.tokenizer.pad(
             features,
@@ -636,7 +688,9 @@ class DataCollatorForCoLLIE:
             and self.model is not None
             and hasattr(self.model, "prepare_decoder_input_ids_from_labels")
         ):
-            decoder_input_ids = self.model.prepare_decoder_input_ids_from_labels(labels=features["labels"])
+            decoder_input_ids = self.model.prepare_decoder_input_ids_from_labels(
+                labels=features["labels"]
+            )
             features["decoder_input_ids"] = decoder_input_ids
 
         return features

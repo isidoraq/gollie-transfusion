@@ -89,7 +89,9 @@ def get_multinerd_hf(
             continue
         words = example["tokens"]
         # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
 
         # Get labeled word spans
         spans = []
@@ -106,12 +108,15 @@ def get_multinerd_hf(
         # Get entities
         entities = []
         for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
 
     return dataset_sentences, dataset_entities
+
 
 def get_multinerd_jsonl(
     split: str,
@@ -176,7 +181,9 @@ def get_multinerd_jsonl(
             continue
         words = example["tokens"]
         # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
 
         # Get labeled word spans
         spans = []
@@ -193,12 +200,15 @@ def get_multinerd_jsonl(
         # Get entities
         entities = []
         for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
 
     return dataset_sentences, dataset_entities
+
 
 class MultinerdDatasetLoader(DatasetLoader):
     """
@@ -251,11 +261,13 @@ class MultinerdDatasetLoader(DatasetLoader):
                 "gold": entities,
             }
 
+
 def load_translation(language):
     path = f"data_translatetest/multinerd/{language}_eng_Latn.jsonl"
     with open(path, "r", encoding="utf-8") as f:
         data = [json.loads(l)["output_sentence"] for l in f]
     return data
+
 
 class MultinerdTransFusionDatasetLoader(DatasetLoader):
     """
@@ -293,20 +305,20 @@ class MultinerdTransFusionDatasetLoader(DatasetLoader):
 
         self.elements = {}
 
-       
         dataset_words, dataset_entities = get_multinerd_jsonl(
             split=path_or_split,
             language=kwargs["language"],
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
         )
-       
 
         dataset_words = dataset_words[:2000]
         dataset_entities = dataset_entities[:2000]
         translation = load_translation(language=kwargs["language"])
 
-        for id, (words, entities, eng_text) in enumerate(zip(dataset_words, dataset_entities, translation)):
-            
+        for id, (words, entities, eng_text) in enumerate(
+            zip(dataset_words, dataset_entities, translation)
+        ):
+
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -317,6 +329,7 @@ class MultinerdTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": [],
             }
+
 
 class MultinerdSampler(Sampler):
     """

@@ -23,7 +23,9 @@ class CasieProcessor:
     def __init__(self) -> CasieProcessor:
         self._nlp = None
 
-    def _sent_tokenize(self: CasieProcessor, text: str, start_pos: int) -> Iterable[Tuple[int, str]]:
+    def _sent_tokenize(
+        self: CasieProcessor, text: str, start_pos: int
+    ) -> Iterable[Tuple[int, str]]:
         if not self._nlp:
             import spacy
 
@@ -50,12 +52,15 @@ class CasieProcessor:
             text = data["content"]
             sentences = list(self._sent_tokenize(text, 0))
 
-            events = [event for idx in data["cyberevent"]["hopper"] for event in idx["events"]]
+            events = [
+                event for idx in data["cyberevent"]["hopper"] for event in idx["events"]
+            ]
             for event in events:
                 _type = self.EVENT_MAPPING[event["type"] + "_" + event["subtype"]]
                 try:
                     sentence_id = self.get_sent_id(
-                        (event["nugget"]["startOffset"], event["nugget"]["endOffset"]), sentences
+                        (event["nugget"]["startOffset"], event["nugget"]["endOffset"]),
+                        sentences,
                     )
                 except ValueError:
                     continue
@@ -64,10 +69,18 @@ class CasieProcessor:
                 # Normalize the trigger
                 if (
                     event["nugget"]["text"]
-                    != sentence[event["nugget"]["startOffset"] - start_idx : event["nugget"]["endOffset"] - start_idx]
+                    != sentence[
+                        event["nugget"]["startOffset"]
+                        - start_idx : event["nugget"]["endOffset"]
+                        - start_idx
+                    ]
                 ):
-                    event["nugget"]["startOffset"] = sentence.find(event["nugget"]["text"]) + start_idx
-                    event["nugget"]["endOffset"] = event["nugget"]["startOffset"] + len(event["nugget"]["text"])
+                    event["nugget"]["startOffset"] = (
+                        sentence.find(event["nugget"]["text"]) + start_idx
+                    )
+                    event["nugget"]["endOffset"] = event["nugget"]["startOffset"] + len(
+                        event["nugget"]["text"]
+                    )
                 trigger = self.trigger(
                     event["nugget"]["startOffset"] - start_idx,
                     event["nugget"]["endOffset"] - start_idx,
@@ -80,7 +93,9 @@ class CasieProcessor:
                     event["argument"] = []
                 for argument in event["argument"]:
                     try:
-                        arg_sent_id = self.get_sent_id((argument["startOffset"], argument["endOffset"]), sentences)
+                        arg_sent_id = self.get_sent_id(
+                            (argument["startOffset"], argument["endOffset"]), sentences
+                        )
                     except ValueError:
                         continue
                     if sentence_id != arg_sent_id:
@@ -89,10 +104,18 @@ class CasieProcessor:
 
                     if (
                         argument["text"]
-                        != sentence[argument["startOffset"] - start_idx : argument["endOffset"] - start_idx]
+                        != sentence[
+                            argument["startOffset"]
+                            - start_idx : argument["endOffset"]
+                            - start_idx
+                        ]
                     ):
-                        argument["startOffset"] = sentence.find(argument["text"]) + start_idx
-                        argument["endOffset"] = argument["startOffset"] + len(argument["text"])
+                        argument["startOffset"] = (
+                            sentence.find(argument["text"]) + start_idx
+                        )
+                        argument["endOffset"] = argument["startOffset"] + len(
+                            argument["text"]
+                        )
 
                     argument = self.argument(
                         argument["startOffset"] - start_idx,
@@ -105,11 +128,19 @@ class CasieProcessor:
                     arguments.append(argument)
 
                 annotations[sentence_id].append(
-                    {"type": _type, "trigger": trigger._asdict(), "arguments": [arg._asdict() for arg in arguments]}
+                    {
+                        "type": _type,
+                        "trigger": trigger._asdict(),
+                        "arguments": [arg._asdict() for arg in arguments],
+                    }
                 )
 
         for sent_id, anns in annotations.items():
-            yield {"sent_id": f"{doc_name}:{sent_id}", "text": sentences[sent_id][-1], "events": anns}
+            yield {
+                "sent_id": f"{doc_name}:{sent_id}",
+                "text": sentences[sent_id][-1],
+                "events": anns,
+            }
 
 
 def main(args):

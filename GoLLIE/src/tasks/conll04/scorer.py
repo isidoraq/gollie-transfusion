@@ -6,6 +6,7 @@ from src.tasks.conll04.prompts import (
 from src.tasks.utils_scorer import EventScorer, RelationScorer, SpanScorer
 from src.tasks.utils_typing import Entity, Value
 
+
 class CoNLL04RelationScorer(RelationScorer):
     """CoNLL04 Relation identification scorer."""
 

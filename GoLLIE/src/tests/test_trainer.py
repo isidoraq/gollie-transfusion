@@ -48,7 +48,10 @@ class TestCollieTrainer(unittest.TestCase):
                 "If PEFT is used, then the adapter must be saved.",
             )
             self.assertFalse(
-                any(elem.startswith("model") and elem.endswith(".safetensors") for elem in os.listdir(tmpdirname)),
+                any(
+                    elem.startswith("model") and elem.endswith(".safetensors")
+                    for elem in os.listdir(tmpdirname)
+                ),
                 "If PEFT is used, then the model should not be saved.",
             )
 
@@ -82,11 +85,17 @@ class TestCollieTrainer(unittest.TestCase):
                 "If PEFT is not used, then no adapter must be saved.",
             )
             self.assertTrue(
-                any(elem.startswith("model") and elem.endswith(".safetensors") for elem in os.listdir(tmpdirname)),
+                any(
+                    elem.startswith("model") and elem.endswith(".safetensors")
+                    for elem in os.listdir(tmpdirname)
+                ),
                 "If PEFT is not used, then the model have to be saved.",
             )
 
-    @unittest.skipIf(psutil.virtual_memory().total / (1 << 30) < 15, "Not enough RAM available to run the test")
+    @unittest.skipIf(
+        psutil.virtual_memory().total / (1 << 30) < 15,
+        "Not enough RAM available to run the test",
+    )
     def test_compute_loss(self):
         from tempfile import TemporaryDirectory
 
@@ -133,24 +142,37 @@ class TestCollieTrainer(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloader = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloader = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             inputs = list(dataloader)[0]
             inputs = {key: value.to("cpu") for key, value in inputs.items()}
             not_result_mask = inputs["loss_weight_mask"] < 1.0
 
-            collie_loss = collie_trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
+            collie_loss = collie_trainer.compute_loss(
+                model=model, inputs=inputs, return_outputs=False
+            )
 
             inputs = list(dataloader)[0]
-            inputs = {key: value.to("cpu") for key, value in inputs.items() if key not in ["loss_weight_mask"]}
+            inputs = {
+                key: value.to("cpu")
+                for key, value in inputs.items()
+                if key not in ["loss_weight_mask"]
+            }
             inputs["labels"][not_result_mask] = -100
 
             model_loss = model(**inputs).loss
-            original_loss = trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
+            original_loss = trainer.compute_loss(
+                model=model, inputs=inputs, return_outputs=False
+            )
 
             self.assertAlmostEqual(model_loss.item(), original_loss.item(), delta=1e-5)
             self.assertAlmostEqual(collie_loss.item(), original_loss.item(), delta=1e-5)
 
-    @unittest.skipIf(psutil.virtual_memory().total / (1 << 30) < 15, "Not enough RAM available to run the test")
+    @unittest.skipIf(
+        psutil.virtual_memory().total / (1 << 30) < 15,
+        "Not enough RAM available to run the test",
+    )
     @require_torch_gpu
     def test_compute_loss_GPU(self):
         from tempfile import TemporaryDirectory
@@ -199,26 +221,40 @@ class TestCollieTrainer(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloader = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloader = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             inputs = list(dataloader)[0]
-            inputs = {key: value.to(collie_trainer.model.device) for key, value in inputs.items()}
+            inputs = {
+                key: value.to(collie_trainer.model.device)
+                for key, value in inputs.items()
+            }
             not_result_mask = inputs["loss_weight_mask"] < 1.0
 
-            collie_loss = collie_trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
+            collie_loss = collie_trainer.compute_loss(
+                model=model, inputs=inputs, return_outputs=False
+            )
 
             inputs = list(dataloader)[0]
             inputs = {
-                key: value.to(trainer.model.device) for key, value in inputs.items() if key not in ["loss_weight_mask"]
+                key: value.to(trainer.model.device)
+                for key, value in inputs.items()
+                if key not in ["loss_weight_mask"]
             }
             inputs["labels"][not_result_mask] = -100
 
             model_loss = model(**inputs).loss
-            original_loss = trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
+            original_loss = trainer.compute_loss(
+                model=model, inputs=inputs, return_outputs=False
+            )
 
             self.assertAlmostEqual(model_loss.item(), original_loss.item(), delta=1e-5)
             self.assertAlmostEqual(collie_loss.item(), original_loss.item(), delta=1e-5)
 
-    @unittest.skipIf(psutil.virtual_memory().total / (1 << 30) < 15, "Not enough RAM available to run the test")
+    @unittest.skipIf(
+        psutil.virtual_memory().total / (1 << 30) < 15,
+        "Not enough RAM available to run the test",
+    )
     def test_compute_loss_lora(self):
         from tempfile import TemporaryDirectory
 
@@ -264,19 +300,29 @@ class TestCollieTrainer(unittest.TestCase):
                 label_pad_token_id=-100,
             )
 
-            dataloader = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            dataloader = DataLoader(
+                dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+            )
             inputs = list(dataloader)[0]
             inputs = {key: value.to("cpu") for key, value in inputs.items()}
             not_result_mask = inputs["loss_weight_mask"] < 1.0
 
-            collie_loss = collie_trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
+            collie_loss = collie_trainer.compute_loss(
+                model=model, inputs=inputs, return_outputs=False
+            )
 
             inputs = list(dataloader)[0]
-            inputs = {key: value.to("cpu") for key, value in inputs.items() if key not in ["loss_weight_mask"]}
+            inputs = {
+                key: value.to("cpu")
+                for key, value in inputs.items()
+                if key not in ["loss_weight_mask"]
+            }
             inputs["labels"][not_result_mask] = -100
 
             model_loss = model(**inputs).loss
-            original_loss = trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
+            original_loss = trainer.compute_loss(
+                model=model, inputs=inputs, return_outputs=False
+            )
 
             self.assertAlmostEqual(model_loss.item(), original_loss.item(), delta=1e-5)
             self.assertAlmostEqual(collie_loss.item(), original_loss.item(), delta=1e-5)

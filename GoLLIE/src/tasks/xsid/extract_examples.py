@@ -1,5 +1,6 @@
 from collections import defaultdict, Counter
 
+
 def read_tsv(filepath):
     """
     READ tsv file in conll format
@@ -64,6 +65,7 @@ def summarize_examples(dataset_words, dataset_labels):
         for label, start, end in spans:
             entities[label][" ".join(words[start:end])] += 1
     return entities
+
 
 words, labels = read_tsv("dataset/xSID/xSID-0.4/en.train.conll")
 

@@ -92,7 +92,9 @@ class TestACEScorers(unittest.TestCase):
         # recall -> 2 / 5 = 0.4
         # F1 -> 2 * (0.6666666666666666 * 0.4) / (0.6666666666666666 + 0.4) = 0.5
 
-        scorer_results = scorer(reference=reference, predictions=predictions)["arguments"]
+        scorer_results = scorer(reference=reference, predictions=predictions)[
+            "arguments"
+        ]
         if "class_scores" in scorer_results:
             scorer_results.pop("class_scores")
 
@@ -184,7 +186,9 @@ class TestRAMSScorers(unittest.TestCase):
 
         # No alignment
 
-        scorer_results = scorer(reference=reference, predictions=predictions)["arguments"]
+        scorer_results = scorer(reference=reference, predictions=predictions)[
+            "arguments"
+        ]
         if "class_scores" in scorer_results:
             scorer_results.pop("class_scores")
 
@@ -240,7 +244,12 @@ class TestTACREDScorers(unittest.TestCase):
         )
 
         predictions = [
-            PersonTemplate(query="Peter", city_of_birth=Name("Lasarte"), age=Value("26"), origin=Name("Spain"))
+            PersonTemplate(
+                query="Peter",
+                city_of_birth=Name("Lasarte"),
+                age=Value("26"),
+                origin=Name("Spain"),
+            )
         ]
 
         # Partially aligned
@@ -274,7 +283,10 @@ class TestCASIEScorers(unittest.TestCase):
 
         scorer = CASIEEventScorer(allow_partial_match=True)
 
-        reference = [VulnerabilityDiscover(mention="vulnerability found"), VulnerabilityDiscover(mention="reported")]
+        reference = [
+            VulnerabilityDiscover(mention="vulnerability found"),
+            VulnerabilityDiscover(mention="reported"),
+        ]
 
         # Perfect alingment
         scorer_results = scorer(reference=reference, predictions=reference)["events"]
@@ -296,7 +308,10 @@ class TestCASIEScorers(unittest.TestCase):
             {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
         )
 
-        predictions = [VulnerabilityDiscover(mention="vulnerability"), VulnerabilityDiscover(mention="discovered")]
+        predictions = [
+            VulnerabilityDiscover(mention="vulnerability"),
+            VulnerabilityDiscover(mention="discovered"),
+        ]
 
         scorer_results = scorer(reference=reference, predictions=predictions)["events"]
         if "class_scores" in scorer_results:
@@ -396,7 +411,9 @@ class TestCASIEScorers(unittest.TestCase):
         # precision -> 6 / 6 = 1.0
         # recall -> 6 / 7 = 0.8571428571428571
         # F1 -> 2 * (0.8571428571428571 * 1.0) / (0.8571428571428571 + 1.0) = 0.9285714285714286
-        scorer_results = scorer(reference=reference, predictions=predictions)["arguments"]
+        scorer_results = scorer(reference=reference, predictions=predictions)[
+            "arguments"
+        ]
         if "class_scores" in scorer_results:
             scorer_results.pop("class_scores")
         self.assertDictEqual(

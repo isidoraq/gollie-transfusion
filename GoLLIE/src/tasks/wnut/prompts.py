@@ -54,6 +54,13 @@ class Group(Entity):
     span: str  # {wnut_group_examples}
 
 
-ENTITY_DEFINITIONS: List[Entity] = [Person, Location, Corporation, Product, CreativeWork, Group]
+ENTITY_DEFINITIONS: List[Entity] = [
+    Person,
+    Location,
+    Corporation,
+    Product,
+    CreativeWork,
+    Group,
+]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

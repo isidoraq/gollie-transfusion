@@ -24,7 +24,9 @@ def clean_cache():
     """Clean cache to avoid memory leak.
     This fixes this issue: https://github.com/huggingface/transformers/issues/22801"""
 
-    logging.info(f"Cleaning GPU memory. Current memory usage: {torch.cuda.memory_allocated()}")
+    logging.info(
+        f"Cleaning GPU memory. Current memory usage: {torch.cuda.memory_allocated()}"
+    )
     torch.cuda.empty_cache()
     gc.collect()
     torch.cuda.empty_cache()
@@ -47,35 +49,42 @@ def train_collie(
         lora_alpha=model_args.lora_alpha,
         lora_target_modules=model_args.lora_target_modules,
         torch_dtype=get_correct_torch_dtype(
-            quantization=model_args.quantization, model_args=model_args, training_args=training_args
+            quantization=model_args.quantization,
+            model_args=model_args,
+            training_args=training_args,
         ),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
         use_better_transformer=model_args.use_better_transformer,
         trust_remote_code=model_args.trust_remote_code,
         use_flash_attention=model_args.use_flash_attention,
-        fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
+        fsdp_training=len(training_args.fsdp) > 1
+        or training_args.fsdp_config is not None,
         max_memory_MB=model_args.max_memory_MB,
-        lora_weights_name_or_path=model_args.lora_weights_name_or_path
+        lora_weights_name_or_path=model_args.lora_weights_name_or_path,
     )
 
     logging.info("Loading datasets...")
     if data_args.train_tasks:
         training_datasets_path = [
-            f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl" for task in data_args.train_tasks
+            f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl"
+            for task in data_args.train_tasks
         ]
     if data_args.train_ep_tasks:
         training_ep_datasets_path = [
-            f"{os.path.join(data_args.dataset_ep_dir, task)}.train.jsonl" for task in data_args.train_ep_tasks
+            f"{os.path.join(data_args.dataset_ep_dir, task)}.train.jsonl"
+            for task in data_args.train_ep_tasks
         ]
 
     if data_args.train_tf_tasks:
         training_tf_datasets_path = [
-            f"{os.path.join(data_args.dataset_tf_dir, task)}.train.jsonl" for task in data_args.train_tf_tasks
+            f"{os.path.join(data_args.dataset_tf_dir, task)}.train.jsonl"
+            for task in data_args.train_tf_tasks
         ]
 
     development_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl" for task in data_args.validation_tasks
+        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl"
+        for task in data_args.validation_tasks
     ]
 
     if data_args.train_tasks:
@@ -96,7 +105,9 @@ def train_collie(
     training_datasets = []
     if data_args.train_tasks:
         for train_task in data_args.train_tasks:
-            train_path = os.path.join(data_args.dataset_dir, f"{train_task}.train.jsonl")
+            train_path = os.path.join(
+                data_args.dataset_dir, f"{train_task}.train.jsonl"
+            )
             train_dataset = CollieDataset(
                 tokenizer=tokenizer,
                 dataset_path=train_path,
@@ -116,7 +127,9 @@ def train_collie(
         )
 
         for train_task in data_args.train_ep_tasks:
-            train_path = os.path.join(data_args.dataset_ep_dir, f"{train_task}.train.jsonl")
+            train_path = os.path.join(
+                data_args.dataset_ep_dir, f"{train_task}.train.jsonl"
+            )
             if os.path.exists(train_path):
                 train_dataset = CollieDataset(
                     tokenizer=tokenizer,
@@ -136,7 +149,9 @@ def train_collie(
         )
 
         for train_task in data_args.train_tf_tasks:
-            train_path = os.path.join(data_args.dataset_tf_dir, f"{train_task}.train.jsonl")
+            train_path = os.path.join(
+                data_args.dataset_tf_dir, f"{train_task}.train.jsonl"
+            )
             if os.path.exists(train_path):
                 train_dataset = CollieDataset(
                     tokenizer=tokenizer,
@@ -178,7 +193,9 @@ def train_collie(
             pad_to_multiple_of=8,
             return_tensors="pt",
             padding=True,
-            label_pad_token_id=(-100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id),
+            label_pad_token_id=(
+                -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+            ),
         ),
     )
 
@@ -258,7 +275,9 @@ def inference_collie(
 
     delete_merged_model: bool = False
     if model_args.merge_lora_before_eval:
-        logging.info("You have specified to merge the LORA weights before inference. We will attempt to do so.")
+        logging.info(
+            "You have specified to merge the LORA weights before inference. We will attempt to do so."
+        )
         if model_args.quantization_inference is None:
             logging.warning(
                 "You have specified to create a merged model (merge_lora_before_eval=True), but you have not"
@@ -284,7 +303,7 @@ def inference_collie(
             delete_merged_model = not model_args.keep_merged_model_after_eval
 
         model_path = os.path.join(training_args.output_dir, "merged_model")
-        #lora_weights_name_or_path = None #even for merged model, still need this
+        # lora_weights_name_or_path = None #even for merged model, still need this
         clean_cache()  # Ensure that nothing remains in the cache, as we will load the mergen model next.
 
     model, tokenizer = load_model(
@@ -295,7 +314,9 @@ def inference_collie(
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
         torch_dtype=get_correct_torch_dtype(
-            quantization=model_args.quantization_inference, model_args=model_args, training_args=training_args
+            quantization=model_args.quantization_inference,
+            model_args=model_args,
+            training_args=training_args,
         ),
         use_better_transformer=model_args.use_better_transformer,
         trust_remote_code=model_args.trust_remote_code,
@@ -317,9 +338,13 @@ def inference_collie(
 
     for test_task in data_args.test_tasks:
         # Skip predicted file...
-        output_dir = training_args.output_dir if checkpoint_path is None else checkpoint_path
+        output_dir = (
+            training_args.output_dir if checkpoint_path is None else checkpoint_path
+        )
         if training_args.predict_with_generate:
-            output_name = f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
+            output_name = (
+                f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
+            )
             if os.path.exists(output_name):
                 logging.info(f"Prediction file on {test_task} exists. Skip...")
                 continue
@@ -347,7 +372,9 @@ def inference_collie(
             continue
 
         if training_args.predict_with_generate:
-            output_name = f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
+            output_name = (
+                f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
+            )
 
             os.makedirs(os.path.join(output_dir, "predictions"), exist_ok=True)
 
@@ -358,13 +385,17 @@ def inference_collie(
                 predictions[predictions == -100] = tokenizer.pad_token_id
 
                 try:
-                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+                    predictions = tokenizer.batch_decode(
+                        predictions, skip_special_tokens=True
+                    )
                 except OverflowError:
                     raise OverflowError(f"Unable to decode predictions: {predictions}")
 
                 for prediction in predictions:
                     print(
-                        json.dumps({"model_prediction": prediction}, ensure_ascii=False),
+                        json.dumps(
+                            {"model_prediction": prediction}, ensure_ascii=False
+                        ),
                         file=f,
                     )
 
@@ -375,7 +406,9 @@ def inference_collie(
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
     if training_args.predict_with_generate and trainer.is_world_process_zero():
-        task_scores = evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
+        task_scores = evaluate(
+            model_args, data_args, training_args, checkpoint_path=checkpoint_path
+        )
         # Add test_ prefix to report test scores
         task_scores = {f"test_{task}": score for task, score in task_scores.items()}
         # Report
@@ -397,27 +430,35 @@ def inference_collie(
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
+    parser = HfArgumentParser(
+        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
+    )
     logging.info(f"Sys args {sys.argv}")
 
     if len(sys.argv) > 0 and sys.argv[-1].endswith(".json"):
         # If we pass only one argument to the script, and it's the path to a json file,
         # let's parse it to get our arguments.
         logging.info(f"Loading json config {sys.argv[-1]}")
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[-1]))
+        model_args, data_args, training_args = parser.parse_json_file(
+            json_file=os.path.abspath(sys.argv[-1])
+        )
 
     elif len(sys.argv) > 0 and sys.argv[-1].endswith(".yaml"):
         # If we pass only one argument to the script, and it's the path to a yaml file,
         # let's parse it to get our arguments.
         logging.info(f"Loading yaml config {sys.argv[-1]}")
-        
-        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
-        
+
+        model_args, data_args, training_args = parser.parse_yaml_file(
+            yaml_file=os.path.abspath(sys.argv[-1])
+        )
+
     else:
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    if training_args.do_train and (data_args.train_tasks is not None or data_args.train_ep_tasks is not None):
+    if training_args.do_train and (
+        data_args.train_tasks is not None or data_args.train_ep_tasks is not None
+    ):
         train_collie(
             model_args,
             data_args,
@@ -454,7 +495,9 @@ if __name__ == "__main__":
             # Sort checkpoints by step number
             checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
             # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
-            no_eval_checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) < 1000]
+            no_eval_checkpoints = [
+                c for c in checkpoints if int(c.split("-")[-1]) < 1000
+            ]
             if len(no_eval_checkpoints) > 0:
                 logging.warning(
                     f"Found {len(no_eval_checkpoints)} checkpoints in {training_args.output_dir} that will not be"

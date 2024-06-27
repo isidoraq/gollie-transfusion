@@ -1,4 +1,5 @@
 import json
+
 for lang in ["ko", "bn", "fi", "te", "ar", "sw", "ru", "id", "en"]:
     print(lang)
     tmp_config = {
@@ -19,9 +20,9 @@ for lang in ["ko", "bn", "fi", "te", "ar", "sw", "ru", "id", "en"]:
                 "guideline_dropout": 0.15,
                 "scorer": "src.tasks.tydiqa.scorer.TyDiQAScorer",
                 "paraphrase_train": True,
-                "label_noise": 0.5
+                "label_noise": 0.5,
             }
-        }
+        },
     }
 
     with open("tydiqa_{}_config.json".format(lang), "w") as f:

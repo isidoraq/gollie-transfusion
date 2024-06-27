@@ -37,7 +37,11 @@ def cast_to(obj: Any, dtype: Type) -> Any:
     if not isinstance(obj, dtype):
         raise TypeError(f"Type {dtype} must be a parent class of object {obj}.")
 
-    _inst = {param: getattr(obj, param) for param in inspect.signature(dtype).parameters.keys() if hasattr(obj, param)}
+    _inst = {
+        param: getattr(obj, param)
+        for param in inspect.signature(dtype).parameters.keys()
+        if hasattr(obj, param)
+    }
     return dtype(**_inst)
 
 
@@ -89,7 +93,9 @@ class Entity:
         self_span = self.span.lower().strip()
         other_span = other.span.lower().strip()
         if self._allow_partial_match:
-            return type(self) == type(other) and (self.span in other_span or other_span in self.span)
+            return type(self) == type(other) and (
+                self.span in other_span or other_span in self.span
+            )
 
         return type(self) == type(other) and self_span == other_span
 
@@ -172,12 +178,17 @@ class Relation:
         other_arg2 = other.arg2.lower().strip()
 
         if self._allow_partial_match:
-            return (type(self) == type(other) 
-                    and (self.arg1 in other_arg2 or other_arg1 in self.arg1)
-                    and (self.arg2 in other_arg2 or other_arg2 in self.arg2)
+            return (
+                type(self) == type(other)
+                and (self.arg1 in other_arg2 or other_arg1 in self.arg1)
+                and (self.arg2 in other_arg2 or other_arg2 in self.arg2)
             )
 
-        return type(self) == type(other) and self_arg1 == other_arg1 and self_arg2 == other_arg2
+        return (
+            type(self) == type(other)
+            and self_arg1 == other_arg1
+            and self_arg2 == other_arg2
+        )
 
     # def __eq__(self: Value, other: Value) -> bool:
     #     if self._allow_partial_match:
@@ -268,7 +279,11 @@ class Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (
+                attr.startswith("_")
+                or attr in ["mention", "subtype"]
+                or inspect.ismethod(values)
+            )
         }
         if self == other:
             for attr in attrs.keys():
@@ -298,7 +313,11 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (
+                attr.startswith("_")
+                or attr in ["mention", "subtype"]
+                or inspect.ismethod(values)
+            )
         }
         _len = 0
         for values in attrs.values():
@@ -349,7 +368,11 @@ class Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (
+                attr.startswith("_")
+                or attr in ["mention", "subtype"]
+                or inspect.ismethod(values)
+            )
         }
         for attr in attrs.keys():
             self_values = getattr(self, attr)
@@ -437,7 +460,10 @@ class Event:
                             is_correct &= _is_correct
                             _var.append(v)
                         if is_correct:
-                            return (is_correct, _var)  # Small difference here to allow empty lists
+                            return (
+                                is_correct,
+                                _var,
+                            )  # Small difference here to allow empty lists
 
                     return (is_correct, _var)
                     # return any(all(check_types(v, _t) for v in var) if isinstance(var, list) else False for _t in _type.__args__)
@@ -446,7 +472,9 @@ class Event:
                 else:
                     raise ValueError(f"Unsupported type: {origin}")
             else:
-                raise ValueError("Only native types or typing module types are supported.")
+                raise ValueError(
+                    "Only native types or typing module types are supported."
+                )
 
         correct = True
         for field in dataclasses.fields(self):
@@ -508,9 +536,13 @@ class Template:
                             other_values.pop(other_values.index(value))
                 else:
                     if isinstance(other_values, list):
-                        attrs[attr] = self_values if self_values in other_values else None
+                        attrs[attr] = (
+                            self_values if self_values in other_values else None
+                        )
                     else:
-                        attrs[attr] = self_values if self_values == other_values else None
+                        attrs[attr] = (
+                            self_values if self_values == other_values else None
+                        )
 
         pos_args = self._get_pos_attributes()
 
@@ -648,7 +680,9 @@ class Template:
                 else:
                     raise ValueError(f"Unsupported type: {origin}")
             else:
-                raise ValueError("Only native types or typing module types are supported.")
+                raise ValueError(
+                    "Only native types or typing module types are supported."
+                )
 
         correct = True
         for field in dataclasses.fields(self):
@@ -708,9 +742,13 @@ class Generic:
                             other_values.pop(other_values.index(value))
                 else:
                     if isinstance(other_values, list):
-                        attrs[attr] = self_values if self_values in other_values else None
+                        attrs[attr] = (
+                            self_values if self_values in other_values else None
+                        )
                     else:
-                        attrs[attr] = self_values if self_values == other_values else None
+                        attrs[attr] = (
+                            self_values if self_values == other_values else None
+                        )
 
         pos_args = self._get_pos_attributes()
 
@@ -825,7 +863,9 @@ class Generic:
                 else:
                     raise ValueError(f"Unsupported type: {origin}")
             else:
-                raise ValueError("Only native types or typing module types are supported.")
+                raise ValueError(
+                    "Only native types or typing module types are supported."
+                )
 
         correct = True
         for field in dataclasses.fields(self):
@@ -848,7 +888,9 @@ class AnnotationList(list):
     SIMPLE_TYPES = [Entity, Value, Relation]
     COMPLEX_TYPES = [Event, Template]
 
-    def __init__(self, elems: List[Any], hallucinated_no: int = 0, parse_error: bool = False):
+    def __init__(
+        self, elems: List[Any], hallucinated_no: int = 0, parse_error: bool = False
+    ):
         self._hallucinated_no = hallucinated_no
         self._parse_error = parse_error
         super().__init__(elems)
@@ -897,7 +939,11 @@ class AnnotationList(list):
 
                 _elems.append(elem)
 
-        return type(self)(_elems, hallucinated_no=len(self) - len(_elems), parse_error=self.parse_error)
+        return type(self)(
+            _elems,
+            hallucinated_no=len(self) - len(_elems),
+            parse_error=self.parse_error,
+        )
 
     def assert_typing_constraints(self) -> None:
         for elem in self:
@@ -928,7 +974,9 @@ class AnnotationList(list):
             # Handle hallucinations
             except NameError as e:
                 # name = re.search(r"'\w+'", e.args[0]).group(0).strip("'")
-                name = re.search(r"'([\u0000-\uFFFF]+)'", e.args[0]).group(0).strip("'") # support unicode
+                name = (
+                    re.search(r"'([\u0000-\uFFFF]+)'", e.args[0]).group(0).strip("'")
+                )  # support unicode
                 logging.warning(f"An hallucinated predicted guideline found: {name}")
                 locals().update({name: HallucinatedType})
             except Exception:
@@ -938,7 +986,9 @@ class AnnotationList(list):
         self = cls(_elems, parse_error=parse_error)
         if filter_hallucinations:
             if text is None:
-                raise ValueError("To filter the hallucinations the text argument must not be None.")
+                raise ValueError(
+                    "To filter the hallucinations the text argument must not be None."
+                )
             self = self.filter_hallucinations(text)
 
         if assert_typing_constraints:
@@ -974,7 +1024,9 @@ class AnnotationList(list):
 
         if filter_hallucinations:
             if text is None:
-                raise ValueError("To filter the hallucinations the text argument must not be None.")
+                raise ValueError(
+                    "To filter the hallucinations the text argument must not be None."
+                )
             self = self.filter_hallucinations(text)
 
         if assert_typing_constraints:
@@ -985,11 +1037,14 @@ class AnnotationList(list):
     def to_string(self) -> str:
         return str(self)
 
+
 @dataclass
 class SkipAction(Entity):
     span: str
 
+
 @dataclass
 class IgnoreAction(Entity):
     """A class to represent ignore action."""
+
     span: str

@@ -350,7 +350,9 @@ RELATION_DEFINITIONS: List[Type] = [
     OrgLocationOrigin,
 ]
 
-FINE_TO_COARSE_RELATIONS: Dict[Type, Type] = {_def: _def.__base__ for _def in RELATION_DEFINITIONS}
+FINE_TO_COARSE_RELATIONS: Dict[Type, Type] = {
+    _def: _def.__base__ for _def in RELATION_DEFINITIONS
+}
 COARSE_TO_FINE_RELATIONS: Dict[Type, List[Type]] = {}
 for fine, coarse in FINE_TO_COARSE_RELATIONS.items():
     if coarse not in COARSE_TO_FINE_RELATIONS:
@@ -880,7 +882,9 @@ EVENT_DEFINITIONS: List[Type] = [
     Appeal,
 ]
 
-FINE_TO_COARSE_EVENTS: Dict[Type, Type] = {_def: _def.__base__ for _def in EVENT_DEFINITIONS}
+FINE_TO_COARSE_EVENTS: Dict[Type, Type] = {
+    _def: _def.__base__ for _def in EVENT_DEFINITIONS
+}
 COARSE_TO_FINE_EVENTS: Dict[Type, List[Type]] = {}
 for fine, coarse in FINE_TO_COARSE_EVENTS.items():
     if coarse not in COARSE_TO_FINE_EVENTS:

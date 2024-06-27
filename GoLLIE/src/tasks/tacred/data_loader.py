@@ -5,7 +5,11 @@ from typing import Tuple, Union
 import rich
 
 from src.tasks.tacred.guidelines import GUIDELINES
-from src.tasks.tacred.prompts import TEMPLATE_DEFINITIONS, OrganizationTemplate, PersonTemplate
+from src.tasks.tacred.prompts import (
+    TEMPLATE_DEFINITIONS,
+    OrganizationTemplate,
+    PersonTemplate,
+)
 
 from ..utils_data import DatasetLoader, Sampler
 from ..utils_typing import Relation, Template, dataclass
@@ -92,7 +96,12 @@ class TACREDDatasetLoader(DatasetLoader):
             data_by_sentence[text].append(line)
 
         for text, instances in data_by_sentence.items():
-            text = text.replace("-LRB-", "(").replace("-RRB-", ")").replace("-LSB-", "[").replace("-RSB-", "]")
+            text = (
+                text.replace("-LRB-", "(")
+                .replace("-RRB-", ")")
+                .replace("-LSB-", "[")
+                .replace("-RSB-", "]")
+            )
             templates = {}
             for inst in instances:
                 if inst["relation"] == "no_relation":
@@ -107,7 +116,10 @@ class TACREDDatasetLoader(DatasetLoader):
                 )
                 if f"{subj}-{inst['subj_type']}" not in templates:
                     _info = self.TEMPLATE_TO_CLASS_MAPPING[inst["subj_type"]]
-                    templates[f"{subj}-{inst['subj_type']}"] = {"query": subj, "_info": _info}
+                    templates[f"{subj}-{inst['subj_type']}"] = {
+                        "query": subj,
+                        "_info": _info,
+                    }
                 _info = templates[f"{subj}-{inst['subj_type']}"]["_info"]
 
                 obj = (

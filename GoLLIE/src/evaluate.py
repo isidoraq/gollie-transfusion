@@ -33,7 +33,9 @@ class ResultLogger:
         self.total_predictions: int = 0
         self.gold_predictions: int = 0
 
-    def add_sentence(self, sentence: str, gold_labels: AnnotationList, pred_labels: AnnotationList) -> None:
+    def add_sentence(
+        self, sentence: str, gold_labels: AnnotationList, pred_labels: AnnotationList
+    ) -> None:
         """
         Add a sentence to the logger.
 
@@ -64,24 +66,37 @@ class ResultLogger:
             A dictionary containing the metrics.
         """
         if len(self.sentences) == 0:
-            raise ValueError(f"No sentences were added to the {self.task_name} logger, we cannot compute metrics.")
+            raise ValueError(
+                f"No sentences were added to the {self.task_name} logger, we cannot compute metrics."
+            )
 
-        scores: Dict[str, Dict[str, Dict[str, float]]] = scorer(reference=self.golds, predictions=self.predictions)
+        scores: Dict[str, Dict[str, Dict[str, float]]] = scorer(
+            reference=self.golds, predictions=self.predictions
+        )
         results: Dict[str, Dict[str, Dict[str, float]]] = {
             "predictions_stats": {
                 "impossible_to_parse": {
                     "total": self.impossible_to_parse,
-                    "percentage%": round((self.impossible_to_parse / len(self.sentences)) * 100, 4),
+                    "percentage%": round(
+                        (self.impossible_to_parse / len(self.sentences)) * 100, 4
+                    ),
                 },
                 "hallucinated_predictions": {
                     "total": self.hallucinated_predictions,
                     "percentage%": (
                         0.0
                         if self.total_predictions == 0
-                        else round((self.hallucinated_predictions / self.total_predictions) * 100, 4)
+                        else round(
+                            (self.hallucinated_predictions / self.total_predictions)
+                            * 100,
+                            4,
+                        )
                     ),
                 },
-                "total": {"predictions": self.valid_predictions, "gold": self.gold_predictions},
+                "total": {
+                    "predictions": self.valid_predictions,
+                    "gold": self.gold_predictions,
+                },
             },
         }
         scores.update(results)
@@ -101,10 +116,19 @@ class ResultLogger:
             output_path: The path to the output file.
         """
         if len(self.sentences) == 0:
-            raise ValueError(f"No sentences were added to the {self.task_name} logger, we cannot print predictions.")
+            raise ValueError(
+                f"No sentences were added to the {self.task_name} logger, we cannot print predictions."
+            )
         with open(output_path, "w", encoding="utf8") as f:
-            for sentence, prediction, gold in zip(self.sentences, self.predictions, self.golds):
-                example = {sentence: {"golds": gold.to_string(), "predictions": prediction.to_string()}}
+            for sentence, prediction, gold in zip(
+                self.sentences, self.predictions, self.golds
+            ):
+                example = {
+                    sentence: {
+                        "golds": gold.to_string(),
+                        "predictions": prediction.to_string(),
+                    }
+                }
                 json.dump(example, ensure_ascii=False, indent=4, fp=f)
                 f.write("\n")
 
@@ -153,7 +177,9 @@ def fix_prompt_outputs(text: str) -> str:
     return text
 
 
-def remove_hallucinations(unlabelled_sentence: str, predictions: List[Any]) -> List[Any]:
+def remove_hallucinations(
+    unlabelled_sentence: str, predictions: List[Any]
+) -> List[Any]:
     """Removes predictions that are not in the unlabelled sentence.
     Args:
         unlabelled_sentence (str): The unlabelled sentence.
@@ -215,7 +241,9 @@ def evaluate(
             task_module = None
             scorer = None
 
-            with open(gold_path, "rt", encoding="utf8") as gold_f, open(pred_path, "rt", encoding="utf8") as pred_f:
+            with open(gold_path, "rt", encoding="utf8") as gold_f, open(
+                pred_path, "rt", encoding="utf8"
+            ) as pred_f:
                 for gold_line, pred_line in zip(gold_f, pred_f):
                     gold_line = json.loads(gold_line)
                     pred_line = json.loads(pred_line)
@@ -231,17 +259,25 @@ def evaluate(
                         str(gold_line["labels"]), task_module=task_module
                     )
 
-                    pred_labels = pred_line["model_prediction"].strip().split("result = ")[-1]
-                    pred_labels: AnnotationList = AnnotationList.from_output(str(pred_labels), task_module=task_module)
+                    pred_labels = (
+                        pred_line["model_prediction"].strip().split("result = ")[-1]
+                    )
+                    pred_labels: AnnotationList = AnnotationList.from_output(
+                        str(pred_labels), task_module=task_module
+                    )
 
                     task_logger.add_sentence(
-                        sentence=gold_line["unlabelled_sentence"], gold_labels=gold_labels, pred_labels=pred_labels
+                        sentence=gold_line["unlabelled_sentence"],
+                        gold_labels=gold_labels,
+                        pred_labels=pred_labels,
                     )
 
             task_metrics = task_logger.compute_metrics(scorer)
             all_scores[task] = task_metrics
             # rich.print(f"{task} scores: {task_metrics}")
-            task_logger.print_predictions(output_path=os.path.join(predictions_dir, f"{task}.eval_file.json"))
+            task_logger.print_predictions(
+                output_path=os.path.join(predictions_dir, f"{task}.eval_file.json")
+            )
             pbar.update(1)
 
     with open(scores_file_name, "wt", encoding="utf8") as f:
@@ -265,17 +301,23 @@ def evaluate(
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
+    parser = HfArgumentParser(
+        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
+    )
 
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script, and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+        model_args, data_args, training_args = parser.parse_json_file(
+            json_file=os.path.abspath(sys.argv[1])
+        )
 
     elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
         # If we pass only one argument to the script, and it's the path to a yaml file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[1]))
+        model_args, data_args, training_args = parser.parse_yaml_file(
+            yaml_file=os.path.abspath(sys.argv[1])
+        )
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 

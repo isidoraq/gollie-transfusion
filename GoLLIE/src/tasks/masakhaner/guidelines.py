@@ -162,8 +162,7 @@ GUIDELINES = {
                 "5. Absolute time expressions. It must indicate a specific segment of time i.e a particular minute and hour.\n"
                 "6. Time expressions including the city time zone.\n"
                 "7. Expression indicating periods between two times."
-            ),            
+            ),
         ]
     },
-
 }

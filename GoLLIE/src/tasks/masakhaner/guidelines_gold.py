@@ -1,5 +1,9 @@
 GUIDELINES = {
-    "ner_person": {"en": ["first, middle and last names of people, animals and fictional characters aliases."]},
+    "ner_person": {
+        "en": [
+            "first, middle and last names of people, animals and fictional characters aliases."
+        ]
+    },
     "ner_organization": {
         "en": [
             "Companies (press agencies, studios, banks, stock\n"
@@ -56,10 +60,32 @@ GUIDELINES = {
 
 EXAMPLES = {
     "ner_location_examples": {
-        "en": ["U.S.", "Germany", "Britain", "Australia", "England", "France", "Spain", "Italy", "LONDON", "China"]
+        "en": [
+            "U.S.",
+            "Germany",
+            "Britain",
+            "Australia",
+            "England",
+            "France",
+            "Spain",
+            "Italy",
+            "LONDON",
+            "China",
+        ]
     },
     "ner_organization_examples": {
-        "en": ["Reuters", "U.N.", "NEW YORK", "CHICAGO", "PUK", "OSCE", "EU", "NATO", "European Union", "Honda"]
+        "en": [
+            "Reuters",
+            "U.N.",
+            "NEW YORK",
+            "CHICAGO",
+            "PUK",
+            "OSCE",
+            "EU",
+            "NATO",
+            "European Union",
+            "Honda",
+        ]
     },
     "ner_person_examples": {
         "en": [
@@ -76,6 +102,20 @@ EXAMPLES = {
         ]
     },
     "ner_date_examples": {
-        "en": ["Monday", "10th of October", "Summer", "1980s", "19th century", "July last year", "next summer", "Christmas day", "from July 1 to July 8", "20 minutes after 10", "5:40", "1:30 p.m. Chicago time", "from 2 pm to 4 pm"]
+        "en": [
+            "Monday",
+            "10th of October",
+            "Summer",
+            "1980s",
+            "19th century",
+            "July last year",
+            "next summer",
+            "Christmas day",
+            "from July 1 to July 8",
+            "20 minutes after 10",
+            "5:40",
+            "1:30 p.m. Chicago time",
+            "from 2 pm to 4 pm",
+        ]
     },
 }

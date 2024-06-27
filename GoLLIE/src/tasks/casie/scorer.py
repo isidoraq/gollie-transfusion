@@ -19,9 +19,13 @@ class CASIEEventScorer(EventScorer):
 
     @override
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
-        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+        if not len(reference) or (
+            len(reference) and not isinstance(reference[0], list)
+        ):
             reference = [reference]
-        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         for ref in reference:
@@ -46,9 +50,13 @@ class CASIEEventArgumentScorer(EventScorer):
 
     @override
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
-        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+        if not len(reference) or (
+            len(reference) and not isinstance(reference[0], list)
+        ):
             reference = [reference]
-        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         for ref in reference:

@@ -56,12 +56,18 @@ def add_flash_attn(module: nn.Module, causal: bool = True):
     if isinstance(module, transformers.models.llama.modeling_llama.LlamaAttention):
         module.old_forward = module.forward
         module.forward = partial(llama_forward_with_flash_attn, module, flash_attn)
-    elif isinstance(module, transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXAttention):
+    elif isinstance(
+        module, transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXAttention
+    ):
         if not hasattr(module, "_attn"):
-            warnings.warn("Provided module doesn't have a _attn() function to be patched.")
+            warnings.warn(
+                "Provided module doesn't have a _attn() function to be patched."
+            )
         module._attn = partial(neox_forward_with_flash_attn, module, flash_attn)
     else:
-        raise NotImplementedError(f"Flash attention is not implemented for {module.__class__.__name__}.")
+        raise NotImplementedError(
+            f"Flash attention is not implemented for {module.__class__.__name__}."
+        )
 
 
 def patch_model(
@@ -82,7 +88,9 @@ def patch_model(
     global FlashSelfAttention
     if flash_attention:
         try:
-            from flash_attn.modules.mha import FlashSelfAttention  # pyright: reportMissingImports=false
+            from flash_attn.modules.mha import (
+                FlashSelfAttention,
+            )  # pyright: reportMissingImports=false
         except ModuleNotFoundError:
             warnings.warn(
                 """\nmodule flash_attn not found - either install:
@@ -152,5 +160,7 @@ or run with:
         if residual_dropout_lima:
             resid_pdrop = i / (num_layers - 1) * resid_pdrop_last_layer
         if resid_pdrop is not None and resid_pdrop > 0:
-            add_dropout(getattr(layer, attention_key), _patched_attn_forward, resid_pdrop)
+            add_dropout(
+                getattr(layer, attention_key), _patched_attn_forward, resid_pdrop
+            )
             add_dropout(getattr(layer, mlp_key), _patched_mlp_forward, resid_pdrop)

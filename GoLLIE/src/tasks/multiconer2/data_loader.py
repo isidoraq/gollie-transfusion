@@ -43,7 +43,6 @@ from ..utils_data import DatasetLoader, Sampler
 from ..utils_typing import Entity
 
 
-
 def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
     """
     READ tsv file in conll format
@@ -82,14 +81,15 @@ def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
 
     print(f"Read {len(dataset_words)} sentences from {filepath}")
 
-    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
+    dataset_labels = [
+        rewrite_labels(labels, encoding="iob2") for labels in dataset_labels
+    ]
 
     return dataset_words, dataset_labels
 
 
 def load_multiconer_tsv(
     path: str,
-    
     ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
 ) -> Tuple[List[List[str]], List[List[Entity]]]:
     """
@@ -125,12 +125,15 @@ def load_multiconer_tsv(
         entities = []
         for label, start, end in spans:
             if label in label_set:
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
 
     return dataset_sentences, dataset_entities
+
 
 ENTITY_TO_CLASS_MAPPING = {
     "Clothing": Clothing,
@@ -165,10 +168,11 @@ ENTITY_TO_CLASS_MAPPING = {
     "Symptom": Symptom,
     "AnatomicalStructure": AnatomicalStructure,
     "AerospaceManufacturer": AerospaceManufacturer,
-    "Drink": Drink
+    "Drink": Drink,
 }
 
 label_set = set(ENTITY_TO_CLASS_MAPPING.keys())
+
 
 class MultiCoNERDatasetLoader(DatasetLoader):
     """
@@ -186,19 +190,15 @@ class MultiCoNERDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-
     def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
-        self.ENTITY_TO_CLASS_MAPPING = (
-            
-        )
+        self.ENTITY_TO_CLASS_MAPPING = ()
 
         self.elements = {}
 
-
         dataset_words, dataset_entities = load_multiconer_tsv(
-                path=path_or_split,
-                ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
-            )
+            path=path_or_split,
+            ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
+        )
 
         for id, (words, entities) in enumerate(zip(dataset_words, dataset_entities)):
             self.elements[id] = {
@@ -208,6 +208,7 @@ class MultiCoNERDatasetLoader(DatasetLoader):
                 "entities": entities,
                 "gold": entities,
             }
+
 
 def get_entities(labels, words, ENTITY_TO_CLASS_MAPPING, include_misc=False):
     labels = rewrite_labels(labels=labels, encoding="iob2")
@@ -227,8 +228,11 @@ def get_entities(labels, words, ENTITY_TO_CLASS_MAPPING, include_misc=False):
     entities = []
     for label, start, end in spans:
         if include_misc or label.lower() != "misc":
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
     return entities
+
 
 def load_jsonl(path):
     with open(path, "r", encoding="utf-8") as f:
@@ -257,13 +261,17 @@ class MultiCoNERTransFusionDatasetLoader(DatasetLoader):
         self.elements = {}
 
         dataset_words, dataset_entities = load_multiconer_tsv(
-                path=path_or_split,
-                ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
-            )
+            path=path_or_split,
+            ENTITY_TO_CLASS_MAPPING=ENTITY_TO_CLASS_MAPPING,
+        )
         lang = path_or_split.split("/")[-1].split("_")[0]
-        translation = load_jsonl(f"data_translatetest/multiconer2/{lang}.eng_Latn.jsonl")
-        for id, (words, entities, en_trans) in enumerate(zip(dataset_words, dataset_entities, translation)):
-            
+        translation = load_jsonl(
+            f"data_translatetest/multiconer2/{lang}.eng_Latn.jsonl"
+        )
+        for id, (words, entities, en_trans) in enumerate(
+            zip(dataset_words, dataset_entities, translation)
+        ):
+
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -274,6 +282,7 @@ class MultiCoNERTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": [],
             }
+
 
 class MultiCoNERSampler(Sampler):
     """

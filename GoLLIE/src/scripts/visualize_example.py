@@ -19,7 +19,9 @@ def main(args):
         imports = TASK_ID_TO_TASKS[line["task_id"]]
 
         print(f"from {imports} import *", file=f)
-        print("from src.tasks.utils_typing import Entity, Value, Relation, Event", file=f)
+        print(
+            "from src.tasks.utils_typing import Entity, Value, Relation, Event", file=f
+        )
         print("from dataclasses import dataclass", file=f)
         print(line["text"], file=f)
         print(f"labels = {line['labels']}", file=f)
@@ -33,7 +35,9 @@ if __name__ == "__main__":
 
     parser.add_argument("-i", "--input_file", dest="input_file", type=str)
     parser.add_argument("-r", "--row", dest="row", type=int, default=0)
-    parser.add_argument("-o", "--output_dir", dest="output_dir", default=".ignore/examples")
+    parser.add_argument(
+        "-o", "--output_dir", dest="output_dir", default=".ignore/examples"
+    )
 
     args = parser.parse_args()
     main(args)

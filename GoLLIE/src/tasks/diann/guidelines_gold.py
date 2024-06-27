@@ -13,7 +13,9 @@ GUIDELINES = {
         ]
     },
     "diann_negation": {
-        "en": ["Negation triggers are annotated when it affects one or more disabilities."],
+        "en": [
+            "Negation triggers are annotated when it affects one or more disabilities."
+        ],
     },
 }
 

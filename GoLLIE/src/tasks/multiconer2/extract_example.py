@@ -1,5 +1,6 @@
 from collections import defaultdict, Counter
 
+
 def read_tsv(filepath):
     """
     READ tsv file in conll format
@@ -35,10 +36,11 @@ def read_tsv(filepath):
         if words:
             dataset_words.append(words)
             dataset_labels.append(labels)
-    
+
     print(f"Read {len(dataset_words)} sentences from {filepath}")
 
     return dataset_words, dataset_labels
+
 
 def summarize_examples(dataset_words, dataset_labels):
     entities = defaultdict(Counter)
@@ -64,6 +66,7 @@ def summarize_examples(dataset_words, dataset_labels):
             ent_label_count[label] += 1
             entities[label][" ".join(words[start:end])] += 1
     return entities, ent_label_count
+
 
 words, labels = read_tsv("dataset/MultiCoNER2/EN-English/en_train.conll.4B2C754e")
 

@@ -1,7 +1,11 @@
 GUIDELINES = {
-    "crossner_politics_person": {"en": ["Refers to an individual's name that is not a politician."]},
+    "crossner_politics_person": {
+        "en": ["Refers to an individual's name that is not a politician."]
+    },
     "crossner_politics_organization": {
-        "en": ["Refers to a structured group, institution, company, or association that is not a political party."]
+        "en": [
+            "Refers to a structured group, institution, company, or association that is not a political party."
+        ]
     },
     "crossner_politics_location": {
         "en": [
@@ -43,7 +47,9 @@ GUIDELINES = {
             " sciences."
         ]
     },
-    "crossner_naturalscience_person": {"en": ["Refers to an individual's name that is not a scientist."]},
+    "crossner_naturalscience_person": {
+        "en": ["Refers to an individual's name that is not a scientist."]
+    },
     "crossner_naturalscience_university": {
         "en": [
             "Refers to an educational institution of higher learning. Label organizations that are universities as"
@@ -96,7 +102,9 @@ GUIDELINES = {
         ]
     },
     "crossner_naturalscience_astronomicalobject": {
-        "en": ["Refers to a celestial entity such as a star, planet, galaxy, or nebula, present in space."]
+        "en": [
+            "Refers to a celestial entity such as a star, planet, galaxy, or nebula, present in space."
+        ]
     },
     "crossner_naturalscience_academicjournal": {
         "en": [
@@ -105,7 +113,9 @@ GUIDELINES = {
         ]
     },
     "crossner_naturalscience_event": {
-        "en": ["Refers to a significant occurrence or happening. Such as festivals, sports events, conferences, etc."]
+        "en": [
+            "Refers to a significant occurrence or happening. Such as festivals, sports events, conferences, etc."
+        ]
     },
     "crossner_naturalscience_award": {
         "en": [
@@ -142,7 +152,9 @@ GUIDELINES = {
         ]
     },
     "crossner_music_album": {
-        "en": ["Refers to a collection of songs or musical compositions released as a single package"]
+        "en": [
+            "Refers to a collection of songs or musical compositions released as a single package"
+        ]
     },
     "crossner_music_musicalartist": {
         "en": [
@@ -152,13 +164,19 @@ GUIDELINES = {
         ]
     },
     "crossner_music_musicalinstrument": {
-        "en": ["Refers to a device or tool used to produce musical sounds, such as a piano, guitar, or drum."]
+        "en": [
+            "Refers to a device or tool used to produce musical sounds, such as a piano, guitar, or drum."
+        ]
     },
     "crossner_music_award": {
-        "en": ["Refers to a device or tool used to produce musical sounds, such as a piano, guitar, or drum."]
+        "en": [
+            "Refers to a device or tool used to produce musical sounds, such as a piano, guitar, or drum."
+        ]
     },
     "crossner_music_event": {
-        "en": ["Refers to a music-related occurrence or happening, such as a concert, festival, or competition."]
+        "en": [
+            "Refers to a music-related occurrence or happening, such as a concert, festival, or competition."
+        ]
     },
     "crossner_music_country": {"en": ["Refers to a sovereign nation."]},
     "crossner_music_location": {
@@ -174,8 +192,12 @@ GUIDELINES = {
             " government agencies."
         ]
     },
-    "crossner_music_person": {"en": ["Refers to an individual's name that is not a musical artist."]},
-    "crossner_music_miscellaneous": {"en": ["Refers to named entities that are not included in any other category."]},
+    "crossner_music_person": {
+        "en": ["Refers to an individual's name that is not a musical artist."]
+    },
+    "crossner_music_miscellaneous": {
+        "en": ["Refers to named entities that are not included in any other category."]
+    },
     "crossner_literature_book": {
         "en": [
             "Refers to a published work of literature, typically consisting of written content bound in a physical or"
@@ -207,7 +229,9 @@ GUIDELINES = {
         ]
     },
     "crossner_literature_magazine": {
-        "en": ["Refers to a periodical publication that features articles, stories, and various literary works."]
+        "en": [
+            "Refers to a periodical publication that features articles, stories, and various literary works."
+        ]
     },
     "crossner_literature_literarygenre": {
         "en": [
@@ -216,7 +240,9 @@ GUIDELINES = {
             " and Fiction. It also encompasses culturally influenced genres, such as Nordic countries poetry."
         ]
     },
-    "crossner_literature_person": {"en": ["Refers to an individual's name that is not a writer."]},
+    "crossner_literature_person": {
+        "en": ["Refers to an individual's name that is not a writer."]
+    },
     "crossner_literature_location": {
         "en": [
             "Refers to a specific geographical or structural location. This includes but is not limited"
@@ -279,7 +305,9 @@ GUIDELINES = {
         ]
     },
     "crossner_ai_country": {"en": ["Refers to a sovereign nation."]},
-    "crossner_ai_person": {"en": ["Refers to an individual's name that is not a researcher."]},
+    "crossner_ai_person": {
+        "en": ["Refers to an individual's name that is not a researcher."]
+    },
     "crossner_ai_organization": {
         "en": [
             "Refers to a structured group, institution, company, or association. This category covers a"
@@ -305,7 +333,9 @@ GUIDELINES = {
             " includes conferences where AI research is presented and published."
         ]
     },
-    "crossner_ai_miscellaneous": {"en": ["Refers to named entities that are not included in any other category."]},
+    "crossner_ai_miscellaneous": {
+        "en": ["Refers to named entities that are not included in any other category."]
+    },
 }
 
 EXAMPLES = {
@@ -338,7 +368,18 @@ EXAMPLES = {
         ]
     },
     "crossner_politics_location_examples": {
-        "en": ["Paris", "London", "Berlin", "Rome", "Dublin", "Cairo", "Amsterdam", "Colombo", "Montreal", "Texas"]
+        "en": [
+            "Paris",
+            "London",
+            "Berlin",
+            "Rome",
+            "Dublin",
+            "Cairo",
+            "Amsterdam",
+            "Colombo",
+            "Montreal",
+            "Texas",
+        ]
     },
     "crossner_politics_politician_examples": {
         "en": [
@@ -872,10 +913,28 @@ EXAMPLES = {
         ]
     },
     "crossner_ai_country_examples": {
-        "en": ["Netherlands", "Japan", "Germany", "Canada", "Australia", "Brazil", "China", "India", "Italy", "Korea"]
+        "en": [
+            "Netherlands",
+            "Japan",
+            "Germany",
+            "Canada",
+            "Australia",
+            "Brazil",
+            "China",
+            "India",
+            "Italy",
+            "Korea",
+        ]
     },
     "crossner_ai_person_examples": {
-        "en": ["Francis Ford Coppola", "Michael Jackson", "John Wayne", "Rita Hayworth", "Dean Martin", "Jerry Lewis"]
+        "en": [
+            "Francis Ford Coppola",
+            "Michael Jackson",
+            "John Wayne",
+            "Rita Hayworth",
+            "Dean Martin",
+            "Jerry Lewis",
+        ]
     },
     "crossner_ai_organization_examples": {
         "en": [
@@ -904,7 +963,18 @@ EXAMPLES = {
         ]
     },
     "crossner_ai_programminglanguage_examples": {
-        "en": ["Java", "R", "CLIPS", "Python", "C + +", "GNU Octave", "Java 9", "java", "Perl", "ActiveX"]
+        "en": [
+            "Java",
+            "R",
+            "CLIPS",
+            "Python",
+            "C + +",
+            "GNU Octave",
+            "Java 9",
+            "java",
+            "Perl",
+            "ActiveX",
+        ]
     },
     "crossner_ai_conference_examples": {
         "en": [
@@ -1088,7 +1158,18 @@ EXAMPLES = {
         ]
     },
     "crossner_naturalscience_astronomicalobject_examples": {
-        "en": ["Saturn", "Jupiter", "Venus", "Earth", "Uranus", "Mercury", "Neptune", "Mars", "Sun", "5145 Pholus"]
+        "en": [
+            "Saturn",
+            "Jupiter",
+            "Venus",
+            "Earth",
+            "Uranus",
+            "Mercury",
+            "Neptune",
+            "Mars",
+            "Sun",
+            "5145 Pholus",
+        ]
     },
     "crossner_naturalscience_academicjournal_examples": {
         "en": [

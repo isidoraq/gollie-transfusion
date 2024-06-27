@@ -29,17 +29,20 @@ class Location(Entity):
 
     span: str  # {ner_location_examples}
 
+
 @dataclass
 class Groups(Entity):
     """{ner_groups}"""
 
     span: str  # {ner_groups_examples}
 
+
 @dataclass
 class Product(Entity):
     """{ner_product}"""
 
     span: str  # {ner_product_examples}
+
 
 @dataclass
 class CreativeWork(Entity):
@@ -55,7 +58,6 @@ ENTITY_DEFINITIONS: List[Entity] = [
     Groups,
     Product,
     CreativeWork,
-    
 ]
 
 

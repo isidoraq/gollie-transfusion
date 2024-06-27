@@ -15,6 +15,7 @@ from src.tasks.label_encoding import rewrite_labels
 from ..utils_data import DatasetLoader, Sampler
 from ..utils_typing import Entity
 
+
 def read_tsv(filepath):
     """
     READ tsv file in conll format
@@ -51,15 +52,16 @@ def read_tsv(filepath):
                 if ner_tag == "B-OTH" or ner_tag == "I-OTH":
                     ner_tag = "O"
                 ner_tags.append(ner_tag)
-        # last example        
+        # last example
         if tokens:
             dataset_words.append(tokens)
             dataset_labels.append(ner_tags)
 
     print(f"Read {len(dataset_words)} sentences from {filepath}")
-    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
+    dataset_labels = [
+        rewrite_labels(labels, encoding="iob2") for labels in dataset_labels
+    ]
     return dataset_words, dataset_labels
-
 
 
 def load_uner_tsv(
@@ -96,7 +98,9 @@ def load_uner_tsv(
         entities = []
         for label, start, end in spans:
             if label.lower() != "misc":
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
@@ -122,12 +126,11 @@ class UNERDatasetLoader(DatasetLoader):
     ENTITY_TO_CLASS_MAPPING = None
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
-        self.ENTITY_TO_CLASS_MAPPING = {        
-                "LOC": Location,
-                "ORG": Organization,
-                "PER": Person,
-            }
-    
+        self.ENTITY_TO_CLASS_MAPPING = {
+            "LOC": Location,
+            "ORG": Organization,
+            "PER": Person,
+        }
 
         self.elements = {}
 
@@ -144,6 +147,7 @@ class UNERDatasetLoader(DatasetLoader):
                 "entities": entities,
                 "gold": entities,
             }
+
 
 def load_translation(language):
     path = f"data_translatetest/uner/uner_{language}_eng_Latn.jsonl"
@@ -170,12 +174,11 @@ class UNERTransFusionDatasetLoader(DatasetLoader):
     ENTITY_TO_CLASS_MAPPING = None
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
-        self.ENTITY_TO_CLASS_MAPPING = {        
-                "LOC": Location,
-                "ORG": Organization,
-                "PER": Person,
-            }
-    
+        self.ENTITY_TO_CLASS_MAPPING = {
+            "LOC": Location,
+            "ORG": Organization,
+            "PER": Person,
+        }
 
         self.elements = {}
 
@@ -183,12 +186,14 @@ class UNERTransFusionDatasetLoader(DatasetLoader):
             path=path_or_split,
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
         )
-        
-        language= path_or_split.split("/")[-1].replace("-ud-test.iob2", "")
+
+        language = path_or_split.split("/")[-1].replace("-ud-test.iob2", "")
         translation = load_translation(language=language)
-        
-        for id, (words, entities, eng_text) in enumerate(zip(dataset_words, dataset_entities, translation)):
-        
+
+        for id, (words, entities, eng_text) in enumerate(
+            zip(dataset_words, dataset_entities, translation)
+        ):
+
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -199,6 +204,7 @@ class UNERTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": [],
             }
+
 
 class UNERSampler(Sampler):
     """

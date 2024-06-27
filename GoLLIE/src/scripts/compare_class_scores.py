@@ -44,7 +44,15 @@ def compare_class_scores(model_paths: str, output_path: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_paths", type=str, nargs="+", required=True, help="Paths to the models to compare.")
-    parser.add_argument("--output_path", type=str, required=True, help="Path to the output CSV file.")
+    parser.add_argument(
+        "--model_paths",
+        type=str,
+        nargs="+",
+        required=True,
+        help="Paths to the models to compare.",
+    )
+    parser.add_argument(
+        "--output_path", type=str, required=True, help="Path to the output CSV file."
+    )
     args = parser.parse_args()
     compare_class_scores(args.model_paths, args.output_path)

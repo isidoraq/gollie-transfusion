@@ -1,5 +1,6 @@
 from collections import defaultdict, Counter
 
+
 def read_tsv(filepath):
     """
     READ tsv file in conll format
@@ -52,9 +53,9 @@ def summarize_examples(dataset_words, dataset_labels):
             if label == "NoLabel":
                 continue
             elif label.startswith("B-"):
-                
+
                 spans.append([label[2:], i, i + 1])
-                
+
             elif label.startswith("I-"):
                 try:
                     spans[-1][2] += 1
@@ -70,7 +71,10 @@ def summarize_examples(dataset_words, dataset_labels):
             entities[label][" ".join(words[start:end])] += 1
     return entities
 
-words, labels = read_tsv("/coc/pskynet6/ychen3411/transfusion/GoLLIE/dataset/MultiTO/en/train-en.conllu")
+
+words, labels = read_tsv(
+    "/coc/pskynet6/ychen3411/transfusion/GoLLIE/dataset/MultiTO/en/train-en.conllu"
+)
 
 entities = summarize_examples(words, labels)
 

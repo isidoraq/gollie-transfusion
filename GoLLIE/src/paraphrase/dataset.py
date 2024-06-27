@@ -110,7 +110,11 @@ class ParaphraseDataset(Dataset):
         for guideline in tqdm(guidelines.values(), desc="Data Tokenization"):
             for text in guideline[language]:
                 # rich.print(f"Guideline: {text}")
-                self.dataset.append(prepare_data(text, tokenizer, is_encoder_decoder, max_length, conv_template))
+                self.dataset.append(
+                    prepare_data(
+                        text, tokenizer, is_encoder_decoder, max_length, conv_template
+                    )
+                )
 
         logging.info(f"Dataset {dataset_name} has {len(self.dataset)} guidelines.")
 

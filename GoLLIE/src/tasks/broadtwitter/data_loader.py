@@ -2,7 +2,12 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.broadtwitter.guidelines import GUIDELINES
 from src.tasks.broadtwitter.guidelines_gold import EXAMPLES
-from src.tasks.broadtwitter.prompts import ENTITY_DEFINITIONS, Location, Organization, Person
+from src.tasks.broadtwitter.prompts import (
+    ENTITY_DEFINITIONS,
+    Location,
+    Organization,
+    Person,
+)
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
@@ -33,7 +38,9 @@ def get_broadtwitter_hf(
     for example in dataset[split]:
         words = example["tokens"]
         # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
         # FIX @ labels https://github.com/GateNLP/broad_twitter_corpus/issues/15
         for i, word in enumerate(words):
             if word.strip() == "@":
@@ -60,7 +67,9 @@ def get_broadtwitter_hf(
         # Get entities
         entities = []
         for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)

@@ -52,15 +52,24 @@ def multicpu_generator(args, tqdm_position, config):
                 )
 
                 if "output_name" in config:
-                    output_name = f"{config['output_name'].lower()}.{ie_task.lower()}.train.jsonl"
+                    output_name = (
+                        f"{config['output_name'].lower()}.{ie_task.lower()}.train.jsonl"
+                    )
                 else:
                     output_name = f"{config['dataset_name'].lower()}.{ie_task.lower()}.train.{seed}.jsonl"
 
-                if os.path.exists(os.path.join(args.output_dir, output_name)) and not args.overwrite_output_dir:
-                    logging.warning(f"Skipping {output_name} because it already exists.")
+                if (
+                    os.path.exists(os.path.join(args.output_dir, output_name))
+                    and not args.overwrite_output_dir
+                ):
+                    logging.warning(
+                        f"Skipping {output_name} because it already exists."
+                    )
                     continue
 
-                with open(os.path.join(args.output_dir, output_name), "w", encoding="utf-8") as _file, tqdm(
+                with open(
+                    os.path.join(args.output_dir, output_name), "w", encoding="utf-8"
+                ) as _file, tqdm(
                     total=len(dataloader),
                     desc=f"{config['dataset_name']}-{ie_task}-train-{seed}",
                     position=tqdm_position,
@@ -72,7 +81,9 @@ def multicpu_generator(args, tqdm_position, config):
                             ids = elem["ids"]
                             progress.update(len(ids))
 
-                logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
+                logging.info(
+                    f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}"
+                )
 
     if "dev_file" in config:
         config["seed"] = 0
@@ -87,15 +98,24 @@ def multicpu_generator(args, tqdm_position, config):
             )
 
             if "output_name" in config:
-                output_name = f"{config['output_name'].lower()}.{task.lower()}.dev.jsonl"
+                output_name = (
+                    f"{config['output_name'].lower()}.{task.lower()}.dev.jsonl"
+                )
             else:
-                output_name = f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
+                )
 
-            if os.path.exists(os.path.join(args.output_dir, output_name)) and not args.overwrite_output_dir:
+            if (
+                os.path.exists(os.path.join(args.output_dir, output_name))
+                and not args.overwrite_output_dir
+            ):
                 logging.warning(f"Skipping {output_name} because it already exists.")
                 continue
 
-            with open(os.path.join(args.output_dir, output_name), "w", encoding="utf-8") as _file, tqdm(
+            with open(
+                os.path.join(args.output_dir, output_name), "w", encoding="utf-8"
+            ) as _file, tqdm(
                 total=len(dataloader),
                 desc=f"{config['dataset_name']}-{task}-dev",
                 position=tqdm_position,
@@ -107,7 +127,9 @@ def multicpu_generator(args, tqdm_position, config):
                         ids = elem["ids"]
                         progress.update(len(ids))
 
-            logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
+            logging.info(
+                f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}"
+            )
 
     if "test_file" in config:
         config["seed"] = 0
@@ -122,15 +144,24 @@ def multicpu_generator(args, tqdm_position, config):
             )
 
             if "output_name" in config:
-                output_name = f"{config['output_name'].lower()}.{task.lower()}.test.jsonl"
+                output_name = (
+                    f"{config['output_name'].lower()}.{task.lower()}.test.jsonl"
+                )
             else:
-                output_name = f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
+                )
 
-            if os.path.exists(os.path.join(args.output_dir, output_name)) and not args.overwrite_output_dir:
+            if (
+                os.path.exists(os.path.join(args.output_dir, output_name))
+                and not args.overwrite_output_dir
+            ):
                 logging.warning(f"Skipping {output_name} because it already exists.")
                 continue
 
-            with open(os.path.join(args.output_dir, output_name), "w", encoding="utf-8") as _file, tqdm(
+            with open(
+                os.path.join(args.output_dir, output_name), "w", encoding="utf-8"
+            ) as _file, tqdm(
                 total=len(dataloader),
                 desc=f"{config['dataset_name']}-{task}-test",
                 position=tqdm_position,
@@ -142,7 +173,9 @@ def multicpu_generator(args, tqdm_position, config):
                         ids = elem["ids"]
                         progress.update(len(ids))
 
-            logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
+            logging.info(
+                f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}"
+            )
 
 
 def main(args):
@@ -153,7 +186,7 @@ def main(args):
     configs = []
     splits = ["train_file", "dev_file", "test_file"]
     data_info = {}
-    
+
     for config_file in config_files:
         with open(config_file, "rt") as f:
             config = json.load(f)
@@ -202,8 +235,10 @@ def main(args):
         multicpu_generator,
         args,
     )
-    
-    logging.warning(f"We will generate the following data: {json.dumps(data_info, indent=4)})")
+
+    logging.warning(
+        f"We will generate the following data: {json.dumps(data_info, indent=4)})"
+    )
 
     with mp.Pool(processes=min(os.cpu_count(), len(configs))) as pool:
         pool.starmap(generator_fn, enumerate(configs))
@@ -215,7 +250,9 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
     datasets.logging.set_verbosity_error()
     datasets.logging.disable_progress_bar()
-    parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
+    parser = ArgumentParser(
+        "generate_data", description="Generate Code formatted data."
+    )
 
     parser.add_argument(
         "-c",

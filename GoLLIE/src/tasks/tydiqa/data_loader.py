@@ -3,6 +3,7 @@ import json
 from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.tydiqa.guidelines import GUIDELINES
+
 # from src.tasks.tydiqa.guidelines_gold import EXAMPLES
 from src.tasks.tydiqa.prompts import (
     Entity,
@@ -11,6 +12,7 @@ from src.tasks.tydiqa.prompts import (
 )
 
 from ..utils_data import DatasetLoader, Sampler
+
 
 def get_tydiqa_hf(
     split: str,
@@ -32,17 +34,18 @@ def get_tydiqa_hf(
     dataset_sentences: List[str] = []
     dataset_id: List[str] = []
     dataset_answers: List[List[Entity]] = []
-    lang2langid = {"arabic": "ar",
-                    "russian": "ru",
-                    "korean": "ko",
-                    "telugu": "te",
-                    "finnish": "fi",
-                    "indonesian": "id",
-                    "bengali": "bn",
-                    "swahili": "sw",
-                    "thai": "th",
-                    "english": "en",
-                }
+    lang2langid = {
+        "arabic": "ar",
+        "russian": "ru",
+        "korean": "ko",
+        "telugu": "te",
+        "finnish": "fi",
+        "indonesian": "id",
+        "bengali": "bn",
+        "swahili": "sw",
+        "thai": "th",
+        "english": "en",
+    }
 
     for example in dataset[split]:
         lang = example["id"].split("-")[0]
@@ -67,6 +70,7 @@ def get_tydiqa_hf(
 
     return dataset_sentences, dataset_answers, dataset_id
 
+
 class TyDiQADatasetLoader(DatasetLoader):
     """
     A `DatasetLoader` for the TydiQA dataset.
@@ -79,18 +83,19 @@ class TyDiQADatasetLoader(DatasetLoader):
         `ValueError`:
             raised when a not defined value found.
     """
-    
+
     def __init__(self, split: str, **kwargs) -> None:
         self.elements = {}
 
         assert split in ["train", "validation"], f"split only in train, validation."
 
         dataset_sentences, dataset_answers, dataset_id = get_tydiqa_hf(
-                split=split, 
-                language=kwargs["language"]
+            split=split, language=kwargs["language"]
         )
-        
-        for key, (sentence, answer, data_id) in enumerate(zip(dataset_sentences, dataset_answers, dataset_id)):
+
+        for key, (sentence, answer, data_id) in enumerate(
+            zip(dataset_sentences, dataset_answers, dataset_id)
+        ):
             self.elements[key] = {
                 "id": data_id,
                 "doc_id": data_id,
@@ -98,6 +103,7 @@ class TyDiQADatasetLoader(DatasetLoader):
                 "answer": [answer[0]],
                 "gold": answer,
             }
+
 
 def load_translation(language):
     path = f"data_translatetest/tydiqa/{language}_eng_Latn.jsonl"
@@ -114,6 +120,7 @@ def load_translation(language):
 
     return output
 
+
 class TyDiQATransFusionDatasetLoader(DatasetLoader):
     """
     A `DatasetLoader` for the TydiQA dataset.
@@ -126,20 +133,21 @@ class TyDiQATransFusionDatasetLoader(DatasetLoader):
         `ValueError`:
             raised when a not defined value found.
     """
-    
+
     def __init__(self, split: str, **kwargs) -> None:
         self.elements = {}
 
         assert split in ["train", "validation"], f"split only in train, validation."
 
         dataset_sentences, dataset_answers, dataset_id = get_tydiqa_hf(
-                split=split, 
-                language=kwargs["language"]
+            split=split, language=kwargs["language"]
         )
-        
+
         translation_data = load_translation(language=kwargs["language"])
 
-        for key, (sentence, answer, data_id, translation) in enumerate(zip(dataset_sentences, dataset_answers, dataset_id, translation_data)):
+        for key, (sentence, answer, data_id, translation) in enumerate(
+            zip(dataset_sentences, dataset_answers, dataset_id, translation_data)
+        ):
             self.elements[key] = {
                 "id": data_id,
                 "doc_id": data_id,
@@ -150,6 +158,7 @@ class TyDiQATransFusionDatasetLoader(DatasetLoader):
                 "gold": answer,
                 "en_gold": [],
             }
+
 
 class TyDiQASampler(Sampler):
     """
@@ -210,17 +219,27 @@ class TyDiQASampler(Sampler):
         use_transfusionv2: bool = False,
         **kwargs,
     ) -> None:
-        assert task in [
-            "QA"
-        ], f"{task} must be QA."
+        assert task in ["QA"], f"{task} must be QA."
 
         if use_transfusion:
             if use_transfusionv2:
-                task_definitions, task_target, task_template = ANSWER_DEFINITIONS, "answer", "templates/prompt_qa_tfv2.txt"
+                task_definitions, task_target, task_template = (
+                    ANSWER_DEFINITIONS,
+                    "answer",
+                    "templates/prompt_qa_tfv2.txt",
+                )
             else:
-                task_definitions, task_target, task_template = ANSWER_DEFINITIONS, "answer", "templates/prompt_qa_tf.txt"
+                task_definitions, task_target, task_template = (
+                    ANSWER_DEFINITIONS,
+                    "answer",
+                    "templates/prompt_qa_tf.txt",
+                )
         else:
-            task_definitions, task_target, task_template = ANSWER_DEFINITIONS, "answer", "templates/prompt_qa.txt"
+            task_definitions, task_target, task_template = (
+                ANSWER_DEFINITIONS,
+                "answer",
+                "templates/prompt_qa.txt",
+            )
 
         is_coarse_to_fine = False
         COARSE_TO_FINE = None

@@ -4,7 +4,9 @@ import unittest
 
 
 class TestDataLoaders(unittest.TestCase):
-    @unittest.skipIf(not os.path.exists("data/ace05/english.sentence.json"), "No ACE data available")
+    @unittest.skipIf(
+        not os.path.exists("data/ace05/english.sentence.json"), "No ACE data available"
+    )
     def test_ACE(self):
         from src.tasks.ace.data_loader import ACEDatasetLoader, ACESampler
 
@@ -14,13 +16,21 @@ class TestDataLoaders(unittest.TestCase):
             config["seed"] = 0
             config["label_noise_prob"] = 0.0
 
-        dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
+        dataloader = ACEDatasetLoader(
+            "data/ace05/english.sentence.json", group_by="sentence"
+        )
 
-        _ = list(ACESampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
+        _ = list(
+            ACESampler(
+                dataloader, task="RE", **config, **config["task_configuration"]["RE"]
+            )
+        )
 
         # TODO: Implement a better TEST
 
-    @unittest.skipIf(not os.path.exists("data/casie/data.jsonl"), "No CASIE data available")
+    @unittest.skipIf(
+        not os.path.exists("data/casie/data.jsonl"), "No CASIE data available"
+    )
     def test_CASIE(self):
         from src.tasks.casie.data_loader import CASIEDatasetLoader, CASIESampler
 
@@ -31,13 +41,23 @@ class TestDataLoaders(unittest.TestCase):
 
         _ = list(
             CASIESampler(
-                dataloader, task="EAE", remove_guidelines=True, **config, **config["task_configuration"]["EE"]
+                dataloader,
+                task="EAE",
+                remove_guidelines=True,
+                **config,
+                **config["task_configuration"]["EE"]
             )
         )
 
-    @unittest.skipIf(not os.path.exists("data/wikievents/train.sentence.jsonl"), "No WikiEvents data available")
+    @unittest.skipIf(
+        not os.path.exists("data/wikievents/train.sentence.jsonl"),
+        "No WikiEvents data available",
+    )
     def test_WikiEvents(self):
-        from src.tasks.wikievents.data_loader import WikiEventsDatasetLoader, WikiEventsSampler
+        from src.tasks.wikievents.data_loader import (
+            WikiEventsDatasetLoader,
+            WikiEventsSampler,
+        )
 
         with open("configs/data_configs/wikievents_config.json") as f:
             config = json.load(f)
@@ -45,13 +65,21 @@ class TestDataLoaders(unittest.TestCase):
             config["seed"] = 0
             config["label_noise_prob"] = 0.0
 
-        dataloader = WikiEventsDatasetLoader("data/wikievents/train.sentence.jsonl", group_by="sentence")
+        dataloader = WikiEventsDatasetLoader(
+            "data/wikievents/train.sentence.jsonl", group_by="sentence"
+        )
 
-        _ = list(WikiEventsSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]))
+        _ = list(
+            WikiEventsSampler(
+                dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]
+            )
+        )
 
         # TODO: Implement a better TEST
 
-    @unittest.skipIf(not os.path.exists("data/rams/dev.jsonlines"), "No RAMS data available")
+    @unittest.skipIf(
+        not os.path.exists("data/rams/dev.jsonlines"), "No RAMS data available"
+    )
     def test_RAMS(self):
         from src.tasks.rams.data_loader import RAMSDatasetLoader, RAMSSampler
 
@@ -63,11 +91,17 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
-        _ = list(RAMSSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]))
+        _ = list(
+            RAMSSampler(
+                dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]
+            )
+        )
 
         # TODO: Implement a better TEST
 
-    @unittest.skipIf(not os.path.exists("data/tacred/dev.json"), "No TACRED data available")
+    @unittest.skipIf(
+        not os.path.exists("data/tacred/dev.json"), "No TACRED data available"
+    )
     def test_TACRED(self):
         from src.tasks.tacred.data_loader import TACREDDatasetLoader, TACREDSampler
 
@@ -79,9 +113,15 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = TACREDDatasetLoader("data/tacred/train.json")[:10]
 
-        _ = list(TACREDSampler(dataloader, task="SF", **config, **config["task_configuration"]["SF"]))
+        _ = list(
+            TACREDSampler(
+                dataloader, task="SF", **config, **config["task_configuration"]["SF"]
+            )
+        )
 
-    @unittest.skipIf(not os.path.exists("data/conll/en.conll.train.tsv"), "No CoNLL data available")
+    @unittest.skipIf(
+        not os.path.exists("data/conll/en.conll.train.tsv"), "No CoNLL data available"
+    )
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader
         from src.tasks.conll03.prompts import Miscellaneous, Organization, Person
@@ -104,7 +144,11 @@ class TestDataLoaders(unittest.TestCase):
         config["include_misc"] = True
         dataloader = CoNLLDatasetLoader("validation", **config)
 
-        _ = list(CoNLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        _ = list(
+            CoNLL03Sampler(
+                dataloader, task="NER", **config, **config["task_configuration"]["NER"]
+            )
+        )
 
         self.assertDictEqual(
             {
@@ -144,7 +188,11 @@ class TestDataLoaders(unittest.TestCase):
         config["include_misc"] = False
         dataloader = CoNLLDatasetLoader("validation", **config)
 
-        _ = list(CoNLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        _ = list(
+            CoNLL03Sampler(
+                dataloader, task="NER", **config, **config["task_configuration"]["NER"]
+            )
+        )
 
         self.assertDictEqual(
             {

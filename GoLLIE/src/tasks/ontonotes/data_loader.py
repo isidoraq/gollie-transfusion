@@ -32,6 +32,7 @@ import json
 import random
 import string
 
+
 def get_ontonotes_hf(
     split: str,
     ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
@@ -46,7 +47,11 @@ def get_ontonotes_hf(
     from datasets import load_dataset
 
     dataset = load_dataset("conll2012_ontonotesv5", "english_v12")
-    id2label = dict(enumerate(dataset["train"].features["sentences"][0]["named_entities"].feature.names))
+    id2label = dict(
+        enumerate(
+            dataset["train"].features["sentences"][0]["named_entities"].feature.names
+        )
+    )
     dataset_sentences: List[List[str]] = []
     dataset_entities: List[List[Entity]] = []
 
@@ -54,7 +59,10 @@ def get_ontonotes_hf(
         for sentence in example["sentences"]:
             words = sentence["words"]
             # Ensure IOB2 encoding
-            labels = rewrite_labels(labels=[id2label[label] for label in sentence["named_entities"]], encoding="iob2")
+            labels = rewrite_labels(
+                labels=[id2label[label] for label in sentence["named_entities"]],
+                encoding="iob2",
+            )
 
             # Get labeled word spans
             spans = []
@@ -71,7 +79,9 @@ def get_ontonotes_hf(
             # Get entities
             entities = []
             for label, start, end in spans:
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
             dataset_sentences.append(words)
             dataset_entities.append(entities)
@@ -93,25 +103,25 @@ class OntoNotesDatasetLoader(DatasetLoader):
     """
 
     ENTITY_TO_CLASS_MAPPING = {
-            "PERSON": Person,
-            "NORP": NORP,
-            "FAC": Facility,
-            "ORG": Organization,
-            "GPE": GPE,
-            "LOC": Location,
-            "PRODUCT": Product,
-            "DATE": Date,
-            "TIME": Time,
-            "PERCENT": Percentage,
-            "MONEY": Money,
-            "QUANTITY": Quantity,
-            "ORDINAL": Ordinal,
-            "CARDINAL": Cardinal,
-            "EVENT": Event,
-            "WORK_OF_ART": WorkOfArt,
-            "LAW": Law,
-            "LANGUAGE": Language,
-        }
+        "PERSON": Person,
+        "NORP": NORP,
+        "FAC": Facility,
+        "ORG": Organization,
+        "GPE": GPE,
+        "LOC": Location,
+        "PRODUCT": Product,
+        "DATE": Date,
+        "TIME": Time,
+        "PERCENT": Percentage,
+        "MONEY": Money,
+        "QUANTITY": Quantity,
+        "ORDINAL": Ordinal,
+        "CARDINAL": Cardinal,
+        "EVENT": Event,
+        "WORK_OF_ART": WorkOfArt,
+        "LAW": Law,
+        "LANGUAGE": Language,
+    }
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.elements = {}
@@ -130,54 +140,76 @@ class OntoNotesDatasetLoader(DatasetLoader):
                 "gold": entities,
             }
 
+
 def get_ontonotes_translation(file_path, ENTITY_TO_CLASS_MAPPING):
     with open(file_path, "r", encoding="utf-8") as f:
         data = [json.loads(d) for d in f]
-    
+
     dataset_sentences = []
     dataset_entities = []
 
     for d in data:
-        sentence, entities = decode_data(d["input_sentence"], d["output_sentence"], d["marker2label"])
+        sentence, entities = decode_data(
+            d["input_sentence"], d["output_sentence"], d["marker2label"]
+        )
         if sentence is not None and entities is not None:
             labeled_entities = []
             for label, entity_span in entities:
-                labeled_entities.append(ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip()))
+                labeled_entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip())
+                )
 
             dataset_sentences.append(sentence)
             dataset_entities.append(labeled_entities)
-    
+
     return dataset_sentences, dataset_entities
+
 
 def get_ontonotes_transfusion(file_path, ENTITY_TO_CLASS_MAPPING):
     with open(file_path, "r", encoding="utf-8") as f:
         data = [json.loads(d) for d in f]
-    
+
     dataset_sentences = []
     dataset_en_sentences = []
     dataset_entities = []
     dataset_en_entities = []
 
     for d in data:
-        sentence, entities = decode_data(d["input_sentence"], d["output_sentence"], d["marker2label"])
-        en_sentence, en_entities = decode_data(d["input_sentence"], d["input_sentence"], d["marker2label"])
-        if all(var is not None for var in [sentence, entities, en_sentence, en_entities]):
+        sentence, entities = decode_data(
+            d["input_sentence"], d["output_sentence"], d["marker2label"]
+        )
+        en_sentence, en_entities = decode_data(
+            d["input_sentence"], d["input_sentence"], d["marker2label"]
+        )
+        if all(
+            var is not None for var in [sentence, entities, en_sentence, en_entities]
+        ):
             labeled_entities = []
             labeled_en_entities = []
             for label, entity_span in entities:
-                labeled_entities.append(ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip()))
+                labeled_entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip())
+                )
 
             dataset_sentences.append(sentence)
             dataset_entities.append(labeled_entities)
 
             for label, entity_span in en_entities:
-                labeled_en_entities.append(ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip()))
-            
+                labeled_en_entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip())
+                )
+
             dataset_en_sentences.append(en_sentence)
             dataset_en_entities.append(labeled_en_entities)
-    
-    return dataset_sentences, dataset_entities, dataset_en_sentences, dataset_en_entities
-    
+
+    return (
+        dataset_sentences,
+        dataset_entities,
+        dataset_en_sentences,
+        dataset_en_entities,
+    )
+
+
 class OntoNotesTranslationDatasetLoader(DatasetLoader):
     """
     A `DatasetLoader` for the OntoNotesV5 dataset.
@@ -192,32 +224,33 @@ class OntoNotesTranslationDatasetLoader(DatasetLoader):
     """
 
     ENTITY_TO_CLASS_MAPPING = {
-            "PERSON": Person,
-            "NORP": NORP,
-            "FAC": Facility,
-            "ORG": Organization,
-            "GPE": GPE,
-            "LOC": Location,
-            "PRODUCT": Product,
-            "DATE": Date,
-            "TIME": Time,
-            "PERCENT": Percentage,
-            "MONEY": Money,
-            "QUANTITY": Quantity,
-            "ORDINAL": Ordinal,
-            "CARDINAL": Cardinal,
-            "EVENT": Event,
-            "WORK_OF_ART": WorkOfArt,
-            "LAW": Law,
-            "LANGUAGE": Language,
-        }
+        "PERSON": Person,
+        "NORP": NORP,
+        "FAC": Facility,
+        "ORG": Organization,
+        "GPE": GPE,
+        "LOC": Location,
+        "PRODUCT": Product,
+        "DATE": Date,
+        "TIME": Time,
+        "PERCENT": Percentage,
+        "MONEY": Money,
+        "QUANTITY": Quantity,
+        "ORDINAL": Ordinal,
+        "CARDINAL": Cardinal,
+        "EVENT": Event,
+        "WORK_OF_ART": WorkOfArt,
+        "LAW": Law,
+        "LANGUAGE": Language,
+    }
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
-        
+
         self.elements = {}
 
-        dataset_words, dataset_entities = get_ontonotes_translation(path_or_split,
-        self.ENTITY_TO_CLASS_MAPPING)
+        dataset_words, dataset_entities = get_ontonotes_translation(
+            path_or_split, self.ENTITY_TO_CLASS_MAPPING
+        )
 
         for id, (sentence, entities) in enumerate(zip(dataset_words, dataset_entities)):
             self.elements[id] = {
@@ -227,6 +260,7 @@ class OntoNotesTranslationDatasetLoader(DatasetLoader):
                 "entities": entities,
                 "gold": entities,
             }
+
 
 class OntoNotesTransFusionDatasetLoader(DatasetLoader):
     """
@@ -242,34 +276,37 @@ class OntoNotesTransFusionDatasetLoader(DatasetLoader):
     """
 
     ENTITY_TO_CLASS_MAPPING = {
-            "PERSON": Person,
-            "NORP": NORP,
-            "FAC": Facility,
-            "ORG": Organization,
-            "GPE": GPE,
-            "LOC": Location,
-            "PRODUCT": Product,
-            "DATE": Date,
-            "TIME": Time,
-            "PERCENT": Percentage,
-            "MONEY": Money,
-            "QUANTITY": Quantity,
-            "ORDINAL": Ordinal,
-            "CARDINAL": Cardinal,
-            "EVENT": Event,
-            "WORK_OF_ART": WorkOfArt,
-            "LAW": Law,
-            "LANGUAGE": Language,
-        }
+        "PERSON": Person,
+        "NORP": NORP,
+        "FAC": Facility,
+        "ORG": Organization,
+        "GPE": GPE,
+        "LOC": Location,
+        "PRODUCT": Product,
+        "DATE": Date,
+        "TIME": Time,
+        "PERCENT": Percentage,
+        "MONEY": Money,
+        "QUANTITY": Quantity,
+        "ORDINAL": Ordinal,
+        "CARDINAL": Cardinal,
+        "EVENT": Event,
+        "WORK_OF_ART": WorkOfArt,
+        "LAW": Law,
+        "LANGUAGE": Language,
+    }
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
-        
+
         self.elements = {}
 
-        dataset_words, dataset_entities, dataset_en_words, dataset_en_entities = get_ontonotes_transfusion(path_or_split,
-                                                            self.ENTITY_TO_CLASS_MAPPING)
+        dataset_words, dataset_entities, dataset_en_words, dataset_en_entities = (
+            get_ontonotes_transfusion(path_or_split, self.ENTITY_TO_CLASS_MAPPING)
+        )
 
-        for id, (sentence, entities, en_sentence, en_entities) in enumerate(zip(dataset_words, dataset_entities, dataset_en_words, dataset_en_entities)):
+        for id, (sentence, entities, en_sentence, en_entities) in enumerate(
+            zip(dataset_words, dataset_entities, dataset_en_words, dataset_en_entities)
+        ):
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -278,8 +315,9 @@ class OntoNotesTransFusionDatasetLoader(DatasetLoader):
                 "entities": entities,
                 "en_entities": en_entities,
                 "gold": entities,
-                "en_gold": entities, # not used
+                "en_gold": entities,  # not used
             }
+
 
 class OntoNotesSampler(Sampler):
     """

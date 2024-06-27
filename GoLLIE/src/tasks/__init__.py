@@ -29,7 +29,7 @@ from . import (
     multiconer2,
     xsid,
     multito,
-    massive
+    massive,
 )
 
 
@@ -79,7 +79,7 @@ TASK_ID_TO_TASKS = {
     "MultiCoNER2_NER": "src.tasks.multiconer2",
     "XSID_NER": "src.tasks.xsid",
     "MultiTO_NER": "src.tasks.multito",
-    "Massive_NER": "src.tasks.massive"
+    "Massive_NER": "src.tasks.massive",
 }
 
 __all__ = [
@@ -113,7 +113,7 @@ __all__ = [
     "multiconer2",
     "xsid",
     "multito",
-    "massive"
+    "massive",
 ]
 
 
@@ -236,7 +236,7 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "masakhaner":
         from src.tasks.masakhaner.guidelines_gold import GUIDELINES
-        
+
         return GUIDELINES
     elif task_id.lower() == "mitmovie":
         from src.tasks.mitmovie.guidelines_gold import GUIDELINES

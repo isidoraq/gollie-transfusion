@@ -22,7 +22,9 @@ def get_top_label_per_class(config, top_k: int = 10):
     ENTITY_TO_CLASS_MAPPING = dataloader.ENTITY_TO_CLASS_MAPPING
     {v: k for k, v in ENTITY_TO_CLASS_MAPPING.items()}
 
-    ENTITY_COUNT = {str(k).split(".")[-1][:-2]: {} for k in ENTITY_TO_CLASS_MAPPING.values()}
+    ENTITY_COUNT = {
+        str(k).split(".")[-1][:-2]: {} for k in ENTITY_TO_CLASS_MAPPING.values()
+    }
     print(ENTITY_COUNT)
     for example in dataloader:
         entities = example["entities"]
@@ -34,14 +36,18 @@ def get_top_label_per_class(config, top_k: int = 10):
     top_k_labels = {}
 
     for entity_type, entity_count in ENTITY_COUNT.items():
-        top_k_labels[entity_type] = sorted(entity_count.items(), key=lambda x: x[1], reverse=True)[:top_k]
+        top_k_labels[entity_type] = sorted(
+            entity_count.items(), key=lambda x: x[1], reverse=True
+        )[:top_k]
 
     print("Top k labels per class")
     print(top_k_labels)
 
     print("\n\nTop k labels per class (formatted)\n")
     for entity_type, entity_count in top_k_labels.items():
-        print(f"{entity_type}. Examples: {', '.join([f'{k}' for k, v in entity_count])}.\n")
+        print(
+            f"{entity_type}. Examples: {', '.join([f'{k}' for k, v in entity_count])}.\n"
+        )
 
     print("\n\nTop k labels per class (Python List)\n")
 
@@ -69,7 +75,9 @@ def add_examples(config, top_k, lang="en"):
     elif config["tasks"] == ["CrossNER_AI"]:
         prompt_template = prompt_template.replace("prompts.py", "prompts_ai.py")
     elif config["tasks"] == ["CrossNER_NATURAL_SCIENCE"]:
-        prompt_template = prompt_template.replace("prompts.py", "prompts_natural_science.py")
+        prompt_template = prompt_template.replace(
+            "prompts.py", "prompts_natural_science.py"
+        )
     elif config["tasks"] == ["CrossNER_LITERATURE"]:
         prompt_template = prompt_template.replace("prompts.py", "prompts_literature.py")
 
@@ -97,16 +105,27 @@ def add_examples(config, top_k, lang="en"):
     # Add examples to guilines
     examples = {}
     for entity_type, entity_count in top_k_labels.items():
-        examples[entity_to_example_name[entity_type]] = {lang: [f"{k}" for k, v in entity_count]}
+        examples[entity_to_example_name[entity_type]] = {
+            lang: [f"{k}" for k, v in entity_count]
+        }
 
-    print(f"\nEXAMPLES={json.dumps(examples, indent=4)}", file=open(guilines_gold, "a", encoding="utf8"))
+    print(
+        f"\nEXAMPLES={json.dumps(examples, indent=4)}",
+        file=open(guilines_gold, "a", encoding="utf8"),
+    )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, required=True, help="The config file")
-    parser.add_argument("--top_k", type=int, default=10, help="The number of top labels to return")
-    parser.add_argument("--add_to_guidelines", action="store_true", help="Add examples to guidelines_gold.py")
+    parser.add_argument(
+        "--top_k", type=int, default=10, help="The number of top labels to return"
+    )
+    parser.add_argument(
+        "--add_to_guidelines",
+        action="store_true",
+        help="Add examples to guidelines_gold.py",
+    )
     args = parser.parse_args()
     config = json.load(open(args.config, "r"))
     if args.add_to_guidelines:

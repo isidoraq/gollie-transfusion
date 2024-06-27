@@ -6,7 +6,9 @@ GUIDELINES = {
         ]
     },
     "databreach_attack_mention": {
-        "en": ["The text span that triggers the event, such as:\n   'attack', 'expose', 'publish', 'steal', ..."]
+        "en": [
+            "The text span that triggers the event, such as:\n   'attack', 'expose', 'publish', 'steal', ..."
+        ]
     },
     "phising_attack_main": {
         "en": [
@@ -29,7 +31,9 @@ GUIDELINES = {
         ]
     },
     "ransom_attack_mention": {
-        "en": ["The text span that triggers the event, such as:\n    'attack', ransomware', 'selling', 'ransom', ..."]
+        "en": [
+            "The text span that triggers the event, such as:\n    'attack', ransomware', 'selling', 'ransom', ..."
+        ]
     },
     "vulnerability_discover_main": {
         "en": [
@@ -60,9 +64,20 @@ GUIDELINES = {
 EXAMPLES = {
     "databreach_attack_examples": {"en": ["attack", "stole", "publish", "steal"]},
     "phising_attack_examples": {
-        "en": ["attack", "purports to be", "dupe", "masquerading as", "pretending to be", "scam"]
+        "en": [
+            "attack",
+            "purports to be",
+            "dupe",
+            "masquerading as",
+            "pretending to be",
+            "scam",
+        ]
     },
     "ransom_attack_examples": {"en": ["attack", "ransomware", "selling", "ransom"]},
-    "vulnerability_discover_examples": {"en": ["attack", "found", "exploit", "vulnerability"]},
-    "vulnerability_patch_examples": {"en": ["patch", "fixed", "addresses", "implemented", "released"]},
+    "vulnerability_discover_examples": {
+        "en": ["attack", "found", "exploit", "vulnerability"]
+    },
+    "vulnerability_patch_examples": {
+        "en": ["patch", "fixed", "addresses", "implemented", "released"]
+    },
 }

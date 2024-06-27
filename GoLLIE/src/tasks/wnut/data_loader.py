@@ -3,7 +3,15 @@ from typing import Dict, List, Tuple, Type, Union
 from src.tasks.label_encoding import rewrite_labels
 from src.tasks.wnut.guidelines import GUIDELINES
 from src.tasks.wnut.guidelines_gold import EXAMPLES
-from src.tasks.wnut.prompts import ENTITY_DEFINITIONS, Corporation, CreativeWork, Group, Location, Person, Product
+from src.tasks.wnut.prompts import (
+    ENTITY_DEFINITIONS,
+    Corporation,
+    CreativeWork,
+    Group,
+    Location,
+    Person,
+    Product,
+)
 
 from ..utils_data import DatasetLoader, Sampler
 from ..utils_typing import Entity, IgnoreAction
@@ -41,7 +49,9 @@ def get_bwnut_hf(
     for example in dataset[split]:
         words = example["tokens"]
         # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
 
         # Get labeled word spans
         spans = []
@@ -58,7 +68,9 @@ def get_bwnut_hf(
         # Get entities
         entities = []
         for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
@@ -107,24 +119,30 @@ class WnutDatasetLoader(DatasetLoader):
                 "gold": entities,
             }
 
+
 def get_wnut_translation(path, ENTITY_TO_CLASS_MAPPING):
     with open(path, "r", encoding="utf-8") as f:
         data = [json.loads(d) for d in f]
-    
+
     dataset_sentences = []
     dataset_entities = []
 
     for d in data:
-        sentence, entities = decode_data(d["input_sentence"], d["output_sentence"], d["marker2label"])
+        sentence, entities = decode_data(
+            d["input_sentence"], d["output_sentence"], d["marker2label"]
+        )
         if sentence is not None and entities is not None:
             labeled_entities = []
             for label, entity_span in entities:
-                labeled_entities.append(ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip()))
+                labeled_entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip())
+                )
 
             dataset_sentences.append(sentence)
             dataset_entities.append(labeled_entities)
-    
+
     return dataset_sentences, dataset_entities
+
 
 class WnutTranslationDatasetLoader(DatasetLoader):
     """
@@ -167,34 +185,51 @@ class WnutTranslationDatasetLoader(DatasetLoader):
                 "gold": entities,
             }
 
+
 def get_wnut_transfusion(path, ENTITY_TO_CLASS_MAPPING):
     with open(path, "r", encoding="utf-8") as f:
         data = [json.loads(d) for d in f]
-    
+
     dataset_sentences = []
     dataset_en_sentences = []
     dataset_entities = []
     dataset_en_entities = []
 
     for d in data:
-        sentence, entities = decode_data(d["input_sentence"], d["output_sentence"], d["marker2label"])
-        en_sentence, en_entities = decode_data(d["input_sentence"], d["input_sentence"], d["marker2label"])
-        if all(var is not None for var in [sentence, entities, en_sentence, en_entities]):
+        sentence, entities = decode_data(
+            d["input_sentence"], d["output_sentence"], d["marker2label"]
+        )
+        en_sentence, en_entities = decode_data(
+            d["input_sentence"], d["input_sentence"], d["marker2label"]
+        )
+        if all(
+            var is not None for var in [sentence, entities, en_sentence, en_entities]
+        ):
             labeled_entities = []
             for label, entity_span in entities:
-                labeled_entities.append(ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip()))
+                labeled_entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip())
+                )
 
             labeled_en_entities = []
             for label, entity_span in en_entities:
-                labeled_en_entities.append(ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip()))
+                labeled_en_entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=entity_span.strip())
+                )
 
             dataset_sentences.append(sentence)
             dataset_entities.append(labeled_entities)
 
             dataset_en_sentences.append(en_sentence)
             dataset_en_entities.append(labeled_en_entities)
-    
-    return dataset_sentences, dataset_entities, dataset_en_sentences, dataset_en_entities
+
+    return (
+        dataset_sentences,
+        dataset_entities,
+        dataset_en_sentences,
+        dataset_en_entities,
+    )
+
 
 class WnutTransFusionDatasetLoader(DatasetLoader):
     """
@@ -223,13 +258,16 @@ class WnutTransFusionDatasetLoader(DatasetLoader):
 
         self.elements = {}
 
-        dataset_words, dataset_entities, dataset_en_words, dataset_en_entities = get_wnut_transfusion(
-            path=path_or_split,
-            ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
+        dataset_words, dataset_entities, dataset_en_words, dataset_en_entities = (
+            get_wnut_transfusion(
+                path=path_or_split,
+                ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
+            )
         )
 
-        for id, (sentence, entities, en_sentence, en_entities) in enumerate(zip(dataset_words, 
-                                    dataset_entities, dataset_en_words, dataset_en_entities)):
+        for id, (sentence, entities, en_sentence, en_entities) in enumerate(
+            zip(dataset_words, dataset_entities, dataset_en_words, dataset_en_entities)
+        ):
             self.elements[id] = {
                 "id": id,
                 "doc_id": id,
@@ -240,6 +278,7 @@ class WnutTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": en_entities,
             }
+
 
 class WnutSampler(Sampler):
     """

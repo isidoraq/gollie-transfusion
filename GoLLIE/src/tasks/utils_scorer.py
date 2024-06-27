@@ -8,10 +8,13 @@ import math
 import re
 import string
 
+
 class Scorer:
     """An abstract class for scorers."""
 
-    def __call__(self, reference: List[Any], predictions: List[Any]) -> Dict[str, Dict[str, float]]:
+    def __call__(
+        self, reference: List[Any], predictions: List[Any]
+    ) -> Dict[str, Dict[str, float]]:
         """
         Computes the scores for the given reference and predictions.
 
@@ -41,7 +44,11 @@ class Scorer:
                 List of the filtered annotations to keep only the ones defined by the
                 valid types.
         """
-        return [elem for elem in elems if any(isinstance(elem, _type) for _type in self.valid_types)]
+        return [
+            elem
+            for elem in elems
+            if any(isinstance(elem, _type) for _type in self.valid_types)
+        ]
 
 
 class SpanScorer(Scorer):
@@ -57,9 +64,13 @@ class SpanScorer(Scorer):
         reference: List[Union[Entity, Value]],
         predictions: List[Union[Entity, Value]],
     ) -> Dict[str, Dict[str, float]]:
-        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+        if not len(reference) or (
+            len(reference) and not isinstance(reference[0], list)
+        ):
             reference = [reference]
-        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(
@@ -71,10 +82,10 @@ class SpanScorer(Scorer):
         class_scores = {}
 
         for ref, pre in zip(reference, predictions):
-            
+
             # ref = self._filter_valid_types(ref)
             # pre = self._filter_valid_types(pre)
-            
+
             ref2 = ref.copy()
             pre2 = pre.copy()
 
@@ -103,7 +114,11 @@ class SpanScorer(Scorer):
 
         precision = tp / total_pre if total_pre > 0.0 else 0.0
         recall = tp / total_pos if total_pos > 0.0 else 0.0
-        f1_score = 2 * precision * recall / (precision + recall) if (precision + recall) > 0.0 else 0.0
+        f1_score = (
+            2 * precision * recall / (precision + recall)
+            if (precision + recall) > 0.0
+            else 0.0
+        )
         # Calculate class scores
         for label in class_scores:
             class_scores[label]["precision"] = (
@@ -121,18 +136,23 @@ class SpanScorer(Scorer):
                 * class_scores[label]["precision"]
                 * class_scores[label]["recall"]
                 / (class_scores[label]["precision"] + class_scores[label]["recall"])
-                if (class_scores[label]["precision"] + class_scores[label]["recall"]) > 0.0
+                if (class_scores[label]["precision"] + class_scores[label]["recall"])
+                > 0.0
                 else 0.0
             )
 
         return {
-            "spans": {"precision": precision, "recall": recall, "f1-score": f1_score, "class_scores": class_scores},
+            "spans": {
+                "precision": precision,
+                "recall": recall,
+                "f1-score": f1_score,
+                "class_scores": class_scores,
+            },
         }
 
 
 class QAScorer(Scorer):
-    """A QA scorer implementation for question answering task.
-    """
+    """A QA scorer implementation for question answering task."""
 
     valid_types: List[Type] = [Entity]
 
@@ -142,9 +162,13 @@ class QAScorer(Scorer):
         reference: List[Union[Entity]],
         predictions: List[Union[Entity]],
     ) -> Dict[str, Dict[str, float]]:
-        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+        if not len(reference) or (
+            len(reference) and not isinstance(reference[0], list)
+        ):
             reference = [reference]
-        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(
@@ -178,7 +202,6 @@ class QAScorer(Scorer):
         def compute_exact(a_gold, a_pred):
             return int(normalize_answer(a_gold) == normalize_answer(a_pred))
 
-
         def compute_f1(a_gold, a_pred):
             gold_toks = get_tokens(a_gold)
             pred_toks = get_tokens(a_pred)
@@ -194,7 +217,6 @@ class QAScorer(Scorer):
             f1 = (2 * precision * recall) / (precision + recall)
             return f1
 
-
         def get_eval_scores(answers, preds):
             """
             Computes the exact and f1 scores from the examples and the model predictions
@@ -204,16 +226,19 @@ class QAScorer(Scorer):
             f1_scores = {}
 
             for qas_id, (gold_answers, prediction) in enumerate(zip(answers, preds)):
-                exact_scores[qas_id] = max(compute_exact(a, prediction) for a in gold_answers)
+                exact_scores[qas_id] = max(
+                    compute_exact(a, prediction) for a in gold_answers
+                )
                 f1_scores[qas_id] = max(compute_f1(a, prediction) for a in gold_answers)
             total = len(exact_scores)
-            return {"qa": 
-                        {
-                            "exact": sum(exact_scores.values()) / total,
-                            "f1": sum(f1_scores.values()) / total,
-                            "total": total,
-                        }     
-                    }
+            return {
+                "qa": {
+                    "exact": sum(exact_scores.values()) / total,
+                    "f1": sum(f1_scores.values()) / total,
+                    "total": total,
+                }
+            }
+
         answers = []
         preds = []
 
@@ -226,7 +251,7 @@ class QAScorer(Scorer):
             preds.append(pred_cache)
 
         final_results = get_eval_scores(answers, preds)
-        
+
         return final_results
 
 
@@ -238,7 +263,9 @@ class RelationScorer(SpanScorer):
     valid_types: List[Type] = [Relation]
 
     @override
-    def __call__(self, reference: List[Relation], predictions: List[Relation]) -> Dict[str, Dict[str, float]]:
+    def __call__(
+        self, reference: List[Relation], predictions: List[Relation]
+    ) -> Dict[str, Dict[str, float]]:
         output = super().__call__(reference, predictions)
         return {"relations": output["spans"]}
 
@@ -250,9 +277,13 @@ class EventScorer(Scorer):
 
     @override
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
-        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+        if not len(reference) or (
+            len(reference) and not isinstance(reference[0], list)
+        ):
             reference = [reference]
-        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(
@@ -301,8 +332,16 @@ class EventScorer(Scorer):
         a_precision = a_tp / a_total_pre if a_total_pre > 0.0 else 0.0
         e_recall = e_tp / e_total_pos if e_total_pos > 0.0 else 0.0
         a_recall = a_tp / a_total_pos if a_total_pos > 0.0 else 0.0
-        e_f1_score = 2 * e_precision * e_recall / (e_precision + e_recall) if (e_precision + e_recall) > 0.0 else 0.0
-        a_f1_score = 2 * a_precision * a_recall / (a_precision + a_recall) if (a_precision + a_recall) > 0.0 else 0.0
+        e_f1_score = (
+            2 * e_precision * e_recall / (e_precision + e_recall)
+            if (e_precision + e_recall) > 0.0
+            else 0.0
+        )
+        a_f1_score = (
+            2 * a_precision * a_recall / (a_precision + a_recall)
+            if (a_precision + a_recall) > 0.0
+            else 0.0
+        )
 
         # Calculate event scores
         for label in event_scores:
@@ -321,7 +360,8 @@ class EventScorer(Scorer):
                 * event_scores[label]["precision"]
                 * event_scores[label]["recall"]
                 / (event_scores[label]["precision"] + event_scores[label]["recall"])
-                if (event_scores[label]["precision"] + event_scores[label]["recall"]) > 0.0
+                if (event_scores[label]["precision"] + event_scores[label]["recall"])
+                > 0.0
                 else 0.0
             )
 
@@ -347,9 +387,13 @@ class TemplateScorer(Scorer):
 
     @override
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
-        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+        if not len(reference) or (
+            len(reference) and not isinstance(reference[0], list)
+        ):
             reference = [reference]
-        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(
@@ -398,8 +442,16 @@ class TemplateScorer(Scorer):
         s_precision = s_tp / s_total_pre if s_total_pre > 0.0 else 0.0
         t_recall = t_tp / t_total_pos if t_total_pos > 0.0 else 0.0
         s_recall = s_tp / s_total_pos if s_total_pos > 0.0 else 0.0
-        t_f1_score = 2 * t_precision * t_recall / (t_precision + t_recall) if (t_precision + t_recall) > 0.0 else 0.0
-        s_f1_score = 2 * s_precision * s_recall / (s_precision + s_recall) if (s_precision + s_recall) > 0.0 else 0.0
+        t_f1_score = (
+            2 * t_precision * t_recall / (t_precision + t_recall)
+            if (t_precision + t_recall) > 0.0
+            else 0.0
+        )
+        s_f1_score = (
+            2 * s_precision * s_recall / (s_precision + s_recall)
+            if (s_precision + s_recall) > 0.0
+            else 0.0
+        )
 
         # Calculate template scores
         for label in template_scores:
@@ -417,8 +469,15 @@ class TemplateScorer(Scorer):
                 2
                 * template_scores[label]["precision"]
                 * template_scores[label]["recall"]
-                / (template_scores[label]["precision"] + template_scores[label]["recall"])
-                if (template_scores[label]["precision"] + template_scores[label]["recall"]) > 0.0
+                / (
+                    template_scores[label]["precision"]
+                    + template_scores[label]["recall"]
+                )
+                if (
+                    template_scores[label]["precision"]
+                    + template_scores[label]["recall"]
+                )
+                > 0.0
                 else 0.0
             )
 

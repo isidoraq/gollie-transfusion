@@ -5,6 +5,7 @@ from src.tasks.tydiqa.prompts import (
 )
 from src.tasks.utils_scorer import QAScorer
 
+
 class TyDiQAScorer(QAScorer):
     """TydiQA scorer."""
 

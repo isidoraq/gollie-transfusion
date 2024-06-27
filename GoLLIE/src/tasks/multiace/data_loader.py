@@ -130,15 +130,27 @@ class ACEDatasetLoader(DatasetLoader):
         "TIME": Time,
     }
     RELATION_TO_CLASS_MAPPING = {
-        "ART:User-Owner-Inventor-Manufacturer": (AgentArtifactRelationRelation, UserOwnerInventorManufacturer),
-        "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (GenAffiliationRelation, CitizenResidentReligionEthnicity),
+        "ART:User-Owner-Inventor-Manufacturer": (
+            AgentArtifactRelationRelation,
+            UserOwnerInventorManufacturer,
+        ),
+        "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (
+            GenAffiliationRelation,
+            CitizenResidentReligionEthnicity,
+        ),
         "GEN-AFF:Org-Location": (GenAffiliationRelation, OrgLocationOrigin),
         "ORG-AFF:Employment": (OrganizationAffiliationRelation, Employment),
         "ORG-AFF:Founder": (OrganizationAffiliationRelation, Founder),
-        "ORG-AFF:Investor-Shareholder": (OrganizationAffiliationRelation, InvestorShareholder),
+        "ORG-AFF:Investor-Shareholder": (
+            OrganizationAffiliationRelation,
+            InvestorShareholder,
+        ),
         "ORG-AFF:Membership": (OrganizationAffiliationRelation, Membership),
         "ORG-AFF:Ownership": (OrganizationAffiliationRelation, Ownership),
-        "ORG-AFF:Sports-Affiliation": (OrganizationAffiliationRelation, SportsAffiliation),
+        "ORG-AFF:Sports-Affiliation": (
+            OrganizationAffiliationRelation,
+            SportsAffiliation,
+        ),
         "ORG-AFF:Student-Alum": (OrganizationAffiliationRelation, StudentAlum),
         "PART-WHOLE:Artifact": (
             PartWholeRelation,
@@ -181,7 +193,12 @@ class ACEDatasetLoader(DatasetLoader):
             "class": MergeOrg,
             "Org": "org",
         },
-        "Business:Start-Org": {"coarse": BusinessEvent, "class": StartOrg, "Agent": "agent", "Org": "org"},
+        "Business:Start-Org": {
+            "coarse": BusinessEvent,
+            "class": StartOrg,
+            "Agent": "agent",
+            "Org": "org",
+        },
         "Conflict:Attack": {
             "coarse": ConflictEvent,
             "class": Attack,
@@ -403,7 +420,7 @@ class ACEDatasetLoader(DatasetLoader):
         with open(path, "rt") as in_f:
             for line in in_f:
                 line = json.loads(line.strip())
-      
+
                 key = line["wnd_id"] if group_by == "sentence" else line["doc_id"]
                 if key not in self.elements:
                     self.elements[key] = {
@@ -420,12 +437,16 @@ class ACEDatasetLoader(DatasetLoader):
                     }
 
                 entities = [
-                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
+                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](
+                        span=entity["text"]
+                    )
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.ENTITY_TO_CLASS_MAPPING
                 ]
                 values = [
-                    self.VALUE_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
+                    self.VALUE_TO_CLASS_MAPPING[entity["entity_type"]](
+                        span=entity["text"]
+                    )
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.VALUE_TO_CLASS_MAPPING
                 ]
@@ -447,11 +468,14 @@ class ACEDatasetLoader(DatasetLoader):
                     )
                 events, arguments = [], []
                 for event in line["event_mentions"]:
-                    
+
                     if event["event_type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
                     info = self.EVENT_TO_CLASS_MAPPING[event["event_type"]]
-                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+                    _inst = {
+                        param: []
+                        for param in inspect.signature(info["class"]).parameters.keys()
+                    }
                     _inst["mention"] = event["trigger"]["text"]
                     for argument in event["arguments"]:
                         if argument["role"] in info:
@@ -463,11 +487,13 @@ class ACEDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
+                            raise ValueError(
+                                f"Argument {event['event_type']}:{argument['role']} not found!"
+                            )
 
                     events.append(info["coarse"](mention=_inst["mention"]))
                     arguments.append(info["class"](**_inst))
-                
+
                 if "sentence" in line:
                     self.elements[key]["text"] += " " + line["sentence"].strip()
                     self.elements[key]["entities"] += entities
@@ -477,7 +503,7 @@ class ACEDatasetLoader(DatasetLoader):
                     self.elements[key]["events"] += events
                     self.elements[key]["arguments"] += arguments
                     self.elements[key]["gold"] += entities  # Is not used anyway
-                elif "sentences" in line: 
+                elif "sentences" in line:
                     self.elements[key]["text"] += " " + line["sentences"].strip()
                     self.elements[key]["entities"] += entities
                     self.elements[key]["values"] += values
@@ -487,11 +513,13 @@ class ACEDatasetLoader(DatasetLoader):
                     self.elements[key]["arguments"] += arguments
                     self.elements[key]["gold"] += entities  # Is not used anyway
 
+
 def load_translation(language):
     path = f"/coc/pskynet6/ychen3411/transfusion/GoLLIE/data_translatetest/ace/{language}_eng_Latn.jsonl"
     with open(path, "r", encoding="utf-8") as f:
         data = [json.loads(l)["output_sentence"] for l in f]
     return data
+
 
 class ACETransFusionDatasetLoader(DatasetLoader):
     """
@@ -526,15 +554,27 @@ class ACETransFusionDatasetLoader(DatasetLoader):
         "TIME": Time,
     }
     RELATION_TO_CLASS_MAPPING = {
-        "ART:User-Owner-Inventor-Manufacturer": (AgentArtifactRelationRelation, UserOwnerInventorManufacturer),
-        "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (GenAffiliationRelation, CitizenResidentReligionEthnicity),
+        "ART:User-Owner-Inventor-Manufacturer": (
+            AgentArtifactRelationRelation,
+            UserOwnerInventorManufacturer,
+        ),
+        "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (
+            GenAffiliationRelation,
+            CitizenResidentReligionEthnicity,
+        ),
         "GEN-AFF:Org-Location": (GenAffiliationRelation, OrgLocationOrigin),
         "ORG-AFF:Employment": (OrganizationAffiliationRelation, Employment),
         "ORG-AFF:Founder": (OrganizationAffiliationRelation, Founder),
-        "ORG-AFF:Investor-Shareholder": (OrganizationAffiliationRelation, InvestorShareholder),
+        "ORG-AFF:Investor-Shareholder": (
+            OrganizationAffiliationRelation,
+            InvestorShareholder,
+        ),
         "ORG-AFF:Membership": (OrganizationAffiliationRelation, Membership),
         "ORG-AFF:Ownership": (OrganizationAffiliationRelation, Ownership),
-        "ORG-AFF:Sports-Affiliation": (OrganizationAffiliationRelation, SportsAffiliation),
+        "ORG-AFF:Sports-Affiliation": (
+            OrganizationAffiliationRelation,
+            SportsAffiliation,
+        ),
         "ORG-AFF:Student-Alum": (OrganizationAffiliationRelation, StudentAlum),
         "PART-WHOLE:Artifact": (
             PartWholeRelation,
@@ -577,7 +617,12 @@ class ACETransFusionDatasetLoader(DatasetLoader):
             "class": MergeOrg,
             "Org": "org",
         },
-        "Business:Start-Org": {"coarse": BusinessEvent, "class": StartOrg, "Agent": "agent", "Org": "org"},
+        "Business:Start-Org": {
+            "coarse": BusinessEvent,
+            "class": StartOrg,
+            "Agent": "agent",
+            "Org": "org",
+        },
         "Conflict:Attack": {
             "coarse": ConflictEvent,
             "class": Attack,
@@ -799,12 +844,12 @@ class ACETransFusionDatasetLoader(DatasetLoader):
         lang = kwargs["language"]
         print(lang)
         translation = load_translation(language=lang)
-        
+
         with open(path, "rt") as in_f:
             for line, eng_text in zip(in_f, translation):
                 line = json.loads(line.strip())
 
-                #key = line["wnd_id"] if group_by == "sentence" else line["doc_id"]
+                # key = line["wnd_id"] if group_by == "sentence" else line["doc_id"]
                 key = line["sent_id"] if group_by == "sentence" else line["doc_id"]
                 if key not in self.elements:
                     self.elements[key] = {
@@ -829,12 +874,16 @@ class ACETransFusionDatasetLoader(DatasetLoader):
                     }
 
                 entities = [
-                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
+                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](
+                        span=entity["text"]
+                    )
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.ENTITY_TO_CLASS_MAPPING
                 ]
                 values = [
-                    self.VALUE_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
+                    self.VALUE_TO_CLASS_MAPPING[entity["entity_type"]](
+                        span=entity["text"]
+                    )
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.VALUE_TO_CLASS_MAPPING
                 ]
@@ -856,11 +905,14 @@ class ACETransFusionDatasetLoader(DatasetLoader):
                     )
                 events, arguments = [], []
                 for event in line["event_mentions"]:
-                    
+
                     if event["event_type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
                     info = self.EVENT_TO_CLASS_MAPPING[event["event_type"]]
-                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+                    _inst = {
+                        param: []
+                        for param in inspect.signature(info["class"]).parameters.keys()
+                    }
                     _inst["mention"] = event["trigger"]["text"]
                     for argument in event["arguments"]:
                         if argument["role"] in info:
@@ -872,7 +924,9 @@ class ACETransFusionDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
+                            raise ValueError(
+                                f"Argument {event['event_type']}:{argument['role']} not found!"
+                            )
 
                     events.append(info["coarse"](mention=_inst["mention"]))
                     arguments.append(info["class"](**_inst))
@@ -895,7 +949,7 @@ class ACETransFusionDatasetLoader(DatasetLoader):
                     self.elements[key]["en_events"] += []
                     self.elements[key]["en_arguments"] += []
                     self.elements[key]["en_gold"] += []
-                elif "sentences" in line: 
+                elif "sentences" in line:
                     self.elements[key]["text"] += " " + line["sentences"].strip()
                     self.elements[key]["en_text"] += eng_text
                     self.elements[key]["entities"] += entities
@@ -986,36 +1040,84 @@ class ACESampler(Sampler):
         if use_transfusion:
             if use_transfusionv2:
                 task_definitions, task_target, task_template = {
-                    "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt_tfv2.txt"),
+                    "NER": (
+                        ENTITY_DEFINITIONS,
+                        "entities",
+                        "templates/prompt_tfv2.txt",
+                    ),
                     "VER": (VALUE_DEFINITIONS, "values", "templates/prompt_tfv2.txt"),
-                    "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re_tfv2.txt"),
-                    "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc.txt"),
-                    "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt_tfv2.txt"),
-                    "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae_tfv2.txt"),
+                    "RE": (
+                        COARSE_RELATION_DEFINITIONS,
+                        "coarse_relations",
+                        "templates/prompt_ace_re_tfv2.txt",
+                    ),
+                    "RC": (
+                        RELATION_DEFINITIONS,
+                        "relations",
+                        "templates/prompt_ace_rc.txt",
+                    ),
+                    "EE": (
+                        COARSE_EVENT_DEFINITIONS,
+                        "events",
+                        "templates/prompt_tfv2.txt",
+                    ),
+                    "EAE": (
+                        EVENT_DEFINITIONS,
+                        "arguments",
+                        "templates/prompt_ace_eae_tfv2.txt",
+                    ),
                 }[task]
             else:
                 task_definitions, task_target, task_template = {
                     "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt_tf.txt"),
                     "VER": (VALUE_DEFINITIONS, "values", "templates/prompt_tf.txt"),
-                    "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re_tf.txt"),
-                    "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc.txt"),
-                    "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt_tf.txt"),
-                    "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae_tf.txt"),
+                    "RE": (
+                        COARSE_RELATION_DEFINITIONS,
+                        "coarse_relations",
+                        "templates/prompt_ace_re_tf.txt",
+                    ),
+                    "RC": (
+                        RELATION_DEFINITIONS,
+                        "relations",
+                        "templates/prompt_ace_rc.txt",
+                    ),
+                    "EE": (
+                        COARSE_EVENT_DEFINITIONS,
+                        "events",
+                        "templates/prompt_tf.txt",
+                    ),
+                    "EAE": (
+                        EVENT_DEFINITIONS,
+                        "arguments",
+                        "templates/prompt_ace_eae_tf.txt",
+                    ),
                 }[task]
         else:
             task_definitions, task_target, task_template = {
                 "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt.txt"),
                 "VER": (VALUE_DEFINITIONS, "values", "templates/prompt.txt"),
-                "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re.txt"),
-                "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc.txt"),
+                "RE": (
+                    COARSE_RELATION_DEFINITIONS,
+                    "coarse_relations",
+                    "templates/prompt_ace_re.txt",
+                ),
+                "RC": (
+                    RELATION_DEFINITIONS,
+                    "relations",
+                    "templates/prompt_ace_rc.txt",
+                ),
                 "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
                 "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
             }[task]
 
         if task in ["RC", "EAE"]:
             is_coarse_to_fine: bool = True
-            COARSE_TO_FINE = COARSE_TO_FINE_EVENTS if task == "EAE" else COARSE_TO_FINE_RELATIONS
-            FINE_TO_COARSE = FINE_TO_COARSE_EVENTS if task == "EAE" else FINE_TO_COARSE_RELATIONS
+            COARSE_TO_FINE = (
+                COARSE_TO_FINE_EVENTS if task == "EAE" else COARSE_TO_FINE_RELATIONS
+            )
+            FINE_TO_COARSE = (
+                FINE_TO_COARSE_EVENTS if task == "EAE" else FINE_TO_COARSE_RELATIONS
+            )
         else:
             is_coarse_to_fine = False
             COARSE_TO_FINE = None

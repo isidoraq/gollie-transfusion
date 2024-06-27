@@ -1,59 +1,59 @@
 GUIDELINES = {
     "redfm_cel": {
         "en": [
-        "CEL refers to celestial objects, such as stars, planets, moons, asteroids, comets, or other astronomical bodies."
+            "CEL refers to celestial objects, such as stars, planets, moons, asteroids, comets, or other astronomical bodies."
         ]
-        },
-        "redfm_concept": {
+    },
+    "redfm_concept": {
         "en": [
-        "Concept represents abstract ideas, objects, or notions that do not fall under other specific entity categories, such as 'newspaper', 'rock', or 'Propylaea'."
+            "Concept represents abstract ideas, objects, or notions that do not fall under other specific entity categories, such as 'newspaper', 'rock', or 'Propylaea'."
         ]
-        },
-        "redfm_date": {
+    },
+    "redfm_date": {
         "en": [
-        "DATE represents specific years, such as '2004', '1894', '1869', or '1786'."
+            "DATE represents specific years, such as '2004', '1894', '1869', or '1786'."
         ]
-        },
-        "redfm_dis": {
+    },
+    "redfm_dis": {
         "en": [
-        "DIS stands for distinct or unique entities, such as specific photographs ('Earthrise'), classifications ('potentially hazardous asteroid'), or astrological signs ('Cancer')."
+            "DIS stands for distinct or unique entities, such as specific photographs ('Earthrise'), classifications ('potentially hazardous asteroid'), or astrological signs ('Cancer')."
         ]
-        },
-        "redfm_eve": {
+    },
+    "redfm_eve": {
         "en": [
-        "EVE represents significant events or occurrences, such as awards ('Academy Award for Best Actor'), military operations ('Operation Crossroads'), or sporting events ('1958 FIFA World Cup')."
+            "EVE represents significant events or occurrences, such as awards ('Academy Award for Best Actor'), military operations ('Operation Crossroads'), or sporting events ('1958 FIFA World Cup')."
         ]
-        },
-        "redfm_loc": {
+    },
+    "redfm_loc": {
         "en": [
-        "LOC refers to locations, which can include specific cities ('Limassol', 'Katowice'), landmarks ('Athenian Acropolis'), or historical regions ('Confederate States of America')."
+            "LOC refers to locations, which can include specific cities ('Limassol', 'Katowice'), landmarks ('Athenian Acropolis'), or historical regions ('Confederate States of America')."
         ]
-        },
-        "redfm_media": {
+    },
+    "redfm_media": {
         "en": [
-        "MEDIA represents various forms of media, such as software ('FL Studio'), literature ('Prose Edda', 'From Here to Eternity'), or television shows ('Seinfeld')."
+            "MEDIA represents various forms of media, such as software ('FL Studio'), literature ('Prose Edda', 'From Here to Eternity'), or television shows ('Seinfeld')."
         ]
-        },
-        "redfm_misc": {
+    },
+    "redfm_misc": {
         "en": [
-        "MISC is used for entities that do not fit into any of the other specific categories, scientific experiments ('NOνA'), or appellations ('Binissalem DOP', 'ICARUS')."
+            "MISC is used for entities that do not fit into any of the other specific categories, scientific experiments ('NOνA'), or appellations ('Binissalem DOP', 'ICARUS')."
         ]
-        },
-        "redfm_org": {
+    },
+    "redfm_org": {
         "en": [
-        "ORG stands for organizations, which can include educational institutions ('Pompeu Fabra University'), literary works ('Dream of the Red Chamber'), gaming consoles ('ColecoVision'), or fairy tales ('The Ugly Duckling')."
+            "ORG stands for organizations, which can include educational institutions ('Pompeu Fabra University'), literary works ('Dream of the Red Chamber'), gaming consoles ('ColecoVision'), or fairy tales ('The Ugly Duckling')."
         ]
-        },
-        "redfm_per": {
+    },
+    "redfm_per": {
         "en": [
-        "PER represents individual persons, including specific names of people, such as musicians ('Ray Charles'), authors ('Philip K. Dick'), or biblical figures ('Abraham', 'Sarah')."
+            "PER represents individual persons, including specific names of people, such as musicians ('Ray Charles'), authors ('Philip K. Dick'), or biblical figures ('Abraham', 'Sarah')."
         ]
-        },
-        "redfm_time": {
+    },
+    "redfm_time": {
         "en": [
-        "TIME refers to geological time periods or epochs, such as 'Serravallian', 'Cenozoic', 'Paleocene', or 'Bathonian'."
+            "TIME refers to geological time periods or epochs, such as 'Serravallian', 'Cenozoic', 'Paleocene', or 'Bathonian'."
         ]
-        },
+    },
     "redfm_country": {
         "en": [
             "Country relation: Sovereign state of this item (not to be used for human beings)."
@@ -85,11 +85,7 @@ GUIDELINES = {
             "Capital relation: seat of government of a country, province, state or other type of administrative territorial entity."
         ]
     },
-    "redfm_child": {
-        "en": [
-            "Child relation: subject has object as child."
-        ]
-    },
+    "redfm_child": {"en": ["Child relation: subject has object as child."]},
     "redfm_shareborderwith": {
         "en": [
             "Share Border with relation: countries or administrative subdivisions, of equal level, that this\n"
@@ -107,11 +103,7 @@ GUIDELINES = {
             "Director relation: directors(s) of film, TV-series, stage-play, video game or similar."
         ]
     },
-    "redfm_occupation": {
-        "en": [
-            "Occupation relation: occupation of a person."
-        ]
-    },
+    "redfm_occupation": {"en": ["Occupation relation: occupation of a person."]},
     "redfm_foundedby": {
         "en": [
             "Founded By relation: founder or co-founder of this organization, religion or place."
@@ -122,99 +114,81 @@ GUIDELINES = {
             "League relation: league in which team or player plays or has played in."
         ]
     },
-    "redfm_ownedby": {
-        "en": [
-            "Owned By relation: owner of the subject."
-        ]
-    },
+    "redfm_ownedby": {"en": ["Owned By relation: owner of the subject."]},
     "redfm_genre": {
-        "en": [
-        "Genre relation: creative work's genre or an artist's field of work."
-        ]
-        },
+        "en": ["Genre relation: creative work's genre or an artist's field of work."]
+    },
     "redfm_named_after": {
-    "en": [
-    "Named After relation: entity or event that inspired the subject's name, or namesake (in at least one language)."
-    ]
+        "en": [
+            "Named After relation: entity or event that inspired the subject's name, or namesake (in at least one language)."
+        ]
     },
     "redfm_follows": {
-    "en": [
-    "Follows relation: immediately prior item in a series of which the subject is a part."
-    ]
+        "en": [
+            "Follows relation: immediately prior item in a series of which the subject is a part."
+        ]
     },
     "redfm_headquarters_location": {
-    "en": [
-    "Headquarters Location relation: city, where an organization's headquarters is or has been situated."
-    ]
+        "en": [
+            "Headquarters Location relation: city, where an organization's headquarters is or has been situated."
+        ]
     },
     "redfm_cast_member": {
-    "en": [
-    "Cast Member relation: actor in the subject production."
-    ]
+        "en": ["Cast Member relation: actor in the subject production."]
     },
     "redfm_manufacturer": {
-    "en": [
-    "Manufacturer relation: manufacturer or producer of this product."
-    ]
+        "en": ["Manufacturer relation: manufacturer or producer of this product."]
     },
     "redfm_located_in_or_next_to_body_of_water": {
-    "en": [
-    "Located In Or Next To Body Of Water relation: sea, lake, river or stream."
-    ]
+        "en": [
+            "Located In Or Next To Body Of Water relation: sea, lake, river or stream."
+        ]
     },
     "redfm_location": {
-    "en": [
-    "Location relation: location of the object, structure or event."
-    ]
+        "en": ["Location relation: location of the object, structure or event."]
     },
     "redfm_part_of": {
-    "en": [
-    "Part Of relation: object of which the subject is a part."
-    ]
+        "en": ["Part Of relation: object of which the subject is a part."]
     },
     "redfm_mouth_of_the_watercourse": {
-    "en": [
-    "Mouth Of The Watercourse relation: the body of water to which the watercourse drains."
-    ]
+        "en": [
+            "Mouth Of The Watercourse relation: the body of water to which the watercourse drains."
+        ]
     },
     "redfm_member_of": {
-    "en": [
-    "Member Of relation: organization, club or musical group to which the subject belongs."
-    ]
+        "en": [
+            "Member Of relation: organization, club or musical group to which the subject belongs."
+        ]
     },
     "redfm_sport": {
-    "en": [
-    "Sport relation: sport that the subject participates or participated in or is associated with."
-    ]
+        "en": [
+            "Sport relation: sport that the subject participates or participated in or is associated with."
+        ]
     },
     "redfm_characters": {
-    "en": [
-    "Characters relation: characters which appear in this item (like plays, operas, operettas, books, comics, films, TV series, video games)."
-    ]
+        "en": [
+            "Characters relation: characters which appear in this item (like plays, operas, operettas, books, comics, films, TV series, video games)."
+        ]
     },
     "redfm_participant": {
-    "en": [
-    "Participant relation: person, group of people or organization that actively takes part in the subject."
-    ]
+        "en": [
+            "Participant relation: person, group of people or organization that actively takes part in the subject."
+        ]
     },
     "redfm_notable_work": {
-    "en": [
-    "Notable Work relation: notable scientific, artistic or literary work, or other work of significance among subject's works."
-    ]
+        "en": [
+            "Notable Work relation: notable scientific, artistic or literary work, or other work of significance among subject's works."
+        ]
     },
-    "redfm_replaces": {
-    "en": [
-    "Replaces relation: person, state or item replaced."
-    ]
-    },
+    "redfm_replaces": {"en": ["Replaces relation: person, state or item replaced."]},
     "redfm_sibling": {
-    "en": [
-    "Sibling relation: the subject and the object have the same parents (brother, sister, etc.)."
-    ]
+        "en": [
+            "Sibling relation: the subject and the object have the same parents (brother, sister, etc.)."
+        ]
     },
     "redfm_inception": {
-    "en": [
-    "Inception relation: date or point in time when the subject came into existence as defined."
-    ]
+        "en": [
+            "Inception relation: date or point in time when the subject came into existence as defined."
+        ]
     },
 }

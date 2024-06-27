@@ -1,5 +1,9 @@
 GUIDELINES = {
-    "ner_person": {"en": ["first, middle and last names of people, animals and fictional characters aliases."]},
+    "ner_person": {
+        "en": [
+            "first, middle and last names of people, animals and fictional characters aliases."
+        ]
+    },
     "ner_organization": {
         "en": [
             "Companies (press agencies, studios, banks, stock\n"
@@ -41,10 +45,32 @@ GUIDELINES = {
 
 EXAMPLES = {
     "ner_location_examples": {
-        "en": ["U.S.", "Germany", "Britain", "Australia", "England", "France", "Spain", "Italy", "LONDON", "China"]
+        "en": [
+            "U.S.",
+            "Germany",
+            "Britain",
+            "Australia",
+            "England",
+            "France",
+            "Spain",
+            "Italy",
+            "LONDON",
+            "China",
+        ]
     },
     "ner_organization_examples": {
-        "en": ["Reuters", "U.N.", "NEW YORK", "CHICAGO", "PUK", "OSCE", "EU", "NATO", "European Union", "Honda"]
+        "en": [
+            "Reuters",
+            "U.N.",
+            "NEW YORK",
+            "CHICAGO",
+            "PUK",
+            "OSCE",
+            "EU",
+            "NATO",
+            "European Union",
+            "Honda",
+        ]
     },
     "ner_person_examples": {
         "en": [
@@ -61,6 +87,17 @@ EXAMPLES = {
         ]
     },
     "ner_miscellaneous_examples": {
-        "en": ["Russian", "German", "British", "French", "Dutch", "GMT", "Israeli", "English", "Iraqi", "European"]
+        "en": [
+            "Russian",
+            "German",
+            "British",
+            "French",
+            "Dutch",
+            "GMT",
+            "Israeli",
+            "English",
+            "Iraqi",
+            "European",
+        ]
     },
 }

@@ -34,7 +34,10 @@ def get_trainable_parameters(model: PreTrainedModel) -> Tuple[int, int, float]:
 
 
 def prepare_model_for_kbit_training(
-    model, use_gradient_checkpointing=True, layer_norm_names=["layer_norm"], output_embedding_layer_name="lm_head"
+    model,
+    use_gradient_checkpointing=True,
+    layer_norm_names=["layer_norm"],
+    output_embedding_layer_name="lm_head",
 ):
     r"""
     This method wraps the entire protocol for preparing a model before running a training. This includes:
@@ -45,7 +48,9 @@ def prepare_model_for_kbit_training(
         model, (`transformers.PreTrainedModel`):
             The loaded model from `transformers`
     """
-    loaded_in_kbit = getattr(model, "is_loaded_in_8bit", False) or getattr(model, "is_loaded_in_4bit", False)
+    loaded_in_kbit = getattr(model, "is_loaded_in_8bit", False) or getattr(
+        model, "is_loaded_in_4bit", False
+    )
 
     for name, param in model.named_parameters():
         # freeze base model's layers
@@ -53,7 +58,9 @@ def prepare_model_for_kbit_training(
 
         if loaded_in_kbit:
             # cast layer norm in fp32 for stability for 8bit models
-            if param.ndim == 1 and any(layer_norm_name in name for layer_norm_name in layer_norm_names):
+            if param.ndim == 1 and any(
+                layer_norm_name in name for layer_norm_name in layer_norm_names
+            ):
                 param.data = param.data.to(torch.float32)
 
     if loaded_in_kbit and use_gradient_checkpointing:
@@ -84,7 +91,11 @@ def prepare_model_for_kbit_training(
             def forward(self, x):
                 return super().forward(x.to(input_dtype)).to(torch.float32)
 
-        setattr(model, output_embedding_layer_name, CastOutputToFloat(output_embedding_layer))
+        setattr(
+            model,
+            output_embedding_layer_name,
+            CastOutputToFloat(output_embedding_layer),
+        )
 
     return model
 

@@ -33,7 +33,9 @@ def get_bc5cdr_hf(
     for example in dataset[split]:
         words = example["tokens"]
         # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
 
         # Get labeled word spans
         spans = []
@@ -50,7 +52,9 @@ def get_bc5cdr_hf(
         # Get entities
         entities = []
         for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)

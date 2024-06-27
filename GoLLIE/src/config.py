@@ -10,7 +10,9 @@ class ModelArguments:
 
     model_name_or_path: Optional[str] = field(
         default=None,
-        metadata={"help": "The local path or huggingface hub name of the model and tokenizer to use."},
+        metadata={
+            "help": "The local path or huggingface hub name of the model and tokenizer to use."
+        },
     )
 
     torch_dtype: Optional[str] = field(
@@ -114,7 +116,9 @@ class ModelArguments:
 
     trust_remote_code: bool = field(
         default=False,
-        metadata={"help": "Trust the remote code from HuggingFace model hub. Defaults to False Defaults to False."},
+        metadata={
+            "help": "Trust the remote code from HuggingFace model hub. Defaults to False Defaults to False."
+        },
     )
 
     use_flash_attention: bool = field(
@@ -183,42 +187,58 @@ class DataTrainingArguments:
 
     dataset_dir: str = field(
         default="~/CoLLIE/data/processed",
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     dataset_ep_dir: str = field(
         default="~/CoLLIE/data/processed",
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     dataset_tf_dir: str = field(
         default="~/CoLLIE/data/processed",
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     train_tasks: List[str] = field(
         default=None,
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     train_ep_tasks: List[str] = field(
         default=None,
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     train_tf_tasks: List[str] = field(
         default=None,
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     validation_tasks: List[str] = field(
         default=None,
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     test_tasks: List[str] = field(
         default=None,
-        metadata={"help": "The tasks to test on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to test on. Can be a list of tasks or a single task."
+        },
     )
 
     max_seq_length: int = field(
@@ -240,7 +260,9 @@ class DataTrainingArguments:
 
     use_dev_inference: bool = field(
         default=False,
-        metadata={"help": "Use the development set for inference instead of the test set."},
+        metadata={
+            "help": "Use the development set for inference instead of the test set."
+        },
     )
 
     evaluate_all_checkpoints: bool = field(
@@ -324,9 +346,5 @@ class DataTrainingArguments:
 
     train_data_seed: int = field(
         default=None,
-        metadata={
-            "help": (
-                "random seed of data.",
-            )
-        },
+        metadata={"help": ("random seed of data.",)},
     )

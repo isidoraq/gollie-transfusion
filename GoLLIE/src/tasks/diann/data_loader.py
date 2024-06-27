@@ -57,7 +57,9 @@ def load_diann_tsv(
         entities = []
         for label, start, end in spans:
             if include_misc or label.lower() != "misc":
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)

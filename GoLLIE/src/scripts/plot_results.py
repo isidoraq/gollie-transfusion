@@ -41,9 +41,19 @@ CoLLIE = [
 def main():
     fig, ax = plt.subplots(1, 7, figsize=(12, 4), sharey=True, layout="constrained")
 
-    TASK_NAMES = ["Movie", "Restaurant", "Politics", "Literature", "Music", "AI", "Science"]
+    TASK_NAMES = [
+        "Movie",
+        "Restaurant",
+        "Politics",
+        "Literature",
+        "Music",
+        "AI",
+        "Science",
+    ]
 
-    for i, (gpt, iuie, collie, name) in enumerate(zip(GPT3_5, InstructUIE, CoLLIE, TASK_NAMES)):
+    for i, (gpt, iuie, collie, name) in enumerate(
+        zip(GPT3_5, InstructUIE, CoLLIE, TASK_NAMES)
+    ):
         rect = ax[i].bar(
             [1],
             [np.round(gpt)],
@@ -87,7 +97,13 @@ def main():
         ax[i].spines["bottom"].set_visible(False)
         ax[i].spines["left"].set_visible(False)
 
-    fig.legend(["GPT-3.5", "SOTA", "GoLLIE"], loc="outside upper center", ncol=3, fontsize=14, frameon=False)
+    fig.legend(
+        ["GPT-3.5", "SOTA", "GoLLIE"],
+        loc="outside upper center",
+        ncol=3,
+        fontsize=14,
+        frameon=False,
+    )
     # ax[3].legend(["GPT-3", "Instruct-UIE", "CoLLIE"], fontsize=12, ncol=3, bbox_to_anchor=(1.00, 1.15), loc="lower center")
 
     # plt.tight_layout()

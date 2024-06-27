@@ -40,7 +40,9 @@ def get_conll_hf(
         words = example["tokens"]
         # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
         # we convert them to IOB2, so we don't have to deal with this later.
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        labels = rewrite_labels(
+            labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2"
+        )
 
         # Get labeled word spans
         spans = []
@@ -58,7 +60,9 @@ def get_conll_hf(
         entities = []
         for label, start, end in spans:
             if include_misc or label != "MISC":
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
@@ -104,7 +108,9 @@ def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
 
     print(f"Read {len(dataset_words)} sentences from {filepath}")
 
-    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
+    dataset_labels = [
+        rewrite_labels(labels, encoding="iob2") for labels in dataset_labels
+    ]
 
     return dataset_words, dataset_labels
 
@@ -147,7 +153,9 @@ def load_conll_tsv(
         entities = []
         for label, start, end in spans:
             if include_misc or label.lower() != "misc":
-                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+                entities.append(
+                    ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+                )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
@@ -213,6 +221,7 @@ class CoNLLDatasetLoader(DatasetLoader):
                 "gold": entities,
             }
 
+
 def get_entities(labels, words, ENTITY_TO_CLASS_MAPPING, include_misc=False):
     labels = rewrite_labels(labels=labels, encoding="iob2")
     # Get labeled word spans
@@ -231,14 +240,17 @@ def get_entities(labels, words, ENTITY_TO_CLASS_MAPPING, include_misc=False):
     entities = []
     for label, start, end in spans:
         if include_misc or label.lower() != "misc":
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
     return entities
+
 
 def load_jsonl(path, ENTITY_TO_CLASS_MAPPING):
     # path=/coc/pskynet6/ychen3411/project03_ace_event/few-shot-learning-main/masakhane-ner/NLLB/easyproject_conll/output-nllb_3Bft_parallel/nllb_3Bft_parallel-en-bam-marker.json
     with open(path, "r", encoding="utf-8") as f:
         output = [json.loads(l) for l in f]
-    
+
     dataset_sentences = []
     dataset_entities = []
     dataset_sentences_en = []
@@ -259,7 +271,12 @@ def load_jsonl(path, ENTITY_TO_CLASS_MAPPING):
         dataset_sentences_en.append(src_words)
         dataset_entities_en.append(src_entities)
 
-    return dataset_sentences, dataset_entities, dataset_sentences_en, dataset_entities_en
+    return (
+        dataset_sentences,
+        dataset_entities,
+        dataset_sentences_en,
+        dataset_entities_en,
+    )
 
 
 class CoNLLTransFusionDatasetLoader(DatasetLoader):
@@ -298,12 +315,16 @@ class CoNLLTransFusionDatasetLoader(DatasetLoader):
 
         self.elements = {}
 
-        dataset_words, dataset_entities, dataset_words_en, dataset_entities_en = load_jsonl(
+        dataset_words, dataset_entities, dataset_words_en, dataset_entities_en = (
+            load_jsonl(
                 path=path_or_split,
                 ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
             )
+        )
 
-        for id, (words, entities, words_en, entities_en) in enumerate(zip(dataset_words, dataset_entities, dataset_words_en, dataset_entities_en)):
+        for id, (words, entities, words_en, entities_en) in enumerate(
+            zip(dataset_words, dataset_entities, dataset_words_en, dataset_entities_en)
+        ):
             assert len(entities) == len(entities_en)
             self.elements[id] = {
                 "id": id,
@@ -315,6 +336,7 @@ class CoNLLTransFusionDatasetLoader(DatasetLoader):
                 "gold": entities,
                 "en_gold": entities_en,
             }
+
 
 class CoNLL03Sampler(Sampler):
     """
@@ -380,7 +402,14 @@ class CoNLL03Sampler(Sampler):
         ], f"CoNLL03 only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
-            "NER": (ENTITY_DEFINITIONS if kwargs["include_misc"] else ENTITY_DEFINITIONS_woMISC, "entities"),
+            "NER": (
+                (
+                    ENTITY_DEFINITIONS
+                    if kwargs["include_misc"]
+                    else ENTITY_DEFINITIONS_woMISC
+                ),
+                "entities",
+            ),
         }[task]
 
         super().__init__(

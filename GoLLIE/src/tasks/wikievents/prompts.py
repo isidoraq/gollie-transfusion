@@ -306,7 +306,9 @@ class DisableDefuse(ArtifactExistanceEvent):
     mention: str  # The text span that most clearly expresses (triggers) the event
     agent: List[str]  # The person disabling, defusing or deactivating the artifact
     artifact: List[str]  # The artifact being disabled
-    instrument: List[str]  # The object used to disable, defuse or deactivating the artifact
+    instrument: List[
+        str
+    ]  # The object used to disable, defuse or deactivating the artifact
     place: List[str]  # Where the event occurred
 
 
@@ -730,7 +732,9 @@ EVENT_DEFINITIONS: List[Type] = [
     ExchangeBuySell,
 ]
 
-FINE_TO_COARSE_EVENTS: Dict[Type, Type] = {_def: _def.__base__ for _def in EVENT_DEFINITIONS}
+FINE_TO_COARSE_EVENTS: Dict[Type, Type] = {
+    _def: _def.__base__ for _def in EVENT_DEFINITIONS
+}
 COARSE_TO_FINE_EVENTS: Dict[Type, List[Type]] = {}
 for fine, coarse in FINE_TO_COARSE_EVENTS.items():
     if coarse not in COARSE_TO_FINE_EVENTS:

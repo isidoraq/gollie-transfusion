@@ -148,7 +148,18 @@ EXAMPLES = {
         ]
     },
     "mit_dish_examples": {
-        "en": ["pizza", "sushi", "steak", "burger", "ice cream", "tacos", "hamburger", "sandwich", "burgers", "beer"]
+        "en": [
+            "pizza",
+            "sushi",
+            "steak",
+            "burger",
+            "ice cream",
+            "tacos",
+            "hamburger",
+            "sandwich",
+            "burgers",
+            "beer",
+        ]
     },
     "mit_cuisine_examples": {
         "en": [

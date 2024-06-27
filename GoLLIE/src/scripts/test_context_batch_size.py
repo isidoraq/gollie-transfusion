@@ -35,7 +35,9 @@ def generate_random_sentence(sentence_length: int = 5120) -> str:
     sentence = ""
     for i in range(sentence_length):
         # generate a random word of length between 1 and 10 characters
-        word = "".join(random.choice(string.ascii_lowercase) for _ in range(random.randint(1, 10)))
+        word = "".join(
+            random.choice(string.ascii_lowercase) for _ in range(random.randint(1, 10))
+        )
         sentence += word + " "
     return sentence
 
@@ -72,11 +74,13 @@ class TestDataset(Dataset):
             inputs_ids = random.sample(range(100, len(tokenizer) - 100), seq_len)
 
             self.data.append(
-                BatchEncoding({
-                    "input_ids": inputs_ids,
-                    "attention_mask": [1] * seq_len,
-                    "labels": inputs_ids.copy(),
-                })
+                BatchEncoding(
+                    {
+                        "input_ids": inputs_ids,
+                        "attention_mask": [1] * seq_len,
+                        "labels": inputs_ids.copy(),
+                    }
+                )
             )
 
     def __len__(self):
@@ -107,7 +111,9 @@ def get_dataloader(
             The dataloader that fits the configuration given.
     """
     dataset = TestDataset(tokenizer=tokenizer, seq_len=seq_len, data_len=batch_size)
-    data_collator = DataCollatorForSeq2Seq(tokenizer, padding=True, pad_to_multiple_of=8, return_tensors="pt")
+    data_collator = DataCollatorForSeq2Seq(
+        tokenizer, padding=True, pad_to_multiple_of=8, return_tensors="pt"
+    )
     return DataLoader(
         dataset,
         batch_size=batch_size,
@@ -162,7 +168,9 @@ def run_training_test(
 
     model.config.max_length = seq_len
 
-    dataloader = get_dataloader(tokenizer=tokenizer, batch_size=batch_size, seq_len=seq_len)
+    dataloader = get_dataloader(
+        tokenizer=tokenizer, batch_size=batch_size, seq_len=seq_len
+    )
 
     if quantization:
         if optimizer_name != "adamW":
@@ -293,7 +301,9 @@ def main():
 
     for i, seq_len in enumerate(seq_lens):
         for j, batch_size in enumerate(batch_sizes):
-            logging.info(f"Running test with seq_len={seq_len} and batch_size={batch_size}...")
+            logging.info(
+                f"Running test with seq_len={seq_len} and batch_size={batch_size}..."
+            )
             try:
                 result_matrix[i][j] = run_training_test(
                     model=model,
@@ -319,7 +329,9 @@ def main():
                 else:
                     raise e
 
-    table = tabulate(tabular_data=result_matrix, headers=batch_sizes, showindex=seq_lens)
+    table = tabulate(
+        tabular_data=result_matrix, headers=batch_sizes, showindex=seq_lens
+    )
     print(table)
 
 

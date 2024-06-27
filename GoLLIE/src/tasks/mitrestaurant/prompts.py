@@ -67,6 +67,15 @@ class Cuisine(Entity):
     span: str  # {mit_cuisine_examples}
 
 
-ENTITY_DEFINITIONS: List[Entity] = [Rating, Amenity, Location, RestaurantName, Price, Hours, Dish, Cuisine]
+ENTITY_DEFINITIONS: List[Entity] = [
+    Rating,
+    Amenity,
+    Location,
+    RestaurantName,
+    Price,
+    Hours,
+    Dish,
+    Cuisine,
+]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

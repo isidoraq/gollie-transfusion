@@ -23,11 +23,13 @@ class Location(Entity):
 
     span: str  # {conll04_location_examples}
 
+
 @dataclass
 class Organization(Entity):
     """{conll04_organization}"""
 
     span: str  # {conll04_organization_examples}
+
 
 @dataclass
 class Other(Entity):
@@ -58,12 +60,14 @@ class OrgBasedInRelation(Relation):
     arg1: str
     arg2: str
 
+
 @dataclass
 class LocatedInRelation(Relation):
     """{conll04_locatedin}"""
 
     arg1: str
     arg2: str
+
 
 @dataclass
 class KillRelation(Relation):
@@ -72,6 +76,7 @@ class KillRelation(Relation):
     arg1: str
     arg2: str
 
+
 @dataclass
 class LiveInRelation(Relation):
     """{conll04_livein}"""
@@ -79,12 +84,14 @@ class LiveInRelation(Relation):
     arg1: str
     arg2: str
 
+
 @dataclass
 class WorkForRelation(Relation):
     """{conll04_workfor}"""
 
     arg1: str
     arg2: str
+
 
 RELATION_DEFINITIONS: List[Type] = [
     OrgBasedInRelation,

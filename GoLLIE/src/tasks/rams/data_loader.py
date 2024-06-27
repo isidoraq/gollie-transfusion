@@ -58,443 +58,446 @@ from src.tasks.rams.easyproject_data import decode_data
 
 _EVENT_CONSTANTS_MAPPING = {"n/a": None, "place": "place"}
 EVENT_TO_CLASS_MAPPING = {
-        "artifactexistence.artifactfailure": {
-            "class": ArtifactFailure,
-            "subtypes": {"mechanicalfailure": "MechanicalFailure"},
-            "mechanicalartifact": "artifact",
-            "instrument": "instrument",
+    "artifactexistence.artifactfailure": {
+        "class": ArtifactFailure,
+        "subtypes": {"mechanicalfailure": "MechanicalFailure"},
+        "mechanicalartifact": "artifact",
+        "instrument": "instrument",
+    },
+    "artifactexistence.damagedestroy": {
+        "class": DamageDestroy,
+        "subtypes": {"damage": "Damage", "destroy": "Destroy"},
+        "damagerdestroyer": "agent",
+        "damager": "agent",
+        "destroyer": "agent",
+        "artifact": "artifact",
+        "instrument": "instrument",
+    },
+    "artifactexistence.shortage": {
+        "class": Shortage,
+        "subtypes": {"shortage": "Shortage"},
+        "experiencer": "experiencer",
+        "supply": "supply",
+    },
+    "conflict.attack": {
+        "class": Attack,
+        "subtypes": {
+            "airstrikemissilestrike": "AirStrikeMissileStrike",
+            "biologicalchemicalpoisonattack": "BiologicalChemicalPoisonAttack",
+            "bombing": "Bombing",
+            "firearmattack": "FireArmAttack",
+            "hanging": "Hanging",
+            "invade": "Invade",
+            "selfdirectedbattle": "SelfDirectedBattle",
+            "setfire": "SetFire",
+            "stabbing": "Stabbing",
+            "stealrobhijack": "StealRobHijack",
+            "strangling": "Strangling",
         },
-        "artifactexistence.damagedestroy": {
-            "class": DamageDestroy,
-            "subtypes": {"damage": "Damage", "destroy": "Destroy"},
-            "damagerdestroyer": "agent",
-            "damager": "agent",
-            "destroyer": "agent",
-            "artifact": "artifact",
-            "instrument": "instrument",
+        "attacker": "attacker",
+        "target": "target",
+        "instrument": "instrument",
+        "artifact": "artifact",
+    },
+    "conflict.coup": {
+        "class": Coup,
+        "subtypes": {"coup": "Coup"},
+        "deposedentity": "deposed_entity",
+        "deposingentity": "deposing_entity",
+    },
+    "conflict.demonstrate": {
+        "class": Demonstrate,
+        "subtypes": {
+            "marchprotestpoliticalgathering": "MarchProtestPoliticalGathering"
         },
-        "artifactexistence.shortage": {
-            "class": Shortage,
-            "subtypes": {"shortage": "Shortage"},
-            "experiencer": "experiencer",
-            "supply": "supply",
+        "demonstrator": "demonstrator",
+    },
+    "conflict.yield": {
+        "class": Yield,
+        "subtypes": {"retreat": "Retreat", "surrender": "Surrender"},
+        "yielder": "agent",
+        "retreater": "agent",
+        "surrenderer": "agent",
+        "recipient": "recipient",
+        "origin": "origin",
+        "destination": "destination",
+    },
+    "contact.collaborate": {
+        "class": Collaborate,
+        "subtypes": {"correspondence": "Correspondence", "meet": "Meet"},
+        "participant": "participants",
+    },
+    "contact.commandorder": {
+        "class": CommandOrder,
+        "subtypes": {
+            "broadcast": "Broadcast",
+            "correspondence": "Correspondence",
+            "meet": "Meet",
         },
-        "conflict.attack": {
-            "class": Attack,
-            "subtypes": {
-                "airstrikemissilestrike": "AirStrikeMissileStrike",
-                "biologicalchemicalpoisonattack": "BiologicalChemicalPoisonAttack",
-                "bombing": "Bombing",
-                "firearmattack": "FireArmAttack",
-                "hanging": "Hanging",
-                "invade": "Invade",
-                "selfdirectedbattle": "SelfDirectedBattle",
-                "setfire": "SetFire",
-                "stabbing": "Stabbing",
-                "stealrobhijack": "StealRobHijack",
-                "strangling": "Strangling",
-            },
-            "attacker": "attacker",
-            "target": "target",
-            "instrument": "instrument",
-            "artifact": "artifact",
+        "communicator": "communicator",
+        "recipient": "recipient",
+        "topic": "topic",
+    },
+    "contact.commitmentpromiseexpressintent": {
+        "class": CommitmentPromiseExpressIntent,
+        "subtypes": {
+            "broadcast": "Broadcast",
+            "correspondence": "Correspondence",
+            "meet": "Meet",
         },
-        "conflict.coup": {
-            "class": Coup,
-            "subtypes": {"coup": "Coup"},
-            "deposedentity": "deposed_entity",
-            "deposingentity": "deposing_entity",
+        "communicator": "communicator",
+        "recipient": "recipient",
+        "topic": "topic",
+    },
+    "contact.discussion": {
+        "class": Discussion,
+        "subtypes": {"correspondence": "Correspondence", "meet": "Meet"},
+        "participant": "participants",
+    },
+    "contact.funeralvigil": {
+        "class": FuneralVigil,
+        "subtypes": {"meet": "Meet"},
+        "participant": "participants",
+        "deceased": "deceased",
+    },
+    "contact.mediastatement": {
+        "class": MediaStatement,
+        "subtypes": {"broadcast": "Broadcast"},
+        "communicator": "communicator",
+        "recipient": "recipient",
+    },
+    "contact.negotiate": {
+        "class": Negotiate,
+        "subtypes": {"correspondence": "Correspondence", "meet": "Meet"},
+        "participant": "participants",
+        "topic": "topic",
+    },
+    "contact.prevarication": {
+        "class": Prevarication,
+        "subtypes": {
+            "broadcast": "Broadcast",
+            "correspondence": "Correspondence",
+            "meet": "Meet",
         },
-        "conflict.demonstrate": {
-            "class": Demonstrate,
-            "subtypes": {"marchprotestpoliticalgathering": "MarchProtestPoliticalGathering"},
-            "demonstrator": "demonstrator",
+        "communicator": "communicator",
+        "recipient": "recipient",
+        "topic": "topic",
+    },
+    "contact.publicstatementinperson": {
+        "class": PublicStatementInPerson,
+        "subtypes": {"broadcast": "Broadcast"},
+        "communicator": "communicator",
+        "recipient": "recipient",
+    },
+    "contact.requestadvise": {
+        "class": RequestAdvice,
+        "subtypes": {
+            "broadcast": "Broadcast",
+            "correspondence": "Correspondence",
+            "meet": "Meet",
         },
-        "conflict.yield": {
-            "class": Yield,
-            "subtypes": {"retreat": "Retreat", "surrender": "Surrender"},
-            "yielder": "agent",
-            "retreater": "agent",
-            "surrenderer": "agent",
-            "recipient": "recipient",
-            "origin": "origin",
-            "destination": "destination",
+        "communicator": "communicator",
+        "recipient": "recipient",
+        "topic": "topic",
+    },
+    "contact.threatencoerce": {
+        "class": ThreatenCoerce,
+        "subtypes": {
+            "broadcast": "Broadcast",
+            "correspondence": "Correspondence",
+            "meet": "Meet",
         },
-        "contact.collaborate": {
-            "class": Collaborate,
-            "subtypes": {"correspondence": "Correspondence", "meet": "Meet"},
-            "participant": "participants",
+        "communicator": "communicator",
+        "recipient": "recipient",
+        "topic": "topic",
+    },
+    "disaster.accidentcrash": {
+        "class": AccidentCrash,
+        "subtypes": {"accidentcrash": "AccidentCrash"},
+        "driverpassenger": "driver_or_passengers",
+        "vehicle": "vehicle",
+        "crashobject": "crash_object",
+    },
+    "disaster.diseaseoutbreak": {
+        "class": DiseaseOutbreak,
+        "subtypes": {"diseaseoutbreak": "DiseaseOutbreak"},
+        "disease": "disease",
+        "victim": "victim",
+    },
+    "disaster.fireexplosion": {
+        "class": FireExplosion,
+        "subtypes": {"fireexplosion": "FireExplosion"},
+        "fireexplosionobject": "fire_explosion_object",
+        "instrument": "instrument",
+    },
+    "genericcrime.genericcrime": {
+        "class": GenericCrime,
+        "subtypes": {"genericcrime": "GenericCrime"},
+        "perpetrator": "perpetrator",
+        "victim": "victim",
+    },
+    "government.agreements": {
+        "class": Agreement,
+        "subtypes": {
+            "acceptagreementcontractceasefire": "Accept",
+            "rejectnullifyagreementcontractceasefire": "RejectNullify",
+            "violateagreement": "Violate",
         },
-        "contact.commandorder": {
-            "class": CommandOrder,
-            "subtypes": {
-                "broadcast": "Broadcast",
-                "correspondence": "Correspondence",
-                "meet": "Meet",
-            },
-            "communicator": "communicator",
-            "recipient": "recipient",
-            "topic": "topic",
+        "participant": "participants",
+        "rejecternullifier": "rejecter_nullifier",
+        "violator": "violator",
+        "otherparticipant": "other_participant",
+    },
+    "government.convene": {
+        "class": Convene,
+        "subtypes": {"convene": "Convene"},
+        "convener": "convener",
+        "convenedthing": "convened_entity",
+    },
+    "government.formation": {
+        "class": Formation,
+        "subtypes": {"mergegpe": "Merge", "startgpe": "Start"},
+        "gpe": "gpe",
+        "founder": "founder",
+        "participant": "participants",
+    },
+    "government.legislate": {
+        "class": Legislate,
+        "subtypes": {"legislate": "Legislate"},
+        "governmentbody": "government_body",
+        "law": "law",
+    },
+    "government.spy": {
+        "class": Spy,
+        "subtypes": {"spy": "Spy"},
+        "spy": "spy",
+        "observedentity": "observed_entity",
+        "beneficiary": "beneficiary",
+    },
+    "government.vote": {
+        "class": Vote,
+        "subtypes": {"castvote": "CastVote", "violationspreventvote": "PreventVote"},
+        "voter": "voter",
+        "candidate": "candidate",
+        "ballot": "ballot",
+        "result": "result",
+        "preventer": "preventer",
+    },
+    "inspection.sensoryobserve": {
+        "class": SensoryObserve,
+        "subtypes": {
+            "inspectpeopleorganization": "InspectPeopleOrganization",
+            "monitorelection": "MonitorElection",
+            "physicalinvestigateinspect": "PhysicalInvestigateInspect",
         },
-        "contact.commitmentpromiseexpressintent": {
-            "class": CommitmentPromiseExpressIntent,
-            "subtypes": {
-                "broadcast": "Broadcast",
-                "correspondence": "Correspondence",
-                "meet": "Meet",
-            },
-            "communicator": "communicator",
-            "recipient": "recipient",
-            "topic": "topic",
+        "observer": "observer",
+        "observedentity": "observed_entity",
+        "monitor": "observer",
+        "monitoredentity": "observed_entity",
+        "inspector": "observer",
+        "inspectedentity": "observed_entity",
+    },
+    "inspection.targetaimat": {
+        "class": TargetAimAt,
+        "subtypes": {"targetaimat": "TargetAimAt"},
+        "targeter": "targeter",
+        "target": "target",
+        "instrument": "instrument",
+    },
+    "justice.arrestjaildetain": {
+        "class": ArrestJailDetain,
+        "subtypes": {"arrestjaildetain": "ArrestJailDetain"},
+        "jailer": "jailer",
+        "detainee": "detainee",
+        "crime": "crime",
+    },
+    "justice.initiatejudicialprocess": {
+        "class": InitiateJudicialProcess,
+        "subtypes": {"chargeindict": "ChargeIndict", "trialhearing": "TrialHearing"},
+        "prosecutor": "prosecutor",
+        "defendant": "defendant",
+        "judgecourt": "judge_court",
+        "crime": "crime",
+    },
+    "justice.investigate": {
+        "class": InvestigateCrime,
+        "subtypes": {"investigatecrime": "InvestigateCrime"},
+        "investigator": "investigator",
+        "defendant": "defendant",
+        "crime": "crime",
+    },
+    "justice.judicialconsequences": {
+        "class": JudicialConsequences,
+        "subtypes": {
+            "convict": "Convict",
+            "execute": "Execute",
+            "extradite": "Extradite",
         },
-        "contact.discussion": {
-            "class": Discussion,
-            "subtypes": {"correspondence": "Correspondence", "meet": "Meet"},
-            "participant": "participants",
+        "judgecourt": "judge_court",
+        "defendant": "defendant",
+        "crime": "crime",
+        "executioner": "judge_court",
+        "extraditer": "judge_court",
+        "origin": "origin",
+        "destination": "destination",
+    },
+    "life.die": {
+        "class": Die,
+        "subtypes": {
+            "deathcausedbyviolentevents": "Violent",
+            "nonviolentdeath": "NonViolent",
         },
-        "contact.funeralvigil": {
-            "class": FuneralVigil,
-            "subtypes": {"meet": "Meet"},
-            "participant": "participants",
-            "deceased": "deceased",
+        "victim": "victim",
+        "killer": "killer",
+        "medicalissue": "medical_issue",
+        "instrument": "instrument",
+    },
+    "life.injure": {
+        "class": Injure,
+        "subtypes": {
+            "illnessdegradationhungerthirst": "HungerThirst",
+            "illnessdegradationphysical": "Physical",
+            "illnessdegredationsickness": "Sickness",
+            "injurycausedbyviolentevents": "Violent",
         },
-        "contact.mediastatement": {
-            "class": MediaStatement,
-            "subtypes": {"broadcast": "Broadcast"},
-            "communicator": "communicator",
-            "recipient": "recipient",
+        "victim": "victim",
+        "injurer": "injurer",
+        "medicalissue": "medical_issue",
+        "disease": "disease",
+        "instrument": "instrument",
+    },
+    "manufacture.artifact": {
+        "class": ManufactureArtifact,
+        "subtypes": {
+            "build": "Build",
+            "createintellectualproperty": "IntellectualProperty",
+            "createmanufacture": "CreateManufacture",
         },
-        "contact.negotiate": {
-            "class": Negotiate,
-            "subtypes": {"correspondence": "Correspondence", "meet": "Meet"},
-            "participant": "participants",
-            "topic": "topic",
+        "manufacturer": "manufacturer",
+        "artifact": "artifact",
+        "instrument": "instrument",
+    },
+    "medical.intervention": {
+        "class": MedicalIntervention,
+        "subtypes": {"intervention": "Intervention"},
+        "treater": "treater",
+        "patient": "patient",
+        "medicalissue": "medical_issue",
+        "instrument": "instrument",
+    },
+    "movement.transportartifact": {
+        "class": TransportArtifact,
+        "subtypes": {
+            "bringcarryunload": "BringCarryUnload",
+            "disperseseparate": "DisperseSeparate",
+            "fall": "Fall",
+            "grantentry": "GrantEntry",
+            "hide": "Hide",
+            "lossofcontrol": "LostOfControl",
+            "nonviolentthrowlaunch": "NonViolentThrowLaunch",
+            "prevententry": "PreventEntry",
+            "preventexit": "PreventExit",
+            "receiveimport": "ReceiveImport",
+            "sendsupplyexport": "SendSupplyExport",
+            "smuggleextract": "SmuggleExtract",
         },
-        "contact.prevarication": {
-            "class": Prevarication,
-            "subtypes": {
-                "broadcast": "Broadcast",
-                "correspondence": "Correspondence",
-                "meet": "Meet",
-            },
-            "communicator": "communicator",
-            "recipient": "recipient",
-            "topic": "topic",
+        "transporter": "transporter",
+        "artifact": "artifact",
+        "vehicle": "vehicle",
+        "origin": "origin",
+        "destination": "destination",
+        "hidingplace": "hidding_place",
+        "controller": "transporter",
+        "controlledthing": "artifact",
+        "preventer": "preventer",
+    },
+    "movement.transportperson": {
+        "class": TransportPerson,
+        "subtypes": {
+            "bringcarryunload": "BringCarryUnload",
+            "disperseseparate": "DisperseSeparate",
+            "evacuationrescue": "EvacuationRescue",
+            "fall": "Fall",
+            "grantentryasylum": "GrantedAsylum",
+            "hide": "Hide",
+            "prevententry": "PreventEntry",
+            "preventexit": "PreventExit",
+            "selfmotion": "SelfMotion",
+            "smuggleextract": "SmuggleExtract",
         },
-        "contact.publicstatementinperson": {
-            "class": PublicStatementInPerson,
-            "subtypes": {"broadcast": "Broadcast"},
-            "communicator": "communicator",
-            "recipient": "recipient",
+        "transporter": "transporter",
+        "passenger": "passenger",
+        "vehicle": "vehicle",
+        "origin": "origin",
+        "destination": "destination",
+        "granter": "granter",
+        "hidingplace": "hidding_place",
+        "preventer": "preventer",
+    },
+    "personnel.elect": {
+        "class": Elect,
+        "subtypes": {"winelection": "WinElection"},
+        "voter": "voter",
+        "candidate": "candidate",
+    },
+    "personnel.endposition": {
+        "class": EndPossition,
+        "subtypes": {"firinglayoff": "FiringLayOff", "quitretire": "QuitRetire"},
+        "employee": "employee",
+        "placeofemployment": "organization",
+    },
+    "personnel.startposition": {
+        "class": StartPossition,
+        "subtypes": {"hiring": "Hiring"},
+        "employee": "employee",
+        "placeofemployment": "organization",
+    },
+    "transaction.transaction": {
+        "class": Transaction,
+        "subtypes": {
+            "embargosanction": "EmbargoSanction",
+            "giftgrantprovideaid": "GiftGrantProvideAid",
+            "transfercontrol": "TransferControl",
         },
-        "contact.requestadvise": {
-            "class": RequestAdvice,
-            "subtypes": {
-                "broadcast": "Broadcast",
-                "correspondence": "Correspondence",
-                "meet": "Meet",
-            },
-            "communicator": "communicator",
-            "recipient": "recipient",
-            "topic": "topic",
+        "participant": "participants",
+        "beneficiary": "beneficiary",
+        "preventer": "preventer",
+        "giver": "giver",
+        "recipient": "recipient",
+        "artifactmoney": "artifact",
+        "territoryorfacility": "artifact",
+    },
+    "transaction.transfermoney": {
+        "class": TransferMoney,
+        "subtypes": {
+            "borrowlend": "BorrowLend",
+            "embargosanction": "EmbargoSanction",
+            "giftgrantprovideaid": "GiftGrantProvideAid",
+            "payforservice": "PayForService",
+            "purchase": "Purchase",
         },
-        "contact.threatencoerce": {
-            "class": ThreatenCoerce,
-            "subtypes": {
-                "broadcast": "Broadcast",
-                "correspondence": "Correspondence",
-                "meet": "Meet",
-            },
-            "communicator": "communicator",
-            "recipient": "recipient",
-            "topic": "topic",
+        "giver": "giver",
+        "recipient": "recipient",
+        "beneficiary": "beneficiary",
+        "money": "money",
+        "preventer": "preventer",
+    },
+    "transaction.transferownership": {
+        "class": TransferOwnership,
+        "subtypes": {
+            "borrowlend": "BorrowLend",
+            "embargosanction": "EmbargoSanction",
+            "giftgrantprovideaid": "GiftGrantProvideAid",
+            "purchase": "Purchase",
         },
-        "disaster.accidentcrash": {
-            "class": AccidentCrash,
-            "subtypes": {"accidentcrash": "AccidentCrash"},
-            "driverpassenger": "driver_or_passengers",
-            "vehicle": "vehicle",
-            "crashobject": "crash_object",
-        },
-        "disaster.diseaseoutbreak": {
-            "class": DiseaseOutbreak,
-            "subtypes": {"diseaseoutbreak": "DiseaseOutbreak"},
-            "disease": "disease",
-            "victim": "victim",
-        },
-        "disaster.fireexplosion": {
-            "class": FireExplosion,
-            "subtypes": {"fireexplosion": "FireExplosion"},
-            "fireexplosionobject": "fire_explosion_object",
-            "instrument": "instrument",
-        },
-        "genericcrime.genericcrime": {
-            "class": GenericCrime,
-            "subtypes": {"genericcrime": "GenericCrime"},
-            "perpetrator": "perpetrator",
-            "victim": "victim",
-        },
-        "government.agreements": {
-            "class": Agreement,
-            "subtypes": {
-                "acceptagreementcontractceasefire": "Accept",
-                "rejectnullifyagreementcontractceasefire": "RejectNullify",
-                "violateagreement": "Violate",
-            },
-            "participant": "participants",
-            "rejecternullifier": "rejecter_nullifier",
-            "violator": "violator",
-            "otherparticipant": "other_participant",
-        },
-        "government.convene": {
-            "class": Convene,
-            "subtypes": {"convene": "Convene"},
-            "convener": "convener",
-            "convenedthing": "convened_entity",
-        },
-        "government.formation": {
-            "class": Formation,
-            "subtypes": {"mergegpe": "Merge", "startgpe": "Start"},
-            "gpe": "gpe",
-            "founder": "founder",
-            "participant": "participants",
-        },
-        "government.legislate": {
-            "class": Legislate,
-            "subtypes": {"legislate": "Legislate"},
-            "governmentbody": "government_body",
-            "law": "law",
-        },
-        "government.spy": {
-            "class": Spy,
-            "subtypes": {"spy": "Spy"},
-            "spy": "spy",
-            "observedentity": "observed_entity",
-            "beneficiary": "beneficiary",
-        },
-        "government.vote": {
-            "class": Vote,
-            "subtypes": {"castvote": "CastVote", "violationspreventvote": "PreventVote"},
-            "voter": "voter",
-            "candidate": "candidate",
-            "ballot": "ballot",
-            "result": "result",
-            "preventer": "preventer",
-        },
-        "inspection.sensoryobserve": {
-            "class": SensoryObserve,
-            "subtypes": {
-                "inspectpeopleorganization": "InspectPeopleOrganization",
-                "monitorelection": "MonitorElection",
-                "physicalinvestigateinspect": "PhysicalInvestigateInspect",
-            },
-            "observer": "observer",
-            "observedentity": "observed_entity",
-            "monitor": "observer",
-            "monitoredentity": "observed_entity",
-            "inspector": "observer",
-            "inspectedentity": "observed_entity",
-        },
-        "inspection.targetaimat": {
-            "class": TargetAimAt,
-            "subtypes": {"targetaimat": "TargetAimAt"},
-            "targeter": "targeter",
-            "target": "target",
-            "instrument": "instrument",
-        },
-        "justice.arrestjaildetain": {
-            "class": ArrestJailDetain,
-            "subtypes": {"arrestjaildetain": "ArrestJailDetain"},
-            "jailer": "jailer",
-            "detainee": "detainee",
-            "crime": "crime",
-        },
-        "justice.initiatejudicialprocess": {
-            "class": InitiateJudicialProcess,
-            "subtypes": {"chargeindict": "ChargeIndict", "trialhearing": "TrialHearing"},
-            "prosecutor": "prosecutor",
-            "defendant": "defendant",
-            "judgecourt": "judge_court",
-            "crime": "crime",
-        },
-        "justice.investigate": {
-            "class": InvestigateCrime,
-            "subtypes": {"investigatecrime": "InvestigateCrime"},
-            "investigator": "investigator",
-            "defendant": "defendant",
-            "crime": "crime",
-        },
-        "justice.judicialconsequences": {
-            "class": JudicialConsequences,
-            "subtypes": {
-                "convict": "Convict",
-                "execute": "Execute",
-                "extradite": "Extradite",
-            },
-            "judgecourt": "judge_court",
-            "defendant": "defendant",
-            "crime": "crime",
-            "executioner": "judge_court",
-            "extraditer": "judge_court",
-            "origin": "origin",
-            "destination": "destination",
-        },
-        "life.die": {
-            "class": Die,
-            "subtypes": {
-                "deathcausedbyviolentevents": "Violent",
-                "nonviolentdeath": "NonViolent",
-            },
-            "victim": "victim",
-            "killer": "killer",
-            "medicalissue": "medical_issue",
-            "instrument": "instrument",
-        },
-        "life.injure": {
-            "class": Injure,
-            "subtypes": {
-                "illnessdegradationhungerthirst": "HungerThirst",
-                "illnessdegradationphysical": "Physical",
-                "illnessdegredationsickness": "Sickness",
-                "injurycausedbyviolentevents": "Violent",
-            },
-            "victim": "victim",
-            "injurer": "injurer",
-            "medicalissue": "medical_issue",
-            "disease": "disease",
-            "instrument": "instrument",
-        },
-        "manufacture.artifact": {
-            "class": ManufactureArtifact,
-            "subtypes": {
-                "build": "Build",
-                "createintellectualproperty": "IntellectualProperty",
-                "createmanufacture": "CreateManufacture",
-            },
-            "manufacturer": "manufacturer",
-            "artifact": "artifact",
-            "instrument": "instrument",
-        },
-        "medical.intervention": {
-            "class": MedicalIntervention,
-            "subtypes": {"intervention": "Intervention"},
-            "treater": "treater",
-            "patient": "patient",
-            "medicalissue": "medical_issue",
-            "instrument": "instrument",
-        },
-        "movement.transportartifact": {
-            "class": TransportArtifact,
-            "subtypes": {
-                "bringcarryunload": "BringCarryUnload",
-                "disperseseparate": "DisperseSeparate",
-                "fall": "Fall",
-                "grantentry": "GrantEntry",
-                "hide": "Hide",
-                "lossofcontrol": "LostOfControl",
-                "nonviolentthrowlaunch": "NonViolentThrowLaunch",
-                "prevententry": "PreventEntry",
-                "preventexit": "PreventExit",
-                "receiveimport": "ReceiveImport",
-                "sendsupplyexport": "SendSupplyExport",
-                "smuggleextract": "SmuggleExtract",
-            },
-            "transporter": "transporter",
-            "artifact": "artifact",
-            "vehicle": "vehicle",
-            "origin": "origin",
-            "destination": "destination",
-            "hidingplace": "hidding_place",
-            "controller": "transporter",
-            "controlledthing": "artifact",
-            "preventer": "preventer",
-        },
-        "movement.transportperson": {
-            "class": TransportPerson,
-            "subtypes": {
-                "bringcarryunload": "BringCarryUnload",
-                "disperseseparate": "DisperseSeparate",
-                "evacuationrescue": "EvacuationRescue",
-                "fall": "Fall",
-                "grantentryasylum": "GrantedAsylum",
-                "hide": "Hide",
-                "prevententry": "PreventEntry",
-                "preventexit": "PreventExit",
-                "selfmotion": "SelfMotion",
-                "smuggleextract": "SmuggleExtract",
-            },
-            "transporter": "transporter",
-            "passenger": "passenger",
-            "vehicle": "vehicle",
-            "origin": "origin",
-            "destination": "destination",
-            "granter": "granter",
-            "hidingplace": "hidding_place",
-            "preventer": "preventer",
-        },
-        "personnel.elect": {
-            "class": Elect,
-            "subtypes": {"winelection": "WinElection"},
-            "voter": "voter",
-            "candidate": "candidate",
-        },
-        "personnel.endposition": {
-            "class": EndPossition,
-            "subtypes": {"firinglayoff": "FiringLayOff", "quitretire": "QuitRetire"},
-            "employee": "employee",
-            "placeofemployment": "organization",
-        },
-        "personnel.startposition": {
-            "class": StartPossition,
-            "subtypes": {"hiring": "Hiring"},
-            "employee": "employee",
-            "placeofemployment": "organization",
-        },
-        "transaction.transaction": {
-            "class": Transaction,
-            "subtypes": {
-                "embargosanction": "EmbargoSanction",
-                "giftgrantprovideaid": "GiftGrantProvideAid",
-                "transfercontrol": "TransferControl",
-            },
-            "participant": "participants",
-            "beneficiary": "beneficiary",
-            "preventer": "preventer",
-            "giver": "giver",
-            "recipient": "recipient",
-            "artifactmoney": "artifact",
-            "territoryorfacility": "artifact",
-        },
-        "transaction.transfermoney": {
-            "class": TransferMoney,
-            "subtypes": {
-                "borrowlend": "BorrowLend",
-                "embargosanction": "EmbargoSanction",
-                "giftgrantprovideaid": "GiftGrantProvideAid",
-                "payforservice": "PayForService",
-                "purchase": "Purchase",
-            },
-            "giver": "giver",
-            "recipient": "recipient",
-            "beneficiary": "beneficiary",
-            "money": "money",
-            "preventer": "preventer",
-        },
-        "transaction.transferownership": {
-            "class": TransferOwnership,
-            "subtypes": {
-                "borrowlend": "BorrowLend",
-                "embargosanction": "EmbargoSanction",
-                "giftgrantprovideaid": "GiftGrantProvideAid",
-                "purchase": "Purchase",
-            },
-            "giver": "giver",
-            "recipient": "recipient",
-            "beneficiary": "beneficiary",
-            "artifact": "artifact",
-            "preventer": "preventer",
-        },
-    }
+        "giver": "giver",
+        "recipient": "recipient",
+        "beneficiary": "beneficiary",
+        "artifact": "artifact",
+        "preventer": "preventer",
+    },
+}
+
 
 class RAMSDatasetLoader(DatasetLoader):
     """
@@ -525,7 +528,10 @@ class RAMSDatasetLoader(DatasetLoader):
                     _event_full_type = ".".join(event_type[:2])
 
                     info = EVENT_TO_CLASS_MAPPING[_event_full_type]
-                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+                    _inst = {
+                        param: []
+                        for param in inspect.signature(info["class"]).parameters.keys()
+                    }
                     _inst["mention"] = " ".join(tokens[trigger_start : trigger_end + 1])
 
                     # Find the correct event subtype
@@ -558,7 +564,14 @@ class RAMSDatasetLoader(DatasetLoader):
 
                     events.append(info["class"](**_inst))
 
-                self.elements[key] = {"id": key, "doc_id": key, "text": text, "labels": events, "gold": events}
+                self.elements[key] = {
+                    "id": key,
+                    "doc_id": key,
+                    "text": text,
+                    "labels": events,
+                    "gold": events,
+                }
+
 
 class RAMSTranslationDatasetLoader(DatasetLoader):
     """
@@ -579,12 +592,14 @@ class RAMSTranslationDatasetLoader(DatasetLoader):
         with open(path, "rt", encoding="utf-8") as in_f:
             for line in in_f:
                 line = json.loads(line.strip())
-                
+
                 output_text = line["output_sentence"]
                 input_text = line["input_sentence"]
                 marker2label = line["marker2label"]
-                
-                clean_sentence, spans = decode_data(input_text, output_text, marker2label)
+
+                clean_sentence, spans = decode_data(
+                    input_text, output_text, marker2label
+                )
 
                 if clean_sentence is not None and spans is not None:
 
@@ -598,7 +613,12 @@ class RAMSTranslationDatasetLoader(DatasetLoader):
                             event_type = label.split(".")
                             _event_full_type = ".".join(event_type[:2])
                             info = EVENT_TO_CLASS_MAPPING[_event_full_type]
-                            _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+                            _inst = {
+                                param: []
+                                for param in inspect.signature(
+                                    info["class"]
+                                ).parameters.keys()
+                            }
                             _inst["mention"] = span.strip()
 
                             # Find the correct event subtype
@@ -607,9 +627,11 @@ class RAMSTranslationDatasetLoader(DatasetLoader):
                             elif event_type[-1] in _EVENT_CONSTANTS_MAPPING:
                                 value = _EVENT_CONSTANTS_MAPPING[event_type[-1]]
                             else:
-                                raise ValueError(f"Event subtype {event_type[-1]} not found!")
+                                raise ValueError(
+                                    f"Event subtype {event_type[-1]} not found!"
+                                )
                             _inst["subtype"] = value
-                    
+
                     for marker_idx, span in spans:
                         label = marker2label[marker_idx]
                         if "." not in label:
@@ -620,17 +642,26 @@ class RAMSTranslationDatasetLoader(DatasetLoader):
                             elif role in _EVENT_CONSTANTS_MAPPING:
                                 value = _EVENT_CONSTANTS_MAPPING[role]
                             else:
-                                raise ValueError(f"Argument {event_type}:{role} not found!")
+                                raise ValueError(
+                                    f"Argument {event_type}:{role} not found!"
+                                )
 
                             try:
                                 _inst[value].append(arg_text)
                             except KeyError:
                                 raise KeyError(f"{event_type}-{value}")
-                    
+
                     events.append(info["class"](**_inst))
 
-                    self.elements[key] = {"id": key, "doc_id": key, "text": clean_sentence, "labels": events, "gold": events}
+                    self.elements[key] = {
+                        "id": key,
+                        "doc_id": key,
+                        "text": clean_sentence,
+                        "labels": events,
+                        "gold": events,
+                    }
                     key += 1
+
 
 def make_events(spans, marker2label):
     events = []
@@ -643,7 +674,10 @@ def make_events(spans, marker2label):
             event_type = label.split(".")
             _event_full_type = ".".join(event_type[:2])
             info = EVENT_TO_CLASS_MAPPING[_event_full_type]
-            _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
+            _inst = {
+                param: []
+                for param in inspect.signature(info["class"]).parameters.keys()
+            }
             _inst["mention"] = span.strip()
 
             # Find the correct event subtype
@@ -654,7 +688,7 @@ def make_events(spans, marker2label):
             else:
                 raise ValueError(f"Event subtype {event_type[-1]} not found!")
             _inst["subtype"] = value
-    
+
     for marker_idx, span in spans:
         label = marker2label[marker_idx]
         if "." not in label:
@@ -671,10 +705,11 @@ def make_events(spans, marker2label):
                 _inst[value].append(arg_text)
             except KeyError:
                 raise KeyError(f"{event_type}-{value}")
-    
+
     events.append(info["class"](**_inst))
     return events
-    
+
+
 class RAMSTransFusionDatasetLoader(DatasetLoader):
     """
     A `DatasetLoader` for the RAMS dataset.
@@ -694,27 +729,38 @@ class RAMSTransFusionDatasetLoader(DatasetLoader):
         with open(path, "rt", encoding="utf-8") as in_f:
             for line in in_f:
                 line = json.loads(line.strip())
-                
+
                 output_text = line["output_sentence"]
                 input_text = line["input_sentence"]
                 marker2label = line["marker2label"]
-                
-                clean_sentence, spans = decode_data(input_text, output_text, marker2label)
-                clean_en_sentence, en_spans = decode_data(input_text, input_text, marker2label)
 
-                if all(var is not None for var in [clean_sentence, spans, clean_en_sentence, en_spans]):
+                clean_sentence, spans = decode_data(
+                    input_text, output_text, marker2label
+                )
+                clean_en_sentence, en_spans = decode_data(
+                    input_text, input_text, marker2label
+                )
+
+                if all(
+                    var is not None
+                    for var in [clean_sentence, spans, clean_en_sentence, en_spans]
+                ):
 
                     events = make_events(spans, marker2label)
                     en_events = make_events(en_spans, marker2label)
 
-                    self.elements[key] = {"id": key, "doc_id": key, 
-                    "text": clean_sentence, 
-                    "en_text": clean_en_sentence, 
-                    "labels": events,
-                    "en_labels": en_events,
-                    "gold": events,
-                    "en_gold": en_events}
+                    self.elements[key] = {
+                        "id": key,
+                        "doc_id": key,
+                        "text": clean_sentence,
+                        "en_text": clean_en_sentence,
+                        "labels": events,
+                        "en_labels": en_events,
+                        "gold": events,
+                        "en_gold": en_events,
+                    }
                     key += 1
+
 
 class RAMSSampler(Sampler):
     """

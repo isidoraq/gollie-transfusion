@@ -1,4 +1,5 @@
 import json
+
 for lang in ["ar", "de", "en", "es", "fr", "it", "zh"]:
     print(lang)
     tmp_config = {
@@ -20,9 +21,9 @@ for lang in ["ar", "de", "en", "es", "fr", "it", "zh"]:
                 "guideline_dropout": 0.15,
                 "scorer": "src.tasks.redfm.scorer.REDFMRelationScorer",
                 "paraphrase_train": True,
-                "label_noise": 0.5
+                "label_noise": 0.5,
             }
-        }
+        },
     }
 
     with open("redfm_{}_config.json".format(lang), "w") as f:

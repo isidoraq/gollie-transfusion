@@ -74,9 +74,13 @@ class DatabreachAttack(Event):
     """
     attacker: List[str]  # The agent (person or organization) of the attack
     attack_pattern: List[str]  # How the attack is done
-    victim: List[str]  # The device, organization, person, product or website victim of the attack
+    victim: List[
+        str
+    ]  # The device, organization, person, product or website victim of the attack
     number_of_victim: List[str]  # The number of victims affected by the attack
-    compromised_data: List[str]  # The data being compromised: 'information', 'data', ...
+    compromised_data: List[
+        str
+    ]  # The data being compromised: 'information', 'data', ...
     number_of_data: List[str]  # The amount of compromised data
     damage_amount: List[str]  # The amount of damage done to the victim
     tool: List[str]  # The file, malware or website used to attack
@@ -93,12 +97,18 @@ class PhisingAttack(Event):
     """The text span that triggers the event.
     {phising_attack_examples}
     """
-    pattern: List[str]  # How was the attack triggered, such as 'opening something' or 'clicking somewhere'
+    pattern: List[
+        str
+    ]  # How was the attack triggered, such as 'opening something' or 'clicking somewhere'
     attacker: List[str]  # The person or organization behind the attack
     victim: List[str]  # The victim of the attack
     damage_amount: List[str]  # The amount of damage done to the victim
-    tool: List[str]  # The tool used to send the attack, such as 'email', 'website', 'file'
-    trusted_entity: List[str]  # The bait, i.e., what the tool pretended (purported) to be
+    tool: List[
+        str
+    ]  # The tool used to send the attack, such as 'email', 'website', 'file'
+    trusted_entity: List[
+        str
+    ]  # The bait, i.e., what the tool pretended (purported) to be
     purpose: List[str]  # What wants to steal the attacker, such as 'information'
     place: List[str]  # Where the attack occurred
     time: List[str]  # When did the attack occurred, such as 'today', 'tomorrow', ...
@@ -132,7 +142,9 @@ class VulnerabilityDiscover(Event):
     {vulnerability_discover_examples}
     """
     cve: List[str]  # The vulnerability identifier: such 'CVE-2018-5003'
-    used_for: List[str]  # What is the vulnerability used for such as 'allow to take control'
+    used_for: List[
+        str
+    ]  # What is the vulnerability used for such as 'allow to take control'
     discoverer: List[str]  # The entity that reported the vulnerability
     supported_platform: List[str]  # The platforms that support the vulnerability
     vulnerability: List[str]  # The vulnerabilities, such as 'vulnerability'

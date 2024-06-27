@@ -14,7 +14,9 @@ class WikiEventsEntityScorer(SpanScorer):
 
     valid_types: List[Type] = ENTITY_DEFINITIONS
 
-    def __call__(self, reference: List[Entity], predictions: List[Entity]) -> Dict[str, Dict[str, float]]:
+    def __call__(
+        self, reference: List[Entity], predictions: List[Entity]
+    ) -> Dict[str, Dict[str, float]]:
         output = super().__call__(reference, predictions)
         return {"entities": output["spans"]}
 

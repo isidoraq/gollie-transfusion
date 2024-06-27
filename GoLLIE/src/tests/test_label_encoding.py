@@ -28,8 +28,12 @@ class TestToIOB(unittest.TestCase):
             "word19 O\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob")
 
@@ -82,8 +86,12 @@ class TestToIOB(unittest.TestCase):
             "word19 O\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob")
 
@@ -136,8 +144,12 @@ class TestToIOB(unittest.TestCase):
             "word19 I-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob")
 
@@ -188,7 +200,9 @@ class TestToIOB(unittest.TestCase):
             "word19 I-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
         [label for _, label in [line.split() for line in text_out.splitlines()]]
 
         rewrite_labels(labels=in_labels, encoding="iob")
@@ -242,8 +256,12 @@ class TestToIOB2(unittest.TestCase):
             "word19 I-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
@@ -272,8 +290,12 @@ class TestToIOB2(unittest.TestCase):
             "word19 I-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
@@ -324,8 +346,12 @@ class TestToIOB2(unittest.TestCase):
             "word19 I-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
@@ -376,8 +402,12 @@ class TestToIOB2(unittest.TestCase):
             "word19 I-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
@@ -432,8 +462,12 @@ class TestToBILOU(unittest.TestCase):
             "word19 L-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
@@ -488,8 +522,12 @@ class TestToBILOU(unittest.TestCase):
             "word21 O\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
@@ -518,8 +556,12 @@ class TestToBILOU(unittest.TestCase):
             "word19 L-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
@@ -582,8 +624,12 @@ class TestToBILOU(unittest.TestCase):
             "word25 L-PER\n"
         )
 
-        in_labels = [label for _, label in [line.split() for line in text_in.splitlines()]]
-        gold_labels = [label for _, label in [line.split() for line in text_out.splitlines()]]
+        in_labels = [
+            label for _, label in [line.split() for line in text_in.splitlines()]
+        ]
+        gold_labels = [
+            label for _, label in [line.split() for line in text_out.splitlines()]
+        ]
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 

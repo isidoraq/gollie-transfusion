@@ -24,7 +24,9 @@ from .model_utils import find_all_linear_names, get_trainable_parameters
 
 
 def get_device_map(
-    force_auto_device_map: bool, max_memory_MB: int = None, use_better_transformer: bool = False
+    force_auto_device_map: bool,
+    max_memory_MB: int = None,
+    use_better_transformer: bool = False,
 ) -> (str, Union[int, List[int]]):
     """
     Get the device map to use for loading the model
@@ -61,13 +63,17 @@ def get_device_map(
             elif is_ipex_available() and torch.xpu.is_available():
                 n_gpus = torch.xpu.device_count()
             else:
-                logging.warning("You are in a DDP environment but no GPU is available, this may cause errors later on")
+                logging.warning(
+                    "You are in a DDP environment but no GPU is available, this may cause errors later on"
+                )
                 n_gpus = 0
 
             max_memory = {i: max_memory_MB for i in range(n_gpus)}
             local_rank = int(os.environ.get("LOCAL_RANK", "0"))
             device_map = {"": local_rank}
-            max_memory = {"": max_memory[local_rank]} if max_memory_MB is not None else None
+            max_memory = (
+                {"": max_memory[local_rank]} if max_memory_MB is not None else None
+            )
 
         else:
             logging.warning(
@@ -89,10 +95,14 @@ def get_device_map(
             if not use_better_transformer:
                 device_map = None
             else:
-                logging.warning("Setting device map to 'auto' to use Better Transformers library.")
+                logging.warning(
+                    "Setting device map to 'auto' to use Better Transformers library."
+                )
                 device_map = "auto"
 
-    logging.info(f"We will load the model using the following device map: {device_map} and max_memory: {max_memory}")
+    logging.info(
+        f"We will load the model using the following device map: {device_map} and max_memory: {max_memory}"
+    )
 
     return device_map, max_memory
 
@@ -118,7 +128,9 @@ def merge_lora_model(
         automatically derived.
     """
 
-    logging.info(f"We will merge the LoRA weights from {lora_weights_name_or_path} into the model {weights_path}")
+    logging.info(
+        f"We will merge the LoRA weights from {lora_weights_name_or_path} into the model {weights_path}"
+    )
     model, tokenizer = load_model(
         inference=True,
         model_weights_name_or_path=weights_path,
@@ -251,7 +263,9 @@ def load_model(
         )
 
     if inference and use_lora and lora_weights_name_or_path is None:
-        raise ValueError("You must provide the path to the LoRA weights when loading the model for inference.")
+        raise ValueError(
+            "You must provide the path to the LoRA weights when loading the model for inference."
+        )
 
     if use_better_transformer and not inference:
         logging.warning(
@@ -270,7 +284,9 @@ def load_model(
         )
 
     if lora_weights_name_or_path is not None and not use_lora:
-        logging.warning("You provided a path to LoRA weights but use_lora is set to False. We will set use_lora=True.")
+        logging.warning(
+            "You provided a path to LoRA weights but use_lora is set to False. We will set use_lora=True."
+        )
         use_lora = True
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
@@ -311,33 +327,45 @@ def load_model(
             # StabilityLM specific fix
             tokenizer.add_special_tokens({"pad_token": "<|padding|>"})
         elif tokenizer.unk_token is not None:
-            logging.warning("Tokenizer does not have a pad token, we will use the unk token as pad token.")
+            logging.warning(
+                "Tokenizer does not have a pad token, we will use the unk token as pad token."
+            )
             tokenizer.pad_token_id = tokenizer.unk_token_id
         else:
-            logging.warning("Tokenizer does not have a pad token. We will use the eos token as pad token.")
+            logging.warning(
+                "Tokenizer does not have a pad token. We will use the eos token as pad token."
+            )
             tokenizer.pad_token_id = tokenizer.eos_token_id
 
     # Load the model weights
 
     #  Get the quantization config
     quant_args = {}
-    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
+    torch_dtype = (
+        torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
+    )
 
     if quantization is not None:
-        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
+        quant_args = (
+            {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
+        )
         if quantization == 4:
             bnb_config = BitsAndBytesConfig(
                 load_in_4bit=True,
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
-                bnb_4bit_compute_dtype=torch.bfloat16 if torch_dtype in ["auto", None] else torch_dtype,
+                bnb_4bit_compute_dtype=(
+                    torch.bfloat16 if torch_dtype in ["auto", None] else torch_dtype
+                ),
             )
 
         else:
             bnb_config = BitsAndBytesConfig(
                 load_in_8bit=True,
             )
-        logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
+        logging.info(
+            f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}"
+        )
     else:
         logging.info(f"Loading model with dtype: {torch_dtype}")
         bnb_config = None
@@ -366,7 +394,9 @@ def load_model(
         )
 
         if config.model_type == "llama" and use_flash_attention:
-            from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
+            from src.model.patch_models.modeling_flash_llama import (
+                LlamaForCausalLM as LlamaForCausalLMFlash,
+            )
 
             logging.warning("Using Flash Attention for LLaMA model.")
             load_fn = LlamaForCausalLMFlash
@@ -407,7 +437,11 @@ def load_model(
         patch_model(model, resid_pdrop=None, flash_attention=True)
 
     logging.info(f"Model dtype: {model.dtype}")
-    logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
+    logging.info(
+        "Total model memory footprint: "
+        + str(model.get_memory_footprint() / 1e6)
+        + " MB"
+    )
 
     # Prepare the model for k-bit training and enable gradient checkpointing
     if quantization is not None and not inference:
@@ -419,7 +453,9 @@ def load_model(
 
         # from peft import prepare_model_for_kbit_training
 
-        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
+        model = prepare_model_for_kbit_training(
+            model, use_gradient_checkpointing=use_gradient_checkpointing
+        )
     else:
         if use_gradient_checkpointing and not inference:
             model.gradient_checkpointing_enable()
@@ -432,9 +468,13 @@ def load_model(
             model.enable_input_require_grads()  #  Enables the gradients for the input embeddings
 
         if lora_weights_name_or_path is None:
-            logging.info("No pretrained LORA weights provided, we will initialize the weights randomly.")
+            logging.info(
+                "No pretrained LORA weights provided, we will initialize the weights randomly."
+            )
 
-            if lora_target_modules is None or (lora_target_modules is not None and len(lora_target_modules) == 0):
+            if lora_target_modules is None or (
+                lora_target_modules is not None and len(lora_target_modules) == 0
+            ):
                 logging.warning(
                     "No target modules provided,  will use the default modules for the"
                     " model in huggingface PEFT library. "
@@ -445,24 +485,32 @@ def load_model(
                 logging.warning(
                     "You provided 'all' as target modules, we will use all the model to which LoRA can be applied."
                 )
-                lora_target_modules = find_all_linear_names(model, quantization=quantization)
+                lora_target_modules = find_all_linear_names(
+                    model, quantization=quantization
+                )
 
             lora_config = LoraConfig(
                 r=lora_r,
                 lora_alpha=lora_alpha,
                 lora_dropout=lora_dropout,
                 bias="none",
-                task_type=TaskType.CAUSAL_LM if model_type == "causal" else TaskType.SEQ_2_SEQ_LM,
+                task_type=(
+                    TaskType.CAUSAL_LM
+                    if model_type == "causal"
+                    else TaskType.SEQ_2_SEQ_LM
+                ),
                 target_modules=lora_target_modules,
             )
 
             model = get_peft_model(model, lora_config)
 
         else:
-            logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
+            logging.info(
+                f"Loading pretrained LORA weights from {lora_weights_name_or_path}"
+            )
 
             model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
-            
+
             # turn on training lora params
             if not inference:
                 # turn on model
@@ -493,7 +541,10 @@ def load_model(
                 module = module.to(torch.float32)
             if "lm_head" in name or "embed_tokens" in name:
                 if hasattr(module, "weight"):
-                    if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
+                    if (
+                        torch_dtype == torch.bfloat16
+                        and module.weight.dtype == torch.float32
+                    ):
                         logging.debug(f"Converting layer {name} to {torch_dtype}")
                         module = module.to(torch.bfloat16)
 
@@ -509,7 +560,9 @@ def load_model(
                     "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
                 )
     else:
-        trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
+        trainable_params, total_params, trainable_percentage = get_trainable_parameters(
+            model
+        )
         logging.info(
             f"---> Trainable params: {trainable_params} || all params: {total_params} ||"
             f" trainable%: {round(trainable_percentage,6)}\n"

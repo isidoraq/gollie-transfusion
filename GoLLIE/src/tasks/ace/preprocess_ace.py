@@ -69,7 +69,9 @@ def mask_escape(text: str) -> str:
     Returns:
         str: masked string.
     """
-    return text.replace("&amp;", "ҪҪҪҪҪ").replace("&lt;", "ҚҚҚҚ").replace("&gt;", "ҺҺҺҺ")
+    return (
+        text.replace("&amp;", "ҪҪҪҪҪ").replace("&lt;", "ҚҚҚҚ").replace("&gt;", "ҺҺҺҺ")
+    )
 
 
 def unmask_escape(text: str) -> str:
@@ -81,7 +83,9 @@ def unmask_escape(text: str) -> str:
     Returns:
         str: unmasked string.
     """
-    return text.replace("ҪҪҪҪҪ", "&amp;").replace("ҚҚҚҚ", "&lt;").replace("ҺҺҺҺ", "&gt;")
+    return (
+        text.replace("ҪҪҪҪҪ", "&amp;").replace("ҚҚҚҚ", "&lt;").replace("ҺҺҺҺ", "&gt;")
+    )
 
 
 def recover_escape(text: str) -> str:
@@ -98,7 +102,9 @@ def recover_escape(text: str) -> str:
     return text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
 
 
-def sent_tokenize(text: Tuple[str, int, int], language: str = "english") -> List[Tuple[str, int, int]]:
+def sent_tokenize(
+    text: Tuple[str, int, int], language: str = "english"
+) -> List[Tuple[str, int, int]]:
     """Performs sentence tokenization. For English, it uses NLTK's sent_tokenize
     function. For Chinese, it uses split_chinese_sentence, a simple sentence
     tokenizer implemented by myself.
@@ -124,7 +130,9 @@ def sent_tokenize(text: Tuple[str, int, int], language: str = "english") -> List
         if index == -1:
             print(text, sent)
         else:
-            sentences_.append((sent, last + index + start, last + index + len(sent) + start))
+            sentences_.append(
+                (sent, last + index + start, last + index + len(sent) + start)
+            )
         last += index + len(sent)
     return sentences_
 
@@ -169,7 +177,11 @@ def split_chinese_sentence(text: str) -> List[str]:
                 sentence = ""
         elif c == '"':
             quote_mark_count += 1
-            if quote_mark_count % 2 == 0 and len(sentence) > 2 and sentence[-2] in {"？", "！", "。", "?", "!"}:
+            if (
+                quote_mark_count % 2 == 0
+                and len(sentence) > 2
+                and sentence[-2] in {"？", "！", "。", "?", "!"}
+            ):
                 sentences.append(sentence)
                 sentence = ""
     if sentence:
@@ -204,7 +216,9 @@ class Span:
                 end_ = i + 1
         if start_ == -1 or end_ == -1 or start_ > end_:
             raise ValueError(
-                "Failed to update offsets for {}-{}:{} in {}".format(self.start, self.end, self.text, tokens)
+                "Failed to update offsets for {}-{}:{} in {}".format(
+                    self.start, self.end, self.text, tokens
+                )
             )
         self.start, self.end = start_, end_
 
@@ -393,7 +407,9 @@ class Document:
         }
 
 
-def revise_sentences(sentences: List[Tuple[str, int, int]], doc_id: str) -> List[Tuple[int, int, str]]:
+def revise_sentences(
+    sentences: List[Tuple[str, int, int]], doc_id: str
+) -> List[Tuple[int, int, str]]:
     """Automatic sentence tokenization may have errors for a few documents.
 
     Args:
@@ -461,30 +477,38 @@ def read_sgm_file(path: str, language: str = "english") -> List[Tuple[str, int, 
                 if current_sentence:
                     sentence = " ".join(current_sentence)
                     if start + chunk_offset >= min_offset:
-                        sentences.append((
-                            sentence,
-                            start + chunk_offset,
-                            start + chunk_offset + len(sentence),
-                        ))
+                        sentences.append(
+                            (
+                                sentence,
+                                start + chunk_offset,
+                                start + chunk_offset + len(sentence),
+                            )
+                        )
                     current_sentence = []
                 start = offset
         if current_sentence:
             sentence = " ".join(current_sentence)
             if start + chunk_offset >= min_offset:
-                sentences.append((
-                    sentence,
-                    start + chunk_offset,
-                    start + chunk_offset + len(sentence),
-                ))
+                sentences.append(
+                    (
+                        sentence,
+                        start + chunk_offset,
+                        start + chunk_offset + len(sentence),
+                    )
+                )
         chunk_offset += len(chunk)
 
     # Re-tokenize sentences
-    sentences = [s for sent in sentences for s in sent_tokenize(sent, language=language)]
+    sentences = [
+        s for sent in sentences for s in sent_tokenize(sent, language=language)
+    ]
 
     return sentences
 
 
-def read_apf_file(path: str, time_and_val: bool = False) -> Tuple[str, str, List[Entity], List[Relation], List[Event]]:
+def read_apf_file(
+    path: str, time_and_val: bool = False
+) -> Tuple[str, str, List[Entity], List[Relation], List[Event]]:
     """Reads an APF file.
 
     Args:
@@ -599,7 +623,9 @@ def read_apf_file(path: str, time_and_val: bool = False) -> Tuple[str, str, List
                 elif arg_role == "Arg-2":
                     arg2 = RelationArgument(arg_mention_id, arg_role, arg_text)
             if arg1 and arg2:
-                relation_list.append(Relation(mention_id, relation_type, relation_subtype, arg1, arg2))
+                relation_list.append(
+                    Relation(mention_id, relation_type, relation_subtype, arg1, arg2)
+                )
 
     # events
     for event in doc.find_all("event"):
@@ -637,7 +663,9 @@ def read_apf_file(path: str, time_and_val: bool = False) -> Tuple[str, str, List
     return doc_id, source, entity_list, relation_list, event_list
 
 
-def process_entities(entities: List[Entity], sentences: List[Tuple[str, int, int]]) -> List[List[Entity]]:
+def process_entities(
+    entities: List[Entity], sentences: List[Tuple[str, int, int]]
+) -> List[List[Entity]]:
     """Cleans entities and splits them into lists
 
     Args:
@@ -734,7 +762,9 @@ def process_events(
                     overlap = True
                     break
             if not overlap:
-                chars[event.trigger.start : event.trigger.end] = [1] * (event.trigger.end - event.trigger.start)
+                chars[event.trigger.start : event.trigger.end] = [1] * (
+                    event.trigger.end - event.trigger.start
+                )
                 sentence_events_cleaned[i].append(event)
         sentence_events_cleaned[i].sort(key=lambda x: x.trigger.start)
 
@@ -802,7 +832,10 @@ def tokenize(
         splits.add(event.trigger.start - start)
         splits.add(event.trigger.end - start)
     splits = sorted(splits)
-    chunks = [(splits[i], splits[i + 1], text[splits[i] : splits[i + 1]]) for i in range(len(splits) - 1)]
+    chunks = [
+        (splits[i], splits[i + 1], text[splits[i] : splits[i + 1]])
+        for i in range(len(splits) - 1)
+    ]
 
     # tokenize each chunk
     chunks = [(s, e, t, wordpunct_tokenize(t, language=language)) for s, e, t in chunks]
@@ -817,17 +850,21 @@ def tokenize(
             if token_start == -1:
                 raise ValueError("Cannot find token {} in {}".format(token, text))
             token_end = token_start + len(token)
-            chunk_tokens_.append((
-                token_start + start + last + chunk_start,
-                token_end + start + last + chunk_start,
-                unmask_escape(token),
-            ))
+            chunk_tokens_.append(
+                (
+                    token_start + start + last + chunk_start,
+                    token_end + start + last + chunk_start,
+                    unmask_escape(token),
+                )
+            )
             last += token_end
         tokens.extend(chunk_tokens_)
     return tokens
 
 
-def convert(sgm_file: str, apf_file: str, time_and_val: bool = False, language: str = "english") -> Document:
+def convert(
+    sgm_file: str, apf_file: str, time_and_val: bool = False, language: str = "english"
+) -> Document:
     """Converts a document.
 
     Args:
@@ -842,7 +879,9 @@ def convert(sgm_file: str, apf_file: str, time_and_val: bool = False, language: 
         Document: a Document instance.
     """
     sentences = read_sgm_file(sgm_file, language=language)
-    doc_id, source, entities, relations, events = read_apf_file(apf_file, time_and_val=time_and_val)
+    doc_id, source, entities, relations, events = read_apf_file(
+        apf_file, time_and_val=time_and_val
+    )
 
     # Reivse sentences
     if doc_id in DOCS_TO_REVISE_SENT:
@@ -855,7 +894,8 @@ def convert(sgm_file: str, apf_file: str, time_and_val: bool = False, language: 
 
     # Tokenization
     sentence_tokens = [
-        tokenize(s, ent, evt, language=language) for s, ent, evt in zip(sentences, sentence_entities, sentence_events)
+        tokenize(s, ent, evt, language=language)
+        for s, ent, evt in zip(sentences, sentence_entities, sentence_events)
     ]
 
     # Convert span character offsets to token indices
@@ -920,7 +960,9 @@ def convert_batch(
         for sgm_file in sgm_files:
             progress.update(1)
             apf_file = sgm_file.replace(".sgm", ".apf.xml")
-            doc = convert(sgm_file, apf_file, time_and_val=time_and_val, language=language)
+            doc = convert(
+                sgm_file, apf_file, time_and_val=time_and_val, language=language
+            )
             w.write(json.dumps(doc.to_dict()) + "\n")
     progress.close()
 
@@ -933,7 +975,9 @@ def convert_to_oneie(input_path: str, output_path: str):
         output_path (str): path to the output file.
     """
     print("Converting the dataset to OneIE format")
-    with open(input_path, "r", encoding="utf-8") as r, open(output_path, "w", encoding="utf-8") as w:
+    with open(input_path, "r", encoding="utf-8") as r, open(
+        output_path, "w", encoding="utf-8"
+    ) as w:
         for line in r:
             doc = json.loads(line)
             for sentence in doc["sentences"]:
@@ -961,52 +1005,66 @@ def convert_to_oneie(input_path: str, output_path: str):
                 # entities
                 entities = []
                 for entity in sentence["entities"]:
-                    entities.append({
-                        "id": entity["mention_id"],
-                        "text": entity["text"],
-                        "entity_type": entity["entity_type"] if entity["mention_type"] != "TIME" else "TIME",
-                        "mention_type": entity["mention_type"],
-                        "entity_subtype": entity["entity_subtype"],
-                        "start": entity["start"],
-                        "end": entity["end"],
-                    })
+                    entities.append(
+                        {
+                            "id": entity["mention_id"],
+                            "text": entity["text"],
+                            "entity_type": (
+                                entity["entity_type"]
+                                if entity["mention_type"] != "TIME"
+                                else "TIME"
+                            ),
+                            "mention_type": entity["mention_type"],
+                            "entity_subtype": entity["entity_subtype"],
+                            "start": entity["start"],
+                            "end": entity["end"],
+                        }
+                    )
                 # relations
                 relations = []
                 for relation in sentence["relations"]:
-                    relations.append({
-                        "id": relation["relation_id"],
-                        "relation_type": relation["relation_type"],
-                        "relation_subtype": "{}:{}".format(relation["relation_type"], relation["relation_subtype"]),
-                        "arguments": [
-                            {
-                                "entity_id": relation["arg1"]["mention_id"],
-                                "text": relation["arg1"]["text"],
-                                "role": relation["arg1"]["role"],
-                            },
-                            {
-                                "entity_id": relation["arg2"]["mention_id"],
-                                "text": relation["arg2"]["text"],
-                                "role": relation["arg2"]["role"],
-                            },
-                        ],
-                    })
+                    relations.append(
+                        {
+                            "id": relation["relation_id"],
+                            "relation_type": relation["relation_type"],
+                            "relation_subtype": "{}:{}".format(
+                                relation["relation_type"], relation["relation_subtype"]
+                            ),
+                            "arguments": [
+                                {
+                                    "entity_id": relation["arg1"]["mention_id"],
+                                    "text": relation["arg1"]["text"],
+                                    "role": relation["arg1"]["role"],
+                                },
+                                {
+                                    "entity_id": relation["arg2"]["mention_id"],
+                                    "text": relation["arg2"]["text"],
+                                    "role": relation["arg2"]["role"],
+                                },
+                            ],
+                        }
+                    )
 
                 # events
                 events = []
                 for event in sentence["events"]:
-                    events.append({
-                        "id": event["mention_id"],
-                        "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
-                        "trigger": event["trigger"],
-                        "arguments": [
-                            {
-                                "entity_id": arg["mention_id"],
-                                "text": arg["text"],
-                                "role": arg["role"],
-                            }
-                            for arg in event["arguments"]
-                        ],
-                    })
+                    events.append(
+                        {
+                            "id": event["mention_id"],
+                            "event_type": "{}:{}".format(
+                                event["event_type"], event["event_subtype"]
+                            ),
+                            "trigger": event["trigger"],
+                            "arguments": [
+                                {
+                                    "entity_id": arg["mention_id"],
+                                    "text": arg["text"],
+                                    "role": arg["role"],
+                                }
+                                for arg in event["arguments"]
+                            ],
+                        }
+                    )
 
                 sent_obj = {
                     "doc_id": doc["doc_id"],
@@ -1030,14 +1088,19 @@ def convert_to_event_only(input_path: str, output_path: str):
     """
     print("Converting the dataset to event-only format...")
     skip_num = 0
-    with open(input_path, "r", encoding="utf-8") as r, open(output_path, "w", encoding="utf-8") as w:
+    with open(input_path, "r", encoding="utf-8") as r, open(
+        output_path, "w", encoding="utf-8"
+    ) as w:
         for line in r:
             doc = json.loads(line)
             for sentence in doc["sentences"]:
                 tokens = sentence["tokens"]
 
                 entity_text = {e["mention_id"]: e["text"] for e in sentence["entities"]}
-                entity_span = {e["mention_id"]: {"start": e["start"], "end": e["end"]} for e in sentence["entities"]}
+                entity_span = {
+                    e["mention_id"]: {"start": e["start"], "end": e["end"]}
+                    for e in sentence["entities"]
+                }
 
                 ## update argument text
 
@@ -1054,28 +1117,36 @@ def convert_to_event_only(input_path: str, output_path: str):
                         if event_type in arg_name_mapping:
                             if arg["role"] in arg_name_mapping[event_type]:
                                 new_role = arg_name_mapping[event_type][arg["role"]]
-                                if new_role is None:  # arg type isn't in ontology at all
+                                if (
+                                    new_role is None
+                                ):  # arg type isn't in ontology at all
                                     continue  # delete it from data
                                 else:  # arg type is in ontology, but misnamed in data
                                     arg["role"] = new_role  # update its name
 
-                        cleaned_arguments.append({
-                            "text": arg["text"],
-                            "role": arg["role"],
-                            "start": arg["start"],
-                            "end": arg["end"],
-                        })
+                        cleaned_arguments.append(
+                            {
+                                "text": arg["text"],
+                                "role": arg["role"],
+                                "start": arg["start"],
+                                "end": arg["end"],
+                            }
+                        )
                     event["arguments"] = cleaned_arguments
 
                 # events
 
                 events = []
                 for event in sentence["events"]:
-                    events.append({
-                        "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
-                        "trigger": event["trigger"],
-                        "arguments": event["arguments"],
-                    })
+                    events.append(
+                        {
+                            "event_type": "{}:{}".format(
+                                event["event_type"], event["event_subtype"]
+                            ),
+                            "trigger": event["trigger"],
+                            "arguments": event["arguments"],
+                        }
+                    )
 
                 sent_obj = {
                     "doc_id": doc["doc_id"],
@@ -1122,7 +1193,9 @@ def split_data(input_file: str, output_dir: str, split_path: str):
     # split the dataset
     with open(input_file, "r", encoding="utf-8") as r, open(
         os.path.join(output_dir, "train.sentence.json"), "w"
-    ) as w_train, open(os.path.join(output_dir, "dev.sentence.json"), "w") as w_dev, open(
+    ) as w_train, open(
+        os.path.join(output_dir, "dev.sentence.json"), "w"
+    ) as w_dev, open(
         os.path.join(output_dir, "test.sentence.json"), "w"
     ) as w_test:
         for line in r:
@@ -1142,7 +1215,9 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", help="Path to the output folder")
     parser.add_argument("-s", "--split", default=None, help="Path to the split folder")
     parser.add_argument("-l", "--lang", default="english", help="Document language")
-    parser.add_argument("--time_and_val", action="store_true", help="Extracts times and values")
+    parser.add_argument(
+        "--time_and_val", action="store_true", help="Extracts times and values"
+    )
 
     args = parser.parse_args()
     if args.lang not in ["chinese", "english"]:
@@ -1151,7 +1226,9 @@ if __name__ == "__main__":
 
     # Convert to doc-level JSON format
     json_path = os.path.join(args.output, "{}.json".format(args.lang))
-    convert_batch(input_dir, json_path, time_and_val=args.time_and_val, language=args.lang)
+    convert_batch(
+        input_dir, json_path, time_and_val=args.time_and_val, language=args.lang
+    )
 
     # Convert to event-only format
     sentence_path = os.path.join(args.output, "{}.sentence.json".format(args.lang))

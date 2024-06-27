@@ -167,7 +167,18 @@ EXAMPLES = {
         ]
     },
     "mit_rating_examples": {
-        "en": ["r", "pg 13", "pg", "g", "nc 17", "unrated", "r rated", "g rated", "rated r", "rated"]
+        "en": [
+            "r",
+            "pg 13",
+            "pg",
+            "g",
+            "nc 17",
+            "unrated",
+            "r rated",
+            "g rated",
+            "rated r",
+            "rated",
+        ]
     },
     "mit_ratings_average_examples": {
         "en": [
@@ -240,6 +251,17 @@ EXAMPLES = {
         ]
     },
     "mit_year_examples": {
-        "en": ["1950 s", "1970 s", "2010 s", "1980 s", "1990 s", "1960 s", "1990s", "2010", "2000", "1990"]
+        "en": [
+            "1950 s",
+            "1970 s",
+            "2010 s",
+            "1980 s",
+            "1990 s",
+            "1960 s",
+            "1990s",
+            "2010",
+            "2000",
+            "1990",
+        ]
     },
 }

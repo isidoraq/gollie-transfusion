@@ -39,6 +39,7 @@ class Miscellaneous(Entity):
 
     span: str  # {ner_miscellaneous_examples}
 
+
 ENTITY_DEFINITIONS: List[Entity] = [
     Person,
     Organization,

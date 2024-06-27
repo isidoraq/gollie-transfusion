@@ -84,7 +84,18 @@ EXAMPLES = {
         ]
     },
     "wnut_location_examples": {
-        "en": ["Chicago", "GA", "NYC", "UK", "London", "DC", "NY", "MD", "Hawaii", "VISIONS LOUNGE"]
+        "en": [
+            "Chicago",
+            "GA",
+            "NYC",
+            "UK",
+            "London",
+            "DC",
+            "NY",
+            "MD",
+            "Hawaii",
+            "VISIONS LOUNGE",
+        ]
     },
     "wnut_person_examples": {
         "en": [

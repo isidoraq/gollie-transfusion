@@ -10,7 +10,9 @@ class DataInferenceArguments:
 
     datasets: List[str] = field(
         default=None,
-        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
+        metadata={
+            "help": "The tasks to train on. Can be a list of tasks or a single task."
+        },
     )
 
     config_template: str = field(

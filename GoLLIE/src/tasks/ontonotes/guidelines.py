@@ -4,7 +4,9 @@ GUIDELINES = {
     "ontonotes_facility": {"en": ["Buildings, airports, highways, bridges, etc."]},
     "ontonotes_organization": {"en": ["Companies, agencies, institutions, etc."]},
     "ontonotes_gpe": {"en": ["Countries, cities, states."]},
-    "ontonotes_location": {"en": ["Non-GPE locations, mountain ranges, bodies of water."]},
+    "ontonotes_location": {
+        "en": ["Non-GPE locations, mountain ranges, bodies of water."]
+    },
     "ontonotes_product": {"en": ["Objects, vehicles, foods, etc. (Not services)."]},
     "ontonotes_event": {"en": ["Named hurricanes, battles, wars, sports events, etc."]},
     "ontonotes_work_of_art": {"en": ["Titles of books, songs, etc."]},
@@ -15,6 +17,12 @@ GUIDELINES = {
     "ontonotes_percent": {"en": ["Percentage, including ”%“."]},
     "ontonotes_money": {"en": ["Monetary values, including unit."]},
     "ontonotes_quantity": {"en": ["Measurements, as of weight or distance."]},
-    "ontonotes_ordinal": {"en": ["first, second, third, First, fourth, fifth, Second, seventh, eighth, sixth."]},
-    "ontonotes_cardinal": {"en": ["two, one, three, One, four, five, six, seven, Two, half."]},
+    "ontonotes_ordinal": {
+        "en": [
+            "first, second, third, First, fourth, fifth, Second, seventh, eighth, sixth."
+        ]
+    },
+    "ontonotes_cardinal": {
+        "en": ["two, one, three, One, four, five, six, seven, Two, half."]
+    },
 }

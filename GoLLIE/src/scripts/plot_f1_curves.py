@@ -60,7 +60,10 @@ def plot_curves(args):
                         if step not in results_dict[dataset][task][_key]:
                             results_dict[dataset][task][_key][step] = {}
 
-                        results_dict[dataset][task][_key][step][args.hue in key] = {**values, **step_info}
+                        results_dict[dataset][task][_key][step][args.hue in key] = {
+                            **values,
+                            **step_info,
+                        }
                     else:
                         if step not in results_dict[dataset][task][key]:
                             results_dict[dataset][task][key][step] = {}
@@ -74,23 +77,27 @@ def plot_curves(args):
                 for chkpt, values in values.items():
                     if args.hue:
                         for hue, values in values.items():
-                            result_list.append({
+                            result_list.append(
+                                {
+                                    "dataset": dataset,
+                                    "task": task,
+                                    "model": model,
+                                    "steps": chkpt,
+                                    f"{args.hue}": hue,
+                                    **values,
+                                }
+                            )
+                    else:
+                        result_list.append(
+                            {
                                 "dataset": dataset,
                                 "task": task,
                                 "model": model,
                                 "steps": chkpt,
-                                f"{args.hue}": hue,
+                                f"{args.hue}": False,
                                 **values,
-                            })
-                    else:
-                        result_list.append({
-                            "dataset": dataset,
-                            "task": task,
-                            "model": model,
-                            "steps": chkpt,
-                            f"{args.hue}": False,
-                            **values,
-                        })
+                            }
+                        )
     localtime = time.localtime()
     timestamp = (
         f"{localtime.tm_year}-{localtime.tm_mon}-{localtime.tm_mday}-{localtime.tm_hour}-"
@@ -122,7 +129,11 @@ if __name__ == "__main__":
 
     parser = ArgumentParser()
 
-    parser.add_argument("--models_path", type=str, default="/ikerlariak/igarcia945/CoLLIE/pretrained_models")
+    parser.add_argument(
+        "--models_path",
+        type=str,
+        default="/ikerlariak/igarcia945/CoLLIE/pretrained_models",
+    )
     parser.add_argument("--regexp", type=str, default="*")
     parser.add_argument("--hue", type=str, default=None)
     parser.add_argument("--x", type=str, default="steps")

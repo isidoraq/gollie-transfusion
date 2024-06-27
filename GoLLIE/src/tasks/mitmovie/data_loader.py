@@ -58,7 +58,9 @@ def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
 
     print(f"Read {len(dataset_words)} sentences from {filepath}")
 
-    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
+    dataset_labels = [
+        rewrite_labels(labels, encoding="iob2") for labels in dataset_labels
+    ]
 
     return dataset_words, dataset_labels
 
@@ -99,7 +101,9 @@ def load_mit_tsv(
         # Get entities
         entities = []
         for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+            entities.append(
+                ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end]))
+            )
 
         dataset_sentences.append(words)
         dataset_entities.append(entities)
