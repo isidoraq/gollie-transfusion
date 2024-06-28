@@ -1,34 +1,3 @@
-{
-    "dataset_name": "TyDiQA",
-    "tasks": [
-        "QA"
-    ],
-    "dataloader_cls": "src.tasks.tydiqa.data_loader.TyDiQATransFusionDatasetLoader",
-    "sampler_cls": "src.tasks.tydiqa.data_loader.TyDiQASampler",
-    "test_file": "validation",
-    "language": "te",
-    "use_transfusion": true,
-    "use_transfusionv2": false,
-    "output_name": "tydiqa.te",
-    "prompt_template": "templates/prompt_qa_tf.txt",
-    "seed": [
-        0,
-        24,
-        42
-    ],
-    "label_noise_prob": [
-        0.15,
-        0.5,
-        0.75
-    ],
-    "task_configuration": {
-        "QA": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.tydiqa.scorer.TyDiQAScorer",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fa338a0656c4d1470b30607800cdeec09370a0d09047c8737ba5dda8fe26db43
+size 846

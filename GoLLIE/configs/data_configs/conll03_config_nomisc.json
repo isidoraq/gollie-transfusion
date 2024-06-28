@@ -1,21 +1,3 @@
-{
-    "dataset_name": "CoNLL03",
-    "tasks": ["NER"],
-    "dataloader_cls": "src.tasks.conll03.data_loader.CoNLLDatasetLoader",
-    "sampler_cls": "src.tasks.conll03.data_loader.CoNLL03Sampler",
-    "train_file": "train",    
-    "prompt_template": "templates/prompt.txt",
-    "seed": [0, 24, 42],
-    "label_noise_prob": [0.15, 0.5, 0.75],
-    "include_misc": false,
-    "task_configuration": {
-        "NER": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorer",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:36fa9aa5ade13735001f534d0cc04d7372eb32cbbc20fba059f4a29638f63156
+size 681

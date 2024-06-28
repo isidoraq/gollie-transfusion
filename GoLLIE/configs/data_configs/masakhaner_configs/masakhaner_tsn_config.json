@@ -1,33 +1,3 @@
-{
-    "dataset_name": "MasakhaNER",
-    "tasks": [
-        "NER"
-    ],
-    "dataloader_cls": "src.tasks.masakhaner.data_loader.MasakhaNERDatasetLoader",
-    "sampler_cls": "src.tasks.masakhaner.data_loader.MasakhaNERSampler",
-    "dev_file": "/coc/pskynet6/ychen3411/project03_ace_event/few-shot-learning-main/masakhane-ner/MasakhaNER2.0/data/tsn/dev.txt",
-    "test_file": "/coc/pskynet6/ychen3411/project03_ace_event/few-shot-learning-main/masakhane-ner/MasakhaNER2.0/data/tsn/test.txt",
-    "prompt_template": "templates/prompt.txt",
-    "output_name": "masakhaner.tsn",
-    "seed": [
-        0,
-        24,
-        42
-    ],
-    "label_noise_prob": [
-        0.15,
-        0.5,
-        0.75
-    ],
-    "include_date": false,
-    "task_configuration": {
-        "NER": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.masakhaner.scorer.MasakhaNEREntityScorer",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:235d55a90dd54eca7f4eaff74cb014fcd858dc42a9d2c4f5308925d26ec478d7
+size 1047

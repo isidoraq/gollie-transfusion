@@ -1,33 +1,3 @@
-{
-    "dataset_name": "Massive",
-    "tasks": [
-        "NER"
-    ],
-    "dataloader_cls": "src.tasks.massive.data_loader.MassiveTransFusionDatasetLoader",
-    "sampler_cls": "src.tasks.massive.data_loader.MassiveSampler",
-    "test_file": "",
-    "language": "en-US",
-    "prompt_template": "templates/prompt_tf.txt",
-    "output_name": "massive.en-US",
-    "use_transfusion": true,
-    "seed": [
-        0,
-        24,
-        42
-    ],
-    "label_noise_prob": [
-        0.15,
-        0.5,
-        0.75
-    ],
-    "task_configuration": {
-        "NER": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.massive.scorer.MassiveEntityScorer",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:64834ee1288e9eb1812bfdb9ea1521a7a602d1d2f3e802c069ef246d79f51ee0
+size 823

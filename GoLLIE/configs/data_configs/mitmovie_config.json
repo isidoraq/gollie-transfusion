@@ -1,22 +1,3 @@
-{
-    "dataset_name": "MITMovie",
-    "tasks": ["NER"],
-    "dataloader_cls": "src.tasks.mitmovie.data_loader.MitMovieDatasetLoader",
-    "sampler_cls": "src.tasks.mitmovie.data_loader.MitMovieSampler",
-    "train_file": "data/MITmovie/engtrain.bio",
-    "dev_file": "data/MITmovie/engdev.bio",
-    "test_file": "data/MITmovie/engtest.bio",
-    "prompt_template": "templates/prompt.txt",
-    "seed": [0, 24, 42],
-    "label_noise_prob": [0.15, 0.50, 0.75],
-    "task_configuration": {
-        "NER": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.mitmovie.scorer.MitMovieEntityScorer",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d2d1d461bab95b1646cc86b4cd495758cd083e4f2475ea68d7367c9f4c0026bd
+size 771

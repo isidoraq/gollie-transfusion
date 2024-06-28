@@ -1,23 +1,3 @@
-{
-    "dataset_name": "CrossNER_woMISC",
-    "tasks": ["CrossNER_NATURAL_SCIENCE"],
-    "dataloader_cls": "src.tasks.crossner.data_loader.CrossNERDatasetLoader",
-    "sampler_cls": "src.tasks.crossner.data_loader.CrossNERSampler",
-    "train_file": "data/CrossNer/science/train.txt",
-    "dev_file": "data/CrossNer/science/dev.txt",
-    "test_file": "data/CrossNer/science/test.txt",
-    "prompt_template": "templates/prompt.txt",
-    "seed": [0, 24, 42],
-    "label_noise_prob": [0.15, 0.50, 0.75],
-    "include_misc": false,
-    "task_configuration": {
-        "CrossNER_NATURAL_SCIENCE": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.0,
-            "scorer": "src.tasks.crossner.scorer.CrossNERNaturalScienceEntityScorer_woMISC",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:faf0337e6ff2ed735fe5bd15db1acc3e57449856f0bc1d3b1a8b80a01d9c2bd4
+size 882

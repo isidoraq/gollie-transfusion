@@ -11,12 +11,12 @@ merge_lora_before_eval: true
 
 # dataset arguments
 dataset_dir:
-  GoLLIE/data/processed_w_examples
+  /home/ubuntu/gollie-transfusion/GoLLIE/data/processed_w_examples
 train_tasks:
   # - ontonotes5.ner
 # dataset ep arguments
 dataset_ep_dir:
-  GoLLIE/data/mixture_gollie/
+  /home/ubuntu/gollie-transfusion/GoLLIE/data/mixture_gollie/
 train_ep_tasks:
   - mix.multi.20k
 validation_tasks:
@@ -51,8 +51,8 @@ predict_with_generate: true
 evaluate_all_checkpoints: false
 
 # batch size
-per_device_train_batch_size: 16
-per_device_eval_batch_size: 4
+per_device_train_batch_size: 32
+per_device_eval_batch_size: 16
 gradient_accumulation_steps: 1
 generation_num_beams: 1
 

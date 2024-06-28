@@ -1,33 +1,3 @@
-{
-    "dataset_name": "MultiNERD",
-    "tasks": [
-        "NER"
-    ],
-    "dataloader_cls": "src.tasks.multinerd.data_loader.MultinerdDatasetLoader",
-    "sampler_cls": "src.tasks.multinerd.data_loader.MultinerdSampler",
-    "dev_file": "validation",
-    "test_file": "test",
-    "language": "it",
-    "output_name": "multinerd.it",
-    "prompt_template": "templates/prompt.txt",
-    "seed": [
-        0,
-        24,
-        42
-    ],
-    "label_noise_prob": [
-        0.15,
-        0.5,
-        0.75
-    ],
-    "task_configuration": {
-        "NER": {
-            "parallel_instances": 1,
-            "max_guidelines": -1,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.multinerd.scorer.MultinerdEntityScorer",
-            "paraphrase_train": true,
-            "label_noise": 0.5
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a732bc0ba37ea4f9d1dbb364c34a789d4f18b9136a83e2ed75f8bea03679eb29
+size 824
