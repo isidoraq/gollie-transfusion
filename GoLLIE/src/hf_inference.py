@@ -283,6 +283,7 @@ def main(
     lora_path: str,
     batch_size: int,
     model_name: str,
+    gold_data_dir: str
 ) -> None:
     """Main function to generate predictions and evaluate the model."""
 
@@ -342,7 +343,7 @@ def main(
             save_json(save_output, save_file_name)
 
         # Run evaluation
-        gold_data_dir = "GoLLIE/data/processed_w_examples"
+        gold_data_dir = gold_data_dir
         evaluate(
             task_list,
             output_path,
@@ -386,6 +387,7 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_path", type=str, help="Path to the dataset folder")
+    parser.add_argument("--gold_data_dir", type=str, help="Path to the gold_data folder")
     parser.add_argument("--task_name_list", type=str, help="Name of the task")
     parser.add_argument(
         "--num_size", type=int, default=200, help="Size of the test set"
@@ -423,4 +425,5 @@ if __name__ == "__main__":
         args.lora_path,
         args.batch_size,
         args.model_name,
+        args.gold_data_dir
     )
