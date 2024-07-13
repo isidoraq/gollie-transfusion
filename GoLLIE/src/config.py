@@ -205,6 +205,13 @@ class DataTrainingArguments:
             "help": "The tasks to train on. Can be a list of tasks or a single task."
         },
     )
+    
+    val_dir: str = field(
+        default="~/CoLLIE/data/validation",
+        metadata={
+            "help": "The directory containing validation data."
+        },
+    )
 
     train_tasks: List[str] = field(
         default=None,
@@ -226,13 +233,15 @@ class DataTrainingArguments:
             "help": "The tasks to train on. Can be a list of tasks or a single task."
         },
     )
-
+    """
     validation_tasks: List[str] = field(
         default=None,
         metadata={
             "help": "The tasks to train on. Can be a list of tasks or a single task."
         },
     )
+    """
+    
 
     test_tasks: List[str] = field(
         default=None,

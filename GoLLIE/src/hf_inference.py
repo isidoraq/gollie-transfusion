@@ -67,6 +67,7 @@ masakhan_task_list = [
 ]
 
 
+
 uner_task_list = [
     "uner.ceb_gja.ner",
     "uner.da_ddt.ner",
@@ -177,7 +178,7 @@ task2list = {
     "multiconer2": multiconer2_task_list,
     "xsid": xsid_task_list,
     "multito": multito_task_list,
-    "massive": massive_task_list,
+    "massive": massive_task_list
 }
 
 

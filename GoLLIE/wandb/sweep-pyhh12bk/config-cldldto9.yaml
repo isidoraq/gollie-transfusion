@@ -1,0 +1,14 @@
+wandb_version: 1
+
+learning_rate:
+  value: 0.0003
+lora_alpha:
+  value: 16
+lora_dropout:
+  value: 0.1
+lora_r:
+  value: 128
+num_train_epochs:
+  value: 1
+per_device_train_batch_size:
+  value: 8

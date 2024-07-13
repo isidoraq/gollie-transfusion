@@ -17,10 +17,10 @@ train_tasks:
 # dataset ep arguments
 dataset_ep_dir:
   /home/ubuntu/gollie-transfusion/GoLLIE/data/mixture_gollie/
+val_dir:
+  /home/ubuntu/gollie-transfusion/GoLLIE/data/processed_w_examples/mrl2024
 train_ep_tasks:
   - mix.multi.20k
-validation_tasks:
-  - masakhaner.bam.ner
 test_tasks:
   # -
 max_examples_per_task_train: 1
@@ -33,7 +33,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: GoLLIE/model_output/gollie_tf
+output_dir: /home/ubuntu/gollie-transfusion/GoLLIE/model_output/gollie_tf
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -51,7 +51,7 @@ predict_with_generate: true
 evaluate_all_checkpoints: false
 
 # batch size
-per_device_train_batch_size: 32
+per_device_train_batch_size: 8
 per_device_eval_batch_size: 16
 gradient_accumulation_steps: 1
 generation_num_beams: 1

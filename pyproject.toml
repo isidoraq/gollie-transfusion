@@ -11,7 +11,7 @@ python = "^3.10"
 peft = "^0.11.1"
 transformers = "^4.33.1"
 bitsandbytes = "^0.43.1"
-numpy = "^2.0.0"
+numpy = "1.21.0"
 packaging = "^24.1"
 torchvision = "^0.18.1"
 black = "^24.4.2"
@@ -25,6 +25,9 @@ wandb = "^0.17.3"
 fschat = "^0.2.36"
 torchaudio = "^2.3.1"
 torch = "^2.3.1"
+thinc = "^9.0.0"
+polyglot = "^16.7.4"
+icu = "^0.0.1"
 
 
 [build-system]

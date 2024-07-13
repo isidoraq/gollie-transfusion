@@ -23,3 +23,13 @@ OUTPUT_PATH=GoLLIE/model_output/gollie_tf #Set model path
 MODEL_NAME=ychenNLP/GoLLIE-7B-TF
 
 python3 -m src.hf_inference --dataset_path $DATASET_PATH --task_name_list $DATASET_NAME --num_size $NUM_SIZE --output_path $OUTPUT_PATH --batch_size 8 --model_name $MODEL_NAME
+
+
+# Inference
+DATASET_PATH=GoLLIE/data/processed_w_examples/tfv1_test #Set dataset path
+DATASET_NAME=masakhaner,massive
+NUM_SIZE=200
+OUTPUT_PATH=GoLLIE/model_output/gollie_tf #Set model path
+LORA_PATH=GoLLIE/model_output/gollie_tf #Set lora path
+
+python3 -m src.hf_inference --dataset_path $DATASET_PATH --task_name_list $DATASET_NAME --num_size $NUM_SIZE --output_path $OUTPUT_PATH --lora_path $LORA_PATH --use_lora --batch_size 8

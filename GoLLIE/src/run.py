@@ -7,6 +7,7 @@ import sys
 
 import torch
 import torch.utils.data
+import wandb
 from datasets import DatasetDict
 
 from src.config import DataTrainingArguments, ModelArguments
@@ -17,7 +18,9 @@ from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
 from transformers import (
     HfArgumentParser,
     Seq2SeqTrainingArguments,
+    TrainerCallback
 )
+from transformers.integrations import WandbCallback
 
 
 def clean_cache():
@@ -82,16 +85,16 @@ def train_collie(
             for task in data_args.train_tf_tasks
         ]
 
+    validation_tasks = ["masakhaner.ibo.ner", "masakhaner.yor.ner", "multinerd.de.ner", "multiconer2.de.ner"]
     development_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl"
-        for task in data_args.validation_tasks
+        f"{os.path.join(data_args.val_dir, task)}.dev.jsonl"
+        for task in validation_tasks
     ]
 
     if data_args.train_tasks:
         logging.info(
             f"We will train CoLLIE on {len(training_datasets_path)} datasets: {', '.join(training_datasets_path)}"
         )
-
     logging.info(
         f"We will validate CoLLIE on {len(development_datasets_path)} datasets: {', '.join(development_datasets_path)}"
     )
@@ -166,10 +169,10 @@ def train_collie(
 
     # TransFusion Training data
     train_dataset = ConcatDataset(training_datasets)
-
+    
     dev_datasets = DatasetDict()
-    for dev_task in data_args.validation_tasks:
-        dev_path = os.path.join(data_args.dataset_dir, f"{dev_task}.dev.jsonl")
+    for dev_task in validation_tasks:
+        dev_path = os.path.join(data_args.val_dir, f"{dev_task}.dev.jsonl")
         dev_dataset = CollieDataset(
             tokenizer=tokenizer,
             dataset_path=dev_path,
@@ -181,6 +184,9 @@ def train_collie(
             max_examples=data_args.max_examples_per_task_val,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
+
+    # Initialize Weights & Biases logging
+    wandb.init(project="collie_project", config=training_args)
 
     trainer = CollieTrainer(
         model=model,
@@ -197,6 +203,7 @@ def train_collie(
                 -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
             ),
         ),
+        callbacks=[WandbCallback]
     )
 
     trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
@@ -204,10 +211,11 @@ def train_collie(
     # Save the model
     trainer.save_model()
 
-    # model.save_pretrained(training_args.output_dir)
-    # model.config.save_pretrained(training_args.output_dir)
-    # tokenizer.save_pretrained(training_args.output_dir)
+    model.save_pretrained(training_args.output_dir)
+    model.config.save_pretrained(training_args.output_dir)
+    tokenizer.save_pretrained(training_args.output_dir)
 
+    wandb.finish()
 
 def inference_collie(
     model_args: ModelArguments,
@@ -506,9 +514,6 @@ if __name__ == "__main__":
                 )
 
             checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
-
-            # Add also the last checkpoint (stored in the output_dir)
-            # checkpoints.append(training_args.output_dir)
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
