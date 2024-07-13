@@ -15,11 +15,7 @@ from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
 from src.evaluate import evaluate
 from src.model.load_model import load_model, merge_lora_model
 from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
-from transformers import (
-    HfArgumentParser,
-    Seq2SeqTrainingArguments,
-    TrainerCallback
-)
+from transformers import HfArgumentParser, Seq2SeqTrainingArguments, TrainerCallback
 from transformers.integrations import WandbCallback
 
 
@@ -85,7 +81,12 @@ def train_collie(
             for task in data_args.train_tf_tasks
         ]
 
-    validation_tasks = ["masakhaner.ibo.ner", "masakhaner.yor.ner", "multinerd.de.ner", "multiconer2.de.ner"]
+    validation_tasks = [
+        "masakhaner.ibo.ner",
+        "masakhaner.yor.ner",
+        "multinerd.de.ner",
+        "multiconer2.de.ner",
+    ]
     development_datasets_path = [
         f"{os.path.join(data_args.val_dir, task)}.dev.jsonl"
         for task in validation_tasks
@@ -169,7 +170,7 @@ def train_collie(
 
     # TransFusion Training data
     train_dataset = ConcatDataset(training_datasets)
-    
+
     dev_datasets = DatasetDict()
     for dev_task in validation_tasks:
         dev_path = os.path.join(data_args.val_dir, f"{dev_task}.dev.jsonl")
@@ -203,7 +204,7 @@ def train_collie(
                 -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
             ),
         ),
-        callbacks=[WandbCallback]
+        callbacks=[WandbCallback],
     )
 
     trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
@@ -216,6 +217,7 @@ def train_collie(
     tokenizer.save_pretrained(training_args.output_dir)
 
     wandb.finish()
+
 
 def inference_collie(
     model_args: ModelArguments,

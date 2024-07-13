@@ -67,7 +67,6 @@ masakhan_task_list = [
 ]
 
 
-
 uner_task_list = [
     "uner.ceb_gja.ner",
     "uner.da_ddt.ner",
@@ -178,7 +177,7 @@ task2list = {
     "multiconer2": multiconer2_task_list,
     "xsid": xsid_task_list,
     "multito": multito_task_list,
-    "massive": massive_task_list
+    "massive": massive_task_list,
 }
 
 
@@ -284,7 +283,7 @@ def main(
     lora_path: str,
     batch_size: int,
     model_name: str,
-    gold_data_dir: str
+    gold_data_dir: str,
 ) -> None:
     """Main function to generate predictions and evaluate the model."""
 
@@ -388,7 +387,9 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_path", type=str, help="Path to the dataset folder")
-    parser.add_argument("--gold_data_dir", type=str, help="Path to the gold_data folder")
+    parser.add_argument(
+        "--gold_data_dir", type=str, help="Path to the gold_data folder"
+    )
     parser.add_argument("--task_name_list", type=str, help="Name of the task")
     parser.add_argument(
         "--num_size", type=int, default=200, help="Size of the test set"
@@ -426,5 +427,5 @@ if __name__ == "__main__":
         args.lora_path,
         args.batch_size,
         args.model_name,
-        args.gold_data_dir
+        args.gold_data_dir,
     )

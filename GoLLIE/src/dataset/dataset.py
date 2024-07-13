@@ -123,7 +123,9 @@ def prepare_data(
             model_inputs["labels"] = model_inputs["input_ids"].copy()
 
             if prompt_until == "all":
-                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+                loss_weight_mask = np.ones(
+                    len(model_inputs["labels"]), dtype=np.float32
+                )
             else:
                 if prompt_until == "result":
                     prompt = example.split("result =", maxsplit=1)[0] + "result ="
@@ -148,15 +150,15 @@ def prepare_data(
 
                 # Ensure the prompt is not longer than the labels
                 if len(prompt_tokens) > len(model_inputs["labels"]):
-                    prompt_tokens = prompt_tokens[:len(model_inputs["labels"])]
+                    prompt_tokens = prompt_tokens[: len(model_inputs["labels"])]
                     logging.warning(f"Truncated prompt: {prompt_tokens}")
 
-                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+                loss_weight_mask = np.ones(
+                    len(model_inputs["labels"]), dtype=np.float32
+                )
                 len_prompt = len(prompt_tokens)
                 len_result = len(model_inputs["labels"]) - len_prompt
-                prompt_token_weight = (
-                    len_result * prompt_loss_weight
-                )
+                prompt_token_weight = len_result * prompt_loss_weight
                 try:
                     prompt_token_weight = prompt_token_weight * (
                         len_result / (len_result * (1 - prompt_loss_weight))
@@ -178,7 +180,6 @@ def prepare_data(
         model_inputs.pop("token_type_ids")
 
     return model_inputs
-
 
 
 def batch_tokenization(
@@ -478,6 +479,7 @@ class CollieDataset(Dataset):
                 f' Dataset {".".join([self.dataset_name, self.task_name, self.split])} rotated to split'
                 f" {self.current_dataset_key}"
             )
+
 
 @dataclass
 class DataCollatorForCoLLIE:
